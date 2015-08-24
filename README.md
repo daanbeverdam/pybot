@@ -1,2 +1,2 @@
 # pybot
-Bot for Telegram in Python
+Python bot for Telegram
