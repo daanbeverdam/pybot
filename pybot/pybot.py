@@ -78,5 +78,5 @@ class PyBot(object):
         })
         resp = urllib2.urlopen(BASE_URL + 'sendMessage', params).read()
 
-    def send_action(self, action)
-
+    def send_action(self, action):
+        pass
