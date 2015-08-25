@@ -1,6 +1,4 @@
-from command import Command
-
-class PutinCommand(Command):
+class PutinCommand(object):
 
     def __init__(self):
         pass

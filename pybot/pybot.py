@@ -1,82 +1,131 @@
 import commands.putin
-import message
+import commands.bbq
+from message import Message
 import config
+import multipart
+import time
+import json
+import urllib, urllib2
+import shelve
+import traceback
 
 class PyBot(object):
     commands = {
-        'bbq' : commands.bbq.BBQCommand,
-        'putin': commands.putin.PutinCommand
+    'putin' : 'a',
+    'bbq' : 'b'
     }
 
-    TOKEN = config.TEST_TOKEN
-    BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
-
-    def __init__(self, name, api_key):
+    def __init__(self, name, token):
         self.name = name
-        self.api_key = api_key
+        self.token = token
+        self.base_url = 'https://api.telegram.org/bot' + self.token + '/'
+        self.update_interval = 0.8
 
     def run(self):
         while True:
-            self.check_for_updates()
+            try:
+                self.check_for_updates()
+                time.sleep(self.update_interval)
+            except Exception, e:
+                self.log(str(e))
+                traceback.print_exc()
+                time.sleep(self.update_interval)
 
     def check_for_updates(self):
-        response = get_updates()
+        data = shelve.open('main_data')
+        try:
+            offset = data['offset']
+        except:
+            offset = 0
+        response = urllib2.urlopen(self.base_url + 'getUpdates', urllib.urlencode({
+            'limit': 50,
+            'offset': offset,
+            })).read()
+        body = json.loads(response)
+        if body['ok'] and body['result'] != []:
+            data['offset'] = body['result'][-1]['update_id'] + 1
+            data.close()
+            for result in body['result']:
+                message = Message(result['message'])
+                self.handle_message(message)
+        elif body['ok'] == False:
+            self.log('Invalid response!')
 
-        if response['ok']:
-            pass
-        else:
-            log_message('Invalid reponse')
+    def handle_message(self, message):
+        self.log(message.first_name_sender + ' sent "' + message.text + '" in chat ' + 
+            str(message.chat_id) + '.')
+        if message.command and message.command.name in message.command.dict:
+            self.reply(message.chat_id, 'Hello world!')
+        elif self.name.lower() in message.text.lower():
+            self.reply(message.chat_id, 'Hello world!')
 
-    def reply(self, chat_id, message = None, photo = None, document = None, location = None, preview_disabled = True, 
-        caption = None):
+    def log(self, entry):
+        print(str(entry.encode('utf-8')))
+        # add to log file?
+
+    def reply(self, chat_id, message = None, photo = None, document = None, location = None, 
+        preview_disabled = True, caption = None):
         if message:
-            response = urllib2.urlopen(BASE_URL + 'sendMessage', urllib.urlencode({
+            response = urllib2.urlopen(self.base_url + 'sendMessage', urllib.urlencode({
                 'chat_id': str(chat_id),
-                'text': message,
+                'text': message.encode('utf-8'),
                 'disable_web_page_preview': preview_disabled
             })).read()
+            self.log('Sent reply "' + message + '" to ' + str(chat_id) + '.')
         elif photo:
-            response = multipart.post_multipart(BASE_URL + 'sendPhoto', [
+            response = multipart.post_multipart(self.base_url + 'sendPhoto', [
                 ('chat_id', str(chat_id)),
             ], [
                 ('photo', 'photo.jpg', photo),
             ])
+            self.log('Sent photo to ' + str(chat_id) + '.')
         elif document:
-            response = multipart.post_multipart(BASE_URL + 'sendDocument', [
+            response = multipart.post_multipart(self.base_url + 'sendDocument', [
                 ('chat_id', str(chat_id)),
             ], [
-                ('document', 'document', document),
+                ('document', 'document.*', document),
             ])
+            self.log('Sent document to ' + str(chat_id) + '.')
         elif location:
-            response = urllib2.urlopen(BASE_URL + 'sendLocation', urllib.urlencode({
+            response = urllib2.urlopen(self.base_url + 'sendLocation', urllib.urlencode({
                 'chat_id': str(chat_id),
                 'latitude': location[0],
                 'longitude': location[1]
             })).read()
+            self.log('Sent location to ' + str(chat_id) + '.')
         else:
-            logging.error('no msg or img specified')
+            self.log('Contents of message and/or chat id not correctly specified.')
             response = None
 
-    def reply_markup(self, chat_id, message, keyboard = None, selective = False, force_reply = False, message_id = None, 
-        resize = True, one_time = True, disable_preview = True):
+    def reply_markup(self, chat_id, message, keyboard = None, selective = False, force_reply = False, 
+        message_id = None, resize = True, one_time = True, disable_preview = True):
         if keyboard:
-            reply_markup = ({'keyboard': keyboard, 
+            reply_markup = ({
+                'keyboard': keyboard, 
                 'resize_keyboard': resize, 
                 'one_time_keyboard': one_time,
-                'selective': selective})
+                'selective': selective
+                })
         else:
-            reply_markup = ({'hide_keyboard': True,
-                'selective': selective}])
+            reply_markup = ({
+                'hide_keyboard': True,
+                'selective': selective
+                })
         reply_markup = json.dumps(reply_markup)
         params = urllib.urlencode({
               'chat_id': str(chat_id),
-              'text': msg.encode('utf-8'),
+              'text': message.encode('utf-8'),
               'reply_markup': reply_markup,
               'disable_web_page_preview': disable_preview,
-              (('reply_to_message_id': str(message_id)) if message_id == True else None),
-              'force_reply' : force_reply,
+              'reply_to_message_id': str(message_id) if message_id == True else None,
+              'force_reply' : force_reply
         })
-        resp = urllib2.urlopen(BASE_URL + 'sendMessage', params).read()
+        response = urllib2.urlopen(self.base_url + 'sendMessage', params).read()
+        self.log('Sent markup: ' + str(keyboard) + ' to ' + str(chat_id) + '.')
 
-    def send_action(self, action):
-        pass
+    def send_action(self, chat_id, action):
+        act = urllib2.urlopen(BASE_URL + 'sendChatAction', urllib.urlencode({
+            'chat_id': str(chat_id),
+            'action': str(action)
+        })).read()
+        self.log('Sent action "' + action + '" to ' + str(chat_id) + '.')
