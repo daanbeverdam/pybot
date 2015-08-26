@@ -1,7 +1,6 @@
-import pybot
 from command import Command
 
-class Message(object):
+class Message():
     
     def __init__(self, message):
         self.id = message.get('message_id')
@@ -14,8 +13,10 @@ class Message(object):
         self.command = self.get_command()
 
     def get_command(self):
-        tokens = self.text.split(' ')
-        if tokens[0].startswith('/') and tokens[0][1:] in PyBot.commands:
-            return Command(tokens[0][1:], tokens[1:])
+        first_word = self.text.split(' ')[0]
+        command_name = first_word[1:]
+        arguments = self.text.split(' ',1)[1] if len(self.text.split(' ')) > 1 else None
+        if first_word.startswith('/') and command_name in Command.dictionary:
+            return Command(command_name, arguments)
         else:
             return None

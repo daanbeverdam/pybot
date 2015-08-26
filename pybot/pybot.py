@@ -1,5 +1,3 @@
-import commands.putin
-import commands.bbq
 from message import Message
 import config
 import multipart
@@ -9,13 +7,9 @@ import urllib, urllib2
 import shelve
 import traceback
 
-class PyBot(object):
-    commands = {
-    'putin' : 'a',
-    'bbq' : 'b'
-    }
+class PyBot():
 
-    def __init__(self, name, token):
+    def __init__(self, name = config.BOT_NAME, token = config.TOKEN):
         self.name = name
         self.token = token
         self.base_url = 'https://api.telegram.org/bot' + self.token + '/'
@@ -54,10 +48,10 @@ class PyBot(object):
     def handle_message(self, message):
         self.log(message.first_name_sender + ' sent "' + message.text + '" in chat ' + 
             str(message.chat_id) + '.')
-        if message.command and message.command.name in message.command.dict:
-            self.reply(message.chat_id, 'Hello world!')
+        if message.command:
+            self.reply(message.chat_id, **message.command.reply)
         elif self.name.lower() in message.text.lower():
-            self.reply(message.chat_id, 'Hello world!')
+            self.reply(message.chat_id, 'Hoi ' + message.first_name_sender + '!')
 
     def log(self, entry):
         print(str(entry.encode('utf-8')))
@@ -69,10 +63,11 @@ class PyBot(object):
             response = urllib2.urlopen(self.base_url + 'sendMessage', urllib.urlencode({
                 'chat_id': str(chat_id),
                 'text': message.encode('utf-8'),
-                'disable_web_page_preview': preview_disabled
+                'disable_web_page_preview': str(preview_disabled)
             })).read()
             self.log('Sent reply "' + message + '" to ' + str(chat_id) + '.')
         elif photo:
+            self.send_action(chat_id, 'upload_photo')
             response = multipart.post_multipart(self.base_url + 'sendPhoto', [
                 ('chat_id', str(chat_id)),
             ], [
@@ -80,6 +75,7 @@ class PyBot(object):
             ])
             self.log('Sent photo to ' + str(chat_id) + '.')
         elif document:
+            self.send_action(chat_id, 'upload_document')
             response = multipart.post_multipart(self.base_url + 'sendDocument', [
                 ('chat_id', str(chat_id)),
             ], [
@@ -94,7 +90,7 @@ class PyBot(object):
             })).read()
             self.log('Sent location to ' + str(chat_id) + '.')
         else:
-            self.log('Contents of message and/or chat id not correctly specified.')
+            self.log('Error: contents of message and/or chat id not correctly specified.')
             response = None
 
     def reply_markup(self, chat_id, message, keyboard = None, selective = False, force_reply = False, 
@@ -105,12 +101,12 @@ class PyBot(object):
                 'resize_keyboard': resize, 
                 'one_time_keyboard': one_time,
                 'selective': selective
-                })
+            })
         else:
             reply_markup = ({
                 'hide_keyboard': True,
                 'selective': selective
-                })
+            })
         reply_markup = json.dumps(reply_markup)
         params = urllib.urlencode({
               'chat_id': str(chat_id),
@@ -124,7 +120,7 @@ class PyBot(object):
         self.log('Sent markup: ' + str(keyboard) + ' to ' + str(chat_id) + '.')
 
     def send_action(self, chat_id, action):
-        act = urllib2.urlopen(BASE_URL + 'sendChatAction', urllib.urlencode({
+        act = urllib2.urlopen(self.base_url + 'sendChatAction', urllib.urlencode({
             'chat_id': str(chat_id),
             'action': str(action)
         })).read()
