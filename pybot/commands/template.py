@@ -7,4 +7,5 @@ class ExampleCommand():
 
     def get_example(self):
  		# get something
+ 		reply = "blabla"
         return {'message' : reply}

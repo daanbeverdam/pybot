@@ -1,16 +1,16 @@
 from commands.putin import PutinCommand
 from commands.bbq import BBQCommand
 from commands.help import HelpCommand
+from commands.dice import DiceCommand
+from commands.doge import DogeCommand
 
 class Command():
 
     dictionary = {
         'bbq' : BBQCommand,
-        # 'boobs' : BoobsCommand,
-        # 'butts' : ButtsCommand,
         # 'cancel' : CancelCommand,
-        # 'dice' : DiceCommand,
-        # 'doge' : DogeCommand,
+        'dice' : DiceCommand,
+        'doge' : DogeCommand,
         # 'gif' : GifCommand,
         # 'google' : GoogleCommand,
         'help' : HelpCommand,

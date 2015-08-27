@@ -20,8 +20,7 @@ class PyBot():
             try:
                 self.check_for_updates()
                 time.sleep(self.update_interval)
-            except Exception, e:
-                self.log(str(e))
+            except:
                 traceback.print_exc()
                 time.sleep(self.update_interval)
 
@@ -49,13 +48,19 @@ class PyBot():
         self.log(message.first_name_sender + ' sent "' + message.text + '" in chat ' + 
             str(message.chat_id) + '.')
         if message.command:
-            self.reply(message.chat_id, **message.command.reply)
+            try:
+                self.reply(message.chat_id, **message.command.reply)
+            except: # doesn't work
+                self.reply(message.chat_id, "Oeps, er ging iets mis. Type '/%s help' "
+                "voor hulp bij het gebruik van dit commando." % message.command.name)
+                traceback.print_exc()
         elif self.name.lower() in message.text.lower():
             self.reply(message.chat_id, 'Hoi ' + message.first_name_sender + '!')
 
     def log(self, entry):
         print(str(entry.encode('utf-8')))
-        # add to log file?
+        with open('pybot.log','a') as log:
+            log.write(str(entry) + '\n')
 
     def reply(self, chat_id, message = None, photo = None, document = None, location = None, 
         preview_disabled = True, caption = None):
