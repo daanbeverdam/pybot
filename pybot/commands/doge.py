@@ -4,10 +4,10 @@ import urllib
 class DogeCommand():
 
     def __init__(self, arguments):
-        self.usage = {'message': "Maak je eigen doge afbeelding met caption. "
-            "Stuur bijvoorbeeld '/doge wow such doge'."}
+        self.usage = {'message': "Generate your own doge image including captions. "
+            "For example, send me: '/doge wow such doge'."}
         self.reply_type = 'message' if arguments == 'help' else 'photo'
-        self.arguments = 'wait for user input' if arguments == None else arguments
+        self.arguments = 'your words could be here' if arguments == None else arguments
         self.result =  self.usage if arguments == 'help' else self.get_doge_photo(self.arguments)
 
     def get_doge_photo(self, caption):

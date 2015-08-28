@@ -49,21 +49,24 @@ class PyBot():
             str(message.chat_id) + '.')
         if message.command:
             try:
-                self.reply(message.chat_id, **message.command.reply)
+                if message.command.reply_type == 'keyboard':
+                    self.reply_markup(message.chat_id, **message.command.repy)
+                else:
+                    self.reply(message.chat_id, **message.command.reply)
             except: # doesn't work
-                self.reply(message.chat_id, "Oeps, er ging iets mis. Type '/%s help' "
-                "voor hulp bij het gebruik van dit commando." % message.command.name)
+                self.reply(message.chat_id, "Something went wrong. Type '/%s help' "
+                "for help in using this command." % message.command.name)
                 traceback.print_exc()
         elif self.name.lower() in message.text.lower():
-            self.reply(message.chat_id, 'Hoi ' + message.first_name_sender + '!')
+            self.reply(message.chat_id, 'Hi ' + message.first_name_sender + '!')
 
     def log(self, entry):
         print(str(entry.encode('utf-8')))
         with open('pybot.log','a') as log:
             log.write(str(entry) + '\n')
 
-    def reply(self, chat_id, message = None, photo = None, document = None, location = None, 
-        preview_disabled = True, caption = None):
+    def reply(self, chat_id, message = None, photo = None, document = None, gif = None, 
+        location = None, preview_disabled = True, caption = None):
         if message:
             response = urllib2.urlopen(self.base_url + 'sendMessage', urllib.urlencode({
                 'chat_id': str(chat_id),
@@ -79,12 +82,12 @@ class PyBot():
                 ('photo', 'photo.jpg', photo),
             ])
             self.log('Sent photo to ' + str(chat_id) + '.')
-        elif document:
+        elif gif or document:
             self.send_action(chat_id, 'upload_document')
             response = multipart.post_multipart(self.base_url + 'sendDocument', [
                 ('chat_id', str(chat_id)),
             ], [
-                ('document', 'document.*', document),
+                ('document', ('image.gif' if gif else 'document.file') , (gif if gif else document)),
             ])
             self.log('Sent document to ' + str(chat_id) + '.')
         elif location:

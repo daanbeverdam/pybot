@@ -3,6 +3,7 @@ from commands.bbq import BBQCommand
 from commands.help import HelpCommand
 from commands.dice import DiceCommand
 from commands.doge import DogeCommand
+from commands.gif import GifCommand
 
 class Command():
 
@@ -11,7 +12,7 @@ class Command():
         # 'cancel' : CancelCommand,
         'dice' : DiceCommand,
         'doge' : DogeCommand,
-        # 'gif' : GifCommand,
+        'gif' : GifCommand,
         # 'google' : GoogleCommand,
         'help' : HelpCommand,
         # 'krabbel' : KrabbelCommand,
