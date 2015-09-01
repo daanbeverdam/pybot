@@ -60,7 +60,7 @@ class PyBot():
                         self.reply(message.chat_id, **command.reply())
                 except:
                     self.reply(message.chat_id, "Sorry, something went wrong. "
-                    "Use '/%s help' to ensure proper usage." % command.name)
+                    "Need help? Type: '/%s help'." % command.name)
         if self.name.lower() in message.text.lower():
             self.reply(message.chat_id, 'Hi ' + message.first_name_sender + '!')
 

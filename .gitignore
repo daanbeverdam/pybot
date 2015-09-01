@@ -1,5 +1,6 @@
 /build
 /*.pyc
 /**/*.pyc
-config.py
 .DS_Store
+/*.log
+/**/*.log

@@ -9,6 +9,7 @@ class BBQCommand(Command):
             return {'message': self.usage}
         else:
             url = "http://www.barbecueweer.nl"
-            grade = re.search(r'<div class="cijfer[\'"]?([^\'" >]+)', urllib.urlopen(url).read()).group(1)
+            grade = (re.search(r'<div class="cijfer[\'"]?([^\'" >]+)',
+                     urllib.urlopen(url).read()).group(1))
             reply = self.reply_text % grade
             return {'message': reply}
