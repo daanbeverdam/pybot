@@ -3,16 +3,19 @@ import config
 import multipart
 import time
 import json
-import urllib, urllib2
+import urllib
+import urllib2
 import shelve
 import traceback
 
+
 class PyBot():
 
-    def __init__(self, name = config.BOT_NAME, token = config.TOKEN):
+    def __init__(self, name, token, commands):
         self.name = name
         self.token = token
         self.base_url = 'https://api.telegram.org/bot' + self.token + '/'
+        self.commands = commands
         self.update_interval = 0.8
 
     def run(self):
@@ -39,34 +42,39 @@ class PyBot():
             data['offset'] = body['result'][-1]['update_id'] + 1
             data.close()
             for result in body['result']:
+                self.log(json_object=result)
                 message = Message(result['message'])
                 self.handle_message(message)
         elif body['ok'] == False:
             self.log('Invalid response!')
 
     def handle_message(self, message):
-        self.log(message.first_name_sender + ' sent "' + message.text + '" in chat ' + 
+        self.log(message.first_name_sender + ' sent "' + message.text + '" in chat ' +
             str(message.chat_id) + '.')
-        if message.command:
-            try:
-                if message.command.reply_type == 'keyboard':
-                    self.reply_markup(message.chat_id, **message.command.repy)
-                else:
-                    self.reply(message.chat_id, **message.command.reply)
-            except: # doesn't work
-                self.reply(message.chat_id, "Something went wrong. Type '/%s help' "
-                "for help in using this command." % message.command.name)
-                traceback.print_exc()
-        elif self.name.lower() in message.text.lower():
+        for command in self.commands:
+            if command.listen(message):
+                try:
+                    if 'keyboard' in str(command.reply()):
+                        self.reply_markup(message.chat_id, **command.reply())
+                    else:
+                        self.reply(message.chat_id, **command.reply())
+                except:
+                    self.reply(message.chat_id, "Sorry, something went wrong. "
+                    "Use '/%s help' to ensure proper usage." % command.name)
+        if self.name.lower() in message.text.lower():
             self.reply(message.chat_id, 'Hi ' + message.first_name_sender + '!')
 
-    def log(self, entry):
-        print(str(entry.encode('utf-8')))
-        with open('pybot.log','a') as log:
-            log.write(str(entry) + '\n')
+    def log(self, entry=None, json_object=None):
+        if entry:
+            print(str(entry.encode('utf-8')))
+            with open('readable.log', 'a') as log:
+                log.write(str(entry) + '\n')
+        if json_object:
+            with open('json.log', 'a') as log:
+                json.dump(json_object, log)
 
-    def reply(self, chat_id, message = None, photo = None, document = None, gif = None, 
-        location = None, preview_disabled = True, caption = None):
+    def reply(self, chat_id, message=None, photo=None, document=None, gif=None,
+        location=None, preview_disabled=True, caption=None):
         if message:
             response = urllib2.urlopen(self.base_url + 'sendMessage', urllib.urlencode({
                 'chat_id': str(chat_id),
@@ -101,12 +109,12 @@ class PyBot():
             self.log('Error: contents of message and/or chat id not correctly specified.')
             response = None
 
-    def reply_markup(self, chat_id, message, keyboard = None, selective = False, force_reply = False, 
-        message_id = None, resize = True, one_time = True, disable_preview = True):
+    def reply_markup(self, chat_id, message, keyboard=None, selective=False, force_reply=False,
+        message_id=None, resize=True, one_time=True, disable_preview=True):
         if keyboard:
             reply_markup = ({
-                'keyboard': keyboard, 
-                'resize_keyboard': resize, 
+                'keyboard': keyboard,
+                'resize_keyboard': resize,
                 'one_time_keyboard': one_time,
                 'selective': selective
             })

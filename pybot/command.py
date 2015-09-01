@@ -1,45 +1,18 @@
-from commands.putin import PutinCommand
-from commands.bbq import BBQCommand
-from commands.help import HelpCommand
-from commands.dice import DiceCommand
-from commands.doge import DogeCommand
-from commands.gif import GifCommand
+class Command(object):
 
-class Command():
-
-    dictionary = {
-        'bbq' : BBQCommand,
-        # 'cancel' : CancelCommand,
-        'dice' : DiceCommand,
-        'doge' : DogeCommand,
-        'gif' : GifCommand,
-        # 'google' : GoogleCommand,
-        'help' : HelpCommand,
-        # 'krabbel' : KrabbelCommand,
-        # 'laser' : LaserCommand,
-        # 'poll' : PollCommand,
-        'putin' : PutinCommand, 
-        # 'request' : RequestCommand,
-        # 'results' : ResultsCommand,
-        # 'quote' : QuoteCommand,
-        # 'status' : StatusCommand,
-        # 'tips' : TipsCommand,
-        # 'weather' : WeatherCommand,
-        # 'wiki' : WikiCommand,
-        # 'youtube' YoutubeCommand,  
-    }
-
-    def __init__(self, name, arguments = None):
+    def __init__(self, name, dialogs):
         self.name = name
-        self.arguments = arguments
-        self.reply = self.get_reply()
-        self.reply_type = self.get_reply_type()
+        self.dialogs = dialogs
+        self.usage = dialogs['usage']
+        self.reply_text = dialogs['reply']
+        self.message = None
 
-    def get_reply(self):
-        command = self.dictionary[self.name](self.arguments)
-        reply = command.result
-        return reply
+    def listen(self, message):
+        if message.text.startswith('/') and message.text.split(' ', 1)[0][1:] == self.name:
+            self.message = message
+            return True
+        return False
 
-    def get_reply_type(self):
-        command = self.dictionary[self.name](self.arguments)
-        return command.reply_type
+    def arguments(self):
+        if len(self.message.text.split(' ')) > 1:
+            return self.message.text.split(' ', 1)[1].lower()
