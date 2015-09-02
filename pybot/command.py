@@ -15,4 +15,4 @@ class Command(object):
 
     def arguments(self):
         if len(self.message.text.split(' ')) > 1:
-            return self.message.text.split(' ', 1)[1].lower()
+            return self.message.text.split(' ', 1)[1]

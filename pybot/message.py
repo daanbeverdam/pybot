@@ -13,5 +13,4 @@ class Message():
     def check_for_command(self):
         if self.text.startswith('/'):
             return True
-        else:
-            return False
+        return False

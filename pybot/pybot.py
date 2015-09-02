@@ -54,11 +54,13 @@ class PyBot():
         for command in self.commands:
             if command.listen(message):
                 try:
-                    if 'keyboard' in str(command.reply()):
-                        self.reply_markup(message.chat_id, **command.reply())
+                    reply = command.reply()
+                    if 'keyboard' in reply:
+                        self.reply_markup(message.chat_id, **reply)
                     else:
-                        self.reply(message.chat_id, **command.reply())
+                        self.reply(message.chat_id, **reply)
                 except:
+                    traceback.print_exc()
                     self.reply(message.chat_id, "Sorry, something went wrong. "
                     "Need help? Type: '/%s help'." % command.name)
         if self.name.lower() in message.text.lower():
@@ -69,7 +71,7 @@ class PyBot():
             print(str(entry.encode('utf-8')))
             with open('readable.log', 'a') as log:
                 log.write(str(entry) + '\n')
-        if json_object:
+        elif json_object:
             with open('json.log', 'a') as log:
                 json.dump(json_object, log)
 
