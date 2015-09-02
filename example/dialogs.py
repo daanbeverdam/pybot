@@ -60,6 +60,22 @@ echo = {'en':{
                }
       }
 
+google = {'en':{
+               'usage': "Search the internet with Google using '/google "
+               "[query]'.",
+               'reply_top': "Top %d hits for '%s':\n",
+               'reply_bottom': "For more results: %s",
+               'no_results': "Sorry, no results found for '%s'."
+               },
+         'nl':{
+               'usage': "Doorzoek het internet met Google: '/google "
+               "[zoekterm]'.",
+               'reply_top': "Top %d hits voor ''%s':\n",
+               'reply_bottom': "Voor meer resultaten: %s",
+               'no_results': "Sorry, geen resultaten gevonden voor '%s'."
+               }
+      }
+
 help = {'en':{
                'usage': "Help-ception! Please try /help for a list of "
                "commands.",
@@ -102,6 +118,18 @@ wiki = {'en':{
          'nl':{
                'usage': "Doorzoek wikipedia met '/wiki [zoekterm]'. "
                "Bijvoorbeeld: '/wiki Albert Einstein'.",
+               'no_results': "Sorry, geen resultaten gevonden voor '%s'."
+               }
+      }
+
+youtube = {'en':{
+               'usage': "Search YouTube with '/youtube [query]'. The first "
+               "result is then returned.",
+               'no_results': "Sorry, no results found for '%s'."
+               },
+         'nl':{
+               'usage': "Doorzoek YouTube met '/youtube [zoekterm]'. Het "
+               "eerste resultaat wordt gegeven.",
                'no_results': "Sorry, geen resultaten gevonden voor '%s'."
                }
       }
