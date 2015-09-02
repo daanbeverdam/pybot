@@ -11,5 +11,5 @@ class BBQCommand(Command):
             url = "http://www.barbecueweer.nl"
             grade = (re.search(r'<div class="cijfer[\'"]?([^\'" >]+)',
                      urllib.urlopen(url).read()).group(1))
-            reply = self.reply_text % grade
+            reply = self.dialogs['reply'] % grade
             return {'message': reply}

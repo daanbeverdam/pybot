@@ -11,10 +11,11 @@ import traceback
 
 class PyBot():
 
-    def __init__(self, name, token, commands):
+    def __init__(self, name, token, dialogs, commands):
         self.name = name
         self.token = token
         self.base_url = 'https://api.telegram.org/bot' + self.token + '/'
+        self.dialogs = dialogs
         self.commands = commands
         self.update_interval = 0.8
 
@@ -33,7 +34,8 @@ class PyBot():
             offset = data['offset']
         except:
             offset = 0
-        response = urllib2.urlopen(self.base_url + 'getUpdates', urllib.urlencode({
+        response = urllib2.urlopen(self.base_url + 'getUpdates',
+            urllib.urlencode({
             'limit': 50,
             'offset': offset,
             })).read()
@@ -49,8 +51,8 @@ class PyBot():
             self.log('Invalid response!')
 
     def handle_message(self, message):
-        self.log(message.first_name_sender + ' sent "' + message.text + '" in chat ' +
-            str(message.chat_id) + '.')
+        self.log(message.first_name_sender + ' sent "' + message.text +
+                 '" in chat ' + str(message.chat_id) + '.')
         for command in self.commands:
             if command.listen(message):
                 try:
@@ -61,29 +63,30 @@ class PyBot():
                         self.reply(message.chat_id, **reply)
                 except:
                     traceback.print_exc()
-                    self.reply(message.chat_id, "Sorry, something went wrong. "
-                    "Need help? Type: '/%s help'." % command.name)
+                    self.reply(message.chat_id,
+                               self.dialogs['command_failed'] % command.name)
         if self.name.lower() in message.text.lower():
             self.reply(message.chat_id, 'Hi ' + message.first_name_sender + '!')
 
     def log(self, entry=None, json_object=None):
         if entry:
-            print(str(entry.encode('utf-8')))
+            print(str(entry.encode('utf-8').replace('\n', ' ')))
             with open('readable.log', 'a') as log:
-                log.write(str(entry) + '\n')
+                log.write(str(entry).replace('\n', ' ') + '\n')
         elif json_object:
             with open('json.log', 'a') as log:
                 json.dump(json_object, log)
 
     def reply(self, chat_id, message=None, photo=None, document=None, gif=None,
-        location=None, preview_disabled=True, caption=None):
+              location=None, preview_disabled=True, caption=None):
         if message:
-            response = urllib2.urlopen(self.base_url + 'sendMessage', urllib.urlencode({
+            response = urllib2.urlopen(self.base_url + 'sendMessage',
+                urllib.urlencode({
                 'chat_id': str(chat_id),
                 'text': message.encode('utf-8'),
                 'disable_web_page_preview': str(preview_disabled)
             })).read()
-            self.log('Sent reply "' + message + '" to ' + str(chat_id) + '.')
+            self.log('Bot sent reply "' + message + '" to ' + str(chat_id) + '.')
         elif photo:
             self.send_action(chat_id, 'upload_photo')
             response = multipart.post_multipart(self.base_url + 'sendPhoto', [
@@ -91,7 +94,7 @@ class PyBot():
             ], [
                 ('photo', 'photo.jpg', photo),
             ])
-            self.log('Sent photo to ' + str(chat_id) + '.')
+            self.log('Bot sent photo to ' + str(chat_id) + '.')
         elif gif or document:
             self.send_action(chat_id, 'upload_document')
             response = multipart.post_multipart(self.base_url + 'sendDocument', [
@@ -99,20 +102,21 @@ class PyBot():
             ], [
                 ('document', ('image.gif' if gif else 'document.file') , (gif if gif else document)),
             ])
-            self.log('Sent document to ' + str(chat_id) + '.')
+            self.log('Bot sent document to ' + str(chat_id) + '.')
         elif location:
             response = urllib2.urlopen(self.base_url + 'sendLocation', urllib.urlencode({
                 'chat_id': str(chat_id),
                 'latitude': location[0],
                 'longitude': location[1]
             })).read()
-            self.log('Sent location to ' + str(chat_id) + '.')
+            self.log('Bot sent location to ' + str(chat_id) + '.')
         else:
             self.log('Error: contents of message and/or chat id not correctly specified.')
             response = None
 
-    def reply_markup(self, chat_id, message, keyboard=None, selective=False, force_reply=False,
-        message_id=None, resize=True, one_time=True, disable_preview=True):
+    def reply_markup(self, chat_id, message, keyboard=None, selective=False,
+                     force_reply=False, message_id=None, resize=True,
+                     one_time=True, disable_preview=True):
         if keyboard:
             reply_markup = ({
                 'keyboard': keyboard,
@@ -135,11 +139,11 @@ class PyBot():
               'force_reply' : force_reply
         })
         response = urllib2.urlopen(self.base_url + 'sendMessage', params).read()
-        self.log('Sent markup: ' + str(keyboard) + ' to ' + str(chat_id) + '.')
+        self.log('Bot sent markup: ' + str(keyboard) + ' to ' + str(chat_id) + '.')
 
     def send_action(self, chat_id, action):
         act = urllib2.urlopen(self.base_url + 'sendChatAction', urllib.urlencode({
             'chat_id': str(chat_id),
             'action': str(action)
         })).read()
-        self.log('Sent action "' + action + '" to ' + str(chat_id) + '.')
+        self.log('Bot sent action "' + action + '" to ' + str(chat_id) + '.')

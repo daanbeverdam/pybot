@@ -24,7 +24,7 @@ class GifCommand(Command):
         search_response = urllib.urlopen(url)
         search_results = search_response.read()
         results = json.loads(search_results)
-        if results != []:
+        if results['data'] != []:
             if 'random' in arguments:
                 gif_url = results['data']['image_original_url']
             else:

@@ -1,7 +1,18 @@
+bot = {'en':{
+               'command_failed': "Sorry, something went wrong. "
+               "Need help? Type: '/%s help'.",
+               },
+       'nl':{
+               'command_failed': "Sorry, er ging iets mis. "
+               "Hulp nodig? Type: '/%s help'"
+               }
+      }
+
 bbq = {'en':{
                'usage': "The command /bbq determines if the weather "
                "circumstances in the Netherlands are suitable for barbecuing.",
-               'reply': "On a scale of 1-10, the barbecue weather gets an %s."
+               'reply': "On a scale of 1-10, the barbecue weather in the "
+               "Netherlands gets an %s."
                },
        'nl':{
                'usage': "Het commando /bbq geeft het huidige "
@@ -31,13 +42,11 @@ dice = {'en':{
 
 doge = {'en':{
                'usage': "Create your own doge image with '/doge "
-               "[your caption]'. For example: '/doge wow such example'.",
-               'reply': "pls enjoy ur doge"
+               "[your caption]'. For example: '/doge wow such example'."
                },
        'nl':{
                'usage': "Maak je eigen doge plaatje met '/doge [caption]'."
-               "Bijvoorbeeld: '/doge wow such example'.",
-               'reply': "pls enjoy ur doge"
+               "Bijvoorbeeld: '/doge wow such example'."
                }
       }
 
@@ -56,23 +65,29 @@ help = {'en':{
 gif = {'en':{
                'usage': "Search for gifs using '/gif [search query]'. You can ask"
                " for a random gif using '/gif random [optional search query]'.",
-               'reply': "Gifs by Giphy.",
                'error': "Sorry, no gifs found for query '%s'."
                },
          'nl':{
                'usage': "Zoek naar gifs met '/gif [zoekterm]'. Je kunt ook een "
                "willekeurige gif opvragen met '/gif random [optionele zoekterm]'",
-               'reply': "Gifs door Giphy.",
                'error': "Sorry, geen gifs gevonden voor '%s'."
                }
       }
 
-empty = {'en':{
-               'usage': "",
-               'reply': ""
+putin = {'en':{
+               'usage': "The command /putin returns a random photo of "
+               "Vladimir Putin."
                },
          'nl':{
-               'usage': "",
-               'reply': ""
+               'usage': "Het /putin commando retourneert een willekeurige "
+               "foto van Vladimir Putin."
+               }
+      }
+
+empty = {'en':{
+               'usage': ""
+               },
+         'nl':{
+               'usage': ""
                }
       }

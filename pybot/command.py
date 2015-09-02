@@ -4,7 +4,6 @@ class Command(object):
         self.name = name
         self.dialogs = dialogs
         self.usage = dialogs['usage']
-        self.reply_text = dialogs['reply']
         self.message = None
 
     def listen(self, message):
