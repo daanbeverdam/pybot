@@ -75,12 +75,12 @@ help = {'en':{
 gif = {'en':{
                'usage': "Search for gifs using '/gif [search query]'. You can ask"
                " for a random gif using '/gif random [optional search query]'.",
-               'error': "Sorry, no gifs found for query '%s'."
+               'no_results': "Sorry, no gifs found for query '%s'."
                },
          'nl':{
                'usage': "Zoek naar gifs met '/gif [zoekterm]'. Je kunt ook een "
                "willekeurige gif opvragen met '/gif random [optionele zoekterm]'",
-               'error': "Sorry, geen gifs gevonden voor '%s'."
+               'no_results': "Sorry, geen gifs gevonden voor '%s'."
                }
       }
 
@@ -91,6 +91,18 @@ putin = {'en':{
          'nl':{
                'usage': "Het /putin commando retourneert een willekeurige "
                "foto van Vladimir Putin."
+               }
+      }
+
+wiki = {'en':{
+               'usage': "Search wikipedia using '/wiki [query]'. For example: "
+               "'/wiki Albert Einstein'.",
+               'no_results': "Sorry, no results found for '%s'."
+               },
+         'nl':{
+               'usage': "Doorzoek wikipedia met '/wiki [zoekterm]'. "
+               "Bijvoorbeeld: '/wiki Albert Einstein'.",
+               'no_results': "Sorry, geen resultaten gevonden voor '%s'."
                }
       }
 
