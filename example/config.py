@@ -6,8 +6,8 @@ from commands.gif import GifCommand
 from help import HelpCommand
 import dialogs
 
-TOKEN = '96784825:AAF24sHS37M_YqvPMeJrjrmHth3E7gABK4A'  # enter authorization token here
-BOT_NAME = 'Jens'   # enter name of the bot here
+TOKEN = ''  # enter authorization token here
+BOT_NAME = ''   # enter name of the bot here
 LANG = 'en'  # 'en' for english, 'nl' for dutch
 COMMAND_LIST = [  #  commands can be removed or added as pleased
                 BBQCommand('bbq', dialogs.bbq[LANG]),
