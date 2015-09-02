@@ -72,7 +72,7 @@ class PyBot():
         if entry:
             print(str(entry.encode('utf-8').replace('\n', ' ')))
             with open('readable.log', 'a') as log:
-                log.write(str(entry).replace('\n', ' ') + '\n')
+                log.write(entry.replace('\n', ' ').encode('utf-8') + '\n')
         elif json_object:
             with open('json.log', 'a') as log:
                 json.dump(json_object, log)

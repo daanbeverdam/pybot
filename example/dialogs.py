@@ -50,6 +50,16 @@ doge = {'en':{
                }
       }
 
+echo = {'en':{
+               'usage': "The simplest command there is: '/echo [text]' returns "
+               "your [text]."
+               },
+         'nl':{
+               'usage': "Het meest simpele commando dat er is: '/echo [tekst]' "
+               "retourneert jouw [tekst]."
+               }
+      }
+
 help = {'en':{
                'usage': "Help-ception! Please try /help for a list of "
                "commands.",

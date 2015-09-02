@@ -3,6 +3,7 @@ from commands.bbq import BBQCommand
 from commands.dice import DiceCommand
 from commands.doge import DogeCommand
 from commands.gif import GifCommand
+from commands.echo import EchoCommand
 from help import HelpCommand
 import dialogs
 
@@ -13,6 +14,8 @@ COMMAND_LIST = [  #  commands can be removed or added as pleased
                 BBQCommand('bbq', dialogs.bbq[LANG]),
                 DiceCommand('dice', dialogs.dice[LANG]),
                 DogeCommand('doge', dialogs.doge[LANG]),
+                EchoCommand('echo', dialogs.echo[LANG]),
                 GifCommand('gif', dialogs.gif[LANG]),
-                HelpCommand('help', dialogs.help[LANG])
+                HelpCommand('help', dialogs.help[LANG]),
+                PutinCommand('putin', dialogs.putin[LANG])
                ]
