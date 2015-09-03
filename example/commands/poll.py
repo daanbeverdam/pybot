@@ -12,7 +12,7 @@ class PollCommand(Command):
         options_dict = {}
         for option in tokens[1:]:
             options.append([option.strip()])
-            options_dict[option.strip()] = ''
+            options_dict[option.strip()] = []
         self.data['poll_options'] = options
         self.data['poll_options_dict'] = options_dict
         self.data['poll_participators'] = []
@@ -22,11 +22,13 @@ class PollCommand(Command):
         return {'message': question, 'keyboard': options, 'force_reply': True}
 
     def store_answer(self):
-        if self.message.sender_id not in self.data['poll_participators']:
-            participators = self.data['poll_participators']
-            participators.append(self.message.first_name_sender)
-            self.data['poll_options_dict'][self.message.text] += (
-                                                 self.message.first_name_sender)
+        participators = self.data['poll_participators']
+        if self.message.sender_id not in participators:
+            participators.append(self.message.sender_id)
+            self.data['poll_participators'] = participators
+            option_dict = self.data['poll_options_dict']
+            option_dict[self.message.text].append(self.message.first_name_sender)
+            self.data['poll_options_dict'] = option_dict
             return {'message': self.dialogs['store_answer'], 'keyboard': None,
                     'selective': True, 'message_id': self.message.id}
         return {'message': None}
@@ -38,8 +40,10 @@ class PollCommand(Command):
 
     def poll_results(self):
         reply = self.dialogs['results']
-        for option, voters in self.data['poll_options_dict']:
-            reply += '\n' + key + ': ' + ', '.join(map(str, voters))
+        for option, voters in self.data['poll_options_dict'].iteritems():
+            reply += ('\n' + option + ': ' + ', '.join(map(str, voters)) +
+                      ' (%d %s)' % (len(voters), self.dialogs[('vote'
+                      if len(voters) == 1 else 'votes')]))
         return {'message': reply}
 
     def end_poll(self):
@@ -49,7 +53,9 @@ class PollCommand(Command):
         return {'message': self.dialogs['not_owner']}
 
     def reply(self):
-        if not self.is_active():
+        if self.arguments() == 'help':
+            return {'message': self.usage}
+        elif not self.is_active():
             return self.new_poll()
         elif self.message.text in self.data['poll_options_dict']:
             return self.store_answer()

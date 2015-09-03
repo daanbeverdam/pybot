@@ -103,24 +103,31 @@ gif = {'en':{
       }
 
 poll = {'en':{
-               'usage': "",
+               'usage': "Start a poll! Use the following format: '/poll "
+               "[question] -[option 1] -[option 2] -[etc]'. You can always "
+               "/cancel a poll and ask for the /results.",
                'store_answer': "Thanks, your answer has been recorded.",
                'results': "The results:",
                'end_poll': "The poll has ended.",
                'not_owner': "Sorry, you are not the owner of the current poll. "
                "Only the owner can /cancel it.",
                'poll_already_active': "Sorry, another poll is already active. "
-               "The owner must /cancel the current one first."
+               "The owner must /cancel the current one first.",
+               'votes': "votes", 'vote': "vote"
                },
          'nl':{
-               'usage': "",
-               'store_answer': "Thanks, your answer has been recorded.",
+               'usage': "Start een poll! Gebruik het volgende formaat: "
+               "'/poll [vraag] -[optie 1] -[optie 2] -[etc]'. De resultaten "
+               "kunnen opgevraagd worden met /results en de poll kan "
+               "geannuleerd worden met /cancel.",
+               'store_answer': "Dankjewel, je antwoord is opgeslagen.",
                'results': "De resultaten zijn als volgt:",
                'end_poll': "De poll is beëindigd.",
                'not_owner': "Sorry, je bent niet de eigenaar van de actieve "
                "poll. Alleen de eigenaar can de poll annuleren met /cancel.",
                'poll_already_active': "Sorry, er is al een andere poll actief. "
-               "De eigenaar moet de huidige poll eerst annuleren met /cancel."
+               "De eigenaar moet de huidige poll eerst annuleren met /cancel.",
+               'votes': "stemmen", 'vote': "stem"
                }
       }
 
