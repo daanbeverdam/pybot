@@ -7,9 +7,10 @@ import urllib
 import urllib2
 import shelve
 import traceback
+import os
 
 
-class PyBot():
+class PyBot(object):
 
     def __init__(self, name, token, dialogs, commands):
         self.name = name
@@ -19,7 +20,13 @@ class PyBot():
         self.commands = commands
         self.update_interval = 0.8
 
+    def check_dirs(self):
+        if not os.path.exists('data'):
+            os.makedirs('data')
+            print "data folder created"
+
     def run(self):
+        self.check_dirs()
         while True:
             try:
                 self.check_for_updates()
@@ -111,7 +118,7 @@ class PyBot():
             })).read()
             self.log('Bot sent location to ' + str(chat_id) + '.')
         else:
-            self.log('Error: contents of message and/or chat id not correctly specified.')
+            self.log('No message specified.')
             response = None
 
     def reply_markup(self, chat_id, message, keyboard=None, selective=False,
@@ -132,7 +139,7 @@ class PyBot():
         reply_markup = json.dumps(reply_markup)
         params = urllib.urlencode({
               'chat_id': str(chat_id),
-              'text': message.encode('utf-8'),
+              'text': message,
               'reply_markup': reply_markup,
               'disable_web_page_preview': disable_preview,
               'reply_to_message_id': str(message_id) if message_id == True else None,
