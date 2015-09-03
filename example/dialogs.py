@@ -1,3 +1,5 @@
+# This Python file uses the following encoding: utf-8
+
 bot = {'en':{
                'command_failed': "Sorry, something went wrong. "
                "Need help? Type: '/%s help'.",
@@ -97,6 +99,28 @@ gif = {'en':{
                'usage': "Zoek naar gifs met '/gif [zoekterm]'. Je kunt ook een "
                "willekeurige gif opvragen met '/gif random [optionele zoekterm]'",
                'no_results': "Sorry, geen gifs gevonden voor '%s'."
+               }
+      }
+
+poll = {'en':{
+               'usage': "",
+               'store_answer': "Thanks, your answer has been recorded.",
+               'results': "The results:",
+               'end_poll': "The poll has ended.",
+               'not_owner': "Sorry, you are not the owner of the current poll. "
+               "Only the owner can /cancel it.",
+               'poll_already_active': "Sorry, another poll is already active. "
+               "The owner must /cancel the current one first."
+               },
+         'nl':{
+               'usage': "",
+               'store_answer': "Thanks, your answer has been recorded.",
+               'results': "De resultaten zijn als volgt:",
+               'end_poll': "De poll is beëindigd.",
+               'not_owner': "Sorry, je bent niet de eigenaar van de actieve "
+               "poll. Alleen de eigenaar can de poll annuleren met /cancel.",
+               'poll_already_active': "Sorry, er is al een andere poll actief. "
+               "De eigenaar moet de huidige poll eerst annuleren met /cancel."
                }
       }
 
