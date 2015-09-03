@@ -117,9 +117,6 @@ class PyBot(object):
                 'longitude': location[1]
             })).read()
             self.log('Bot sent location to ' + str(chat_id) + '.')
-        else:
-            self.log('No message specified.')
-            response = None
 
     def reply_markup(self, chat_id, message, keyboard=None, selective=False,
                      force_reply=False, message_id=None, resize=True,
@@ -142,10 +139,11 @@ class PyBot(object):
               'text': message,
               'reply_markup': reply_markup,
               'disable_web_page_preview': disable_preview,
-              'reply_to_message_id': str(message_id) if message_id == True else None,
-              'force_reply' : force_reply
+              'force_reply' : force_reply,
+              'reply_to_message_id': str(message_id)
         })
         response = urllib2.urlopen(self.base_url + 'sendMessage', params).read()
+        self.log(json_object=response)
         self.log('Bot sent markup: ' + str(keyboard) + ' to ' + str(chat_id) + '.')
 
     def send_action(self, chat_id, action):
