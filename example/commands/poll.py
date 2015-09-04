@@ -5,21 +5,37 @@ import shelve
 class PollCommand(Command):
 
     def new_poll(self):
-        tokens = self.arguments().split('-')
-        question = tokens[0]
+        tokens = self.arguments().split('*')
+        question = tokens[0].strip()
         self.data['poll_question'] = question
         options = []
         options_dict = {}
         for option in tokens[1:]:
-            options.append([option.strip()])
+            options.append(option.strip())
             options_dict[option.strip()] = []
-        self.data['poll_options'] = options
+        formatted_options = self.format(question, options)
         self.data['poll_options_dict'] = options_dict
         self.data['poll_participators'] = []
         self.data['poll_starter'] = self.message.sender_id
-        self.data['poll_active'] = True
-        print options,options_dict
-        return {'message': question, 'keyboard': options, 'force_reply': True}
+        if question != '':
+            self.data['poll_active'] = True
+            reply = question
+        return {'message': reply, 'keyboard': formatted_options,
+                'force_reply': True}
+
+    def format(self, question, options):
+        formatted_options = [['"' + question + '"' ]]
+        temp_options = []
+        counter = 1
+        for option in options:
+            temp_options.append(option)
+            if counter % 2 == 0:
+                formatted_options.append(temp_options)
+                temp_options = []
+            counter +=1
+        if len(temp_options) > 0:
+            formatted_options.append(temp_options + [' '])
+        return formatted_options
 
     def store_answer(self):
         participators = self.data['poll_participators']
@@ -39,7 +55,7 @@ class PollCommand(Command):
         return self.end_poll()
 
     def poll_results(self):
-        reply = self.dialogs['results']
+        reply = self.dialogs['results'] % self.data['poll_question']
         for option, voters in self.data['poll_options_dict'].iteritems():
             reply += ('\n' + option + ': ' + ', '.join(map(str, voters)) +
                       ' (%d %s)' % (len(voters), self.dialogs[('vote'

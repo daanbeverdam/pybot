@@ -104,10 +104,10 @@ gif = {'en':{
 
 poll = {'en':{
                'usage': "Start a poll! Use the following format: '/poll "
-               "[question] -[option 1] -[option 2] -[etc]'. You can always "
+               "[question] *[option 1] *[option 2] *[etc]'. You can always "
                "/cancel a poll and ask for the /results.",
                'store_answer': "Thanks, your answer has been recorded.",
-               'results': "The results:",
+               'results': "The results for '%s':",
                'end_poll': "The poll has ended.",
                'not_owner': "Sorry, you are not the owner of the current poll. "
                "Only the owner can /cancel it.",
@@ -117,11 +117,11 @@ poll = {'en':{
                },
          'nl':{
                'usage': "Start een poll! Gebruik het volgende formaat: "
-               "'/poll [vraag] -[optie 1] -[optie 2] -[etc]'. De resultaten "
+               "'/poll [vraag] *[optie 1] *[optie 2] *[etc]'. De resultaten "
                "kunnen opgevraagd worden met /results en de poll kan "
                "geannuleerd worden met /cancel.",
                'store_answer': "Dankjewel, je antwoord is opgeslagen.",
-               'results': "De resultaten zijn als volgt:",
+               'results': "De resultaten voor de vraag '%s':",
                'end_poll': "De poll is beëindigd.",
                'not_owner': "Sorry, je bent niet de eigenaar van de actieve "
                "poll. Alleen de eigenaar can de poll annuleren met /cancel.",
