@@ -81,7 +81,7 @@ class PyBot(object):
                 log.write(entry.replace('\n', ' ').encode('utf-8') + '\n')
         elif json:
             with open('json.log', 'a') as log:
-                json.dump(json_entry, log)
+                log.write(str(json_entry) + ',\n')
 
     def reply(self, chat_id, message=None, photo=None, document=None, gif=None,
               location=None, preview_disabled=True, caption=None):
