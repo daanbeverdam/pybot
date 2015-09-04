@@ -1,5 +1,5 @@
-import config
 from pybot.command import Command
+import os
 
 
 class HelpCommand(Command):
@@ -7,6 +7,8 @@ class HelpCommand(Command):
     def reply(self):
         if self.arguments() == 'help':
             return {'message': self.usage}
-        for command in config.COMMAND_LIST:
-            self.dialogs['reply'] += '\n/' + command.name
-        return {'message': self.dialogs['reply']}
+        reply = self.dialogs['reply']
+        for name in os.listdir(os.path.dirname(os.path.abspath(__file__))):
+            if name.endswith('.py') and name != '__init__.py':
+                reply += '\n/' + name[:-3]
+        return {'message': reply}
