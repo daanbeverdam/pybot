@@ -1,5 +1,4 @@
 from message import Message
-import config
 import multipart
 import time
 import json
@@ -51,7 +50,7 @@ class PyBot(object):
             data['offset'] = body['result'][-1]['update_id'] + 1
             data.close()
             for result in body['result']:
-                self.log(json_object=result)
+                self.log(json_entry=result)
                 message = Message(result['message'])
                 self.handle_message(message)
         elif body['ok'] == False:
@@ -75,14 +74,14 @@ class PyBot(object):
         if self.name.lower() in message.text.lower():
             self.reply(message.chat_id, 'Hi ' + message.first_name_sender + '!')
 
-    def log(self, entry=None, json_object=None):
+    def log(self, entry=None, json_entry=None):
         if entry:
             print(str(entry.encode('utf-8').replace('\n', ' ')))
             with open('readable.log', 'a') as log:
                 log.write(entry.replace('\n', ' ').encode('utf-8') + '\n')
-        elif json_object:
+        elif json:
             with open('json.log', 'a') as log:
-                json.dump(json_object, log)
+                json.dump(json_entry, log)
 
     def reply(self, chat_id, message=None, photo=None, document=None, gif=None,
               location=None, preview_disabled=True, caption=None):
@@ -138,12 +137,11 @@ class PyBot(object):
               'chat_id': str(chat_id),
               'text': message,
               'reply_markup': reply_markup,
-              'disable_web_page_preview': disable_preview,
               'force_reply' : force_reply,
+              'disable_web_page_preview': disable_preview,
               'reply_to_message_id': str(message_id)
         })
         response = urllib2.urlopen(self.base_url + 'sendMessage', params).read()
-        self.log(json_object=response)
         self.log('Bot sent markup: ' + str(keyboard) + ' to ' + str(chat_id) + '.')
 
     def send_action(self, chat_id, action):
