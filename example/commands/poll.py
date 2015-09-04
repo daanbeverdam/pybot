@@ -19,7 +19,7 @@ class PollCommand(Command):
         self.data['poll_starter'] = self.message.sender_id
         if question != '':
             self.data['poll_active'] = True
-            reply = question
+            reply = question + '\n- ' + '\n -'.join(map(str, options))
         return {'message': reply, 'keyboard': formatted_options,
                 'force_reply': True}
 
@@ -28,7 +28,7 @@ class PollCommand(Command):
         temp_options = []
         counter = 1
         for option in options:
-            temp_options.append(option)
+            temp_options.append(option.strip())
             if counter % 2 == 0:
                 formatted_options.append(temp_options)
                 temp_options = []
