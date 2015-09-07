@@ -30,6 +30,6 @@ class GifCommand(Command):
             else:
                 gif_url = results['data'][0]['images']['original']['url']
         else:
-            return {'message': self.dialogs['error'] % arguments}
+            return {'message': self.dialogs['no_results'] % arguments}
         gif = StringIO.StringIO(urllib.urlopen(gif_url).read()).getvalue()
         return {'gif': gif}

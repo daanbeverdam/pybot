@@ -1,3 +1,5 @@
+# This Python file uses the following encoding: utf-8
+
 bot = {'en':{
                'command_failed': "Sorry, something went wrong. "
                "Need help? Type: '/%s help'.",
@@ -50,6 +52,32 @@ doge = {'en':{
                }
       }
 
+echo = {'en':{
+               'usage': "The simplest command there is: '/echo [text]' returns "
+               "your [text]."
+               },
+         'nl':{
+               'usage': "Het meest simpele commando dat er is: '/echo [tekst]' "
+               "retourneert jouw [tekst]."
+               }
+      }
+
+google = {'en':{
+               'usage': "Search the internet with Google using '/google "
+               "[query]'.",
+               'reply_top': "Top %d hits for '%s':\n",
+               'reply_bottom': "For more results: %s",
+               'no_results': "Sorry, no results found for '%s'."
+               },
+         'nl':{
+               'usage': "Doorzoek het internet met Google: '/google "
+               "[zoekterm]'.",
+               'reply_top': "Top %d hits voor ''%s':\n",
+               'reply_bottom': "Voor meer resultaten: %s",
+               'no_results': "Sorry, geen resultaten gevonden voor '%s'."
+               }
+      }
+
 help = {'en':{
                'usage': "Help-ception! Please try /help for a list of "
                "commands.",
@@ -65,12 +93,41 @@ help = {'en':{
 gif = {'en':{
                'usage': "Search for gifs using '/gif [search query]'. You can ask"
                " for a random gif using '/gif random [optional search query]'.",
-               'error': "Sorry, no gifs found for query '%s'."
+               'no_results': "Sorry, no gifs found for query '%s'."
                },
          'nl':{
                'usage': "Zoek naar gifs met '/gif [zoekterm]'. Je kunt ook een "
                "willekeurige gif opvragen met '/gif random [optionele zoekterm]'",
-               'error': "Sorry, geen gifs gevonden voor '%s'."
+               'no_results': "Sorry, geen gifs gevonden voor '%s'."
+               }
+      }
+
+poll = {'en':{
+               'usage': "Start a poll! Use the following format: '/poll "
+               "[question] *[option 1] *[option 2] *[etc]'. You can always "
+               "/cancel a poll and ask for the /results.",
+               'store_answer': "Thanks, your answer has been recorded.",
+               'results': "The results for '%s':",
+               'end_poll': "The poll has ended.",
+               'not_owner': "Sorry, you are not the owner of the current poll. "
+               "Only the owner can /cancel it.",
+               'poll_already_active': "Sorry, another poll is already active. "
+               "The owner must /cancel the current one first.",
+               'votes': "votes", 'vote': "vote"
+               },
+         'nl':{
+               'usage': "Start een poll! Gebruik het volgende formaat: "
+               "'/poll [vraag] *[optie 1] *[optie 2] *[etc]'. De resultaten "
+               "kunnen opgevraagd worden met /results en de poll kan "
+               "geannuleerd worden met /cancel.",
+               'store_answer': "Dankjewel, je antwoord is opgeslagen.",
+               'results': "De resultaten voor de vraag '%s':",
+               'end_poll': "De poll is beëindigd.",
+               'not_owner': "Sorry, je bent niet de eigenaar van de actieve "
+               "poll. Alleen de eigenaar can de poll annuleren met /cancel.",
+               'poll_already_active': "Sorry, er is al een andere poll actief. "
+               "De eigenaar moet de huidige poll eerst annuleren met /cancel.",
+               'votes': "stemmen", 'vote': "stem"
                }
       }
 
@@ -81,6 +138,71 @@ putin = {'en':{
          'nl':{
                'usage': "Het /putin commando retourneert een willekeurige "
                "foto van Vladimir Putin."
+               }
+      }
+
+quote = {'en':{
+               'usage': "Save quotes by using '/poll [name]: [quote]'. "
+               "You can also ask for a random quote using '/poll [optional "
+               "name]'. Request all quotes by adding 'all'.",
+               'quote_saved': "Quote saved."
+               },
+         'nl':{
+               'usage': "Sla je quotes op met behulp van '/poll [naam]: "
+               "[quote]'. Een willekeurige quote is aan te vragen met '/poll "
+               "[optionele naam]'. Vraag alle quotes op door 'all' toe te "
+               "voegen.",
+               'quote_saved': "Quote opgeslagen."
+               }
+      }
+
+status = {'en':{
+               'usage': "The /status commands lets you know the current status "
+               "of the bot.",
+               'reply': "PyBot is up and running. Awaiting your commands."
+               },
+         'nl':{
+               'usage': "Het /status commando geeft de huidige status weer van "
+               "de bot.",
+               'reply': "PyBot staat voor je klaar en wacht op je commando."
+               }
+      }
+
+weather = {'en':{
+               'usage': "Get the actual weather with '/weather [place name]'.",
+               'lang': 'en',
+               'reply': "It's %s degrees Celsius in %s. Weather description: "
+               "%s."
+               },
+         'nl':{
+               'usage': "Krijg de actuele weersomstandigheden met '/weather "
+               "[plaatsnaam]'.",
+               'lang': 'nl',
+               'reply': "Het is %s graden in %s. Weersomstandigheden: %s."
+               }
+      }
+
+wiki = {'en':{
+               'usage': "Search wikipedia using '/wiki [query]'. For example: "
+               "'/wiki Albert Einstein'.",
+               'no_results': "Sorry, no results found for '%s'."
+               },
+         'nl':{
+               'usage': "Doorzoek wikipedia met '/wiki [zoekterm]'. "
+               "Bijvoorbeeld: '/wiki Albert Einstein'.",
+               'no_results': "Sorry, geen resultaten gevonden voor '%s'."
+               }
+      }
+
+youtube = {'en':{
+               'usage': "Search YouTube with '/youtube [query]'. The first "
+               "result is then returned.",
+               'no_results': "Sorry, no results found for '%s'."
+               },
+         'nl':{
+               'usage': "Doorzoek YouTube met '/youtube [zoekterm]'. Het "
+               "eerste resultaat wordt gegeven.",
+               'no_results': "Sorry, geen resultaten gevonden voor '%s'."
                }
       }
 

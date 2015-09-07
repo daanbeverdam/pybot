@@ -1,2 +1,2 @@
-# pybot
-Python bot for Telegram
+# PyBot
+A Python framework for Telegram Bots

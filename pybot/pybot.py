@@ -1,5 +1,4 @@
 from message import Message
-import config
 import multipart
 import time
 import json
@@ -7,9 +6,10 @@ import urllib
 import urllib2
 import shelve
 import traceback
+import os
 
 
-class PyBot():
+class PyBot(object):
 
     def __init__(self, name, token, dialogs, commands):
         self.name = name
@@ -19,7 +19,13 @@ class PyBot():
         self.commands = commands
         self.update_interval = 0.8
 
+    def check_dirs(self):
+        if not os.path.exists('data'):
+            os.makedirs('data')
+            print "data folder created"
+
     def run(self):
+        self.check_dirs()
         while True:
             try:
                 self.check_for_updates()
@@ -44,7 +50,7 @@ class PyBot():
             data['offset'] = body['result'][-1]['update_id'] + 1
             data.close()
             for result in body['result']:
-                self.log(json_object=result)
+                self.log(json_entry=result)
                 message = Message(result['message'])
                 self.handle_message(message)
         elif body['ok'] == False:
@@ -54,7 +60,9 @@ class PyBot():
         self.log(message.first_name_sender + ' sent "' + message.text +
                  '" in chat ' + str(message.chat_id) + '.')
         for command in self.commands:
-            if command.listen(message):
+            if command.listen(message) == 'help':
+                reply = self.reply(message.chat_id, command.usage)
+            elif command.listen(message):
                 try:
                     reply = command.reply()
                     if 'keyboard' in reply:
@@ -68,14 +76,14 @@ class PyBot():
         if self.name.lower() in message.text.lower():
             self.reply(message.chat_id, 'Hi ' + message.first_name_sender + '!')
 
-    def log(self, entry=None, json_object=None):
+    def log(self, entry=None, json_entry=None):
         if entry:
             print(str(entry.encode('utf-8').replace('\n', ' ')))
             with open('readable.log', 'a') as log:
-                log.write(str(entry).replace('\n', ' ') + '\n')
-        elif json_object:
-            with open('json.log', 'a') as log:
-                json.dump(json_object, log)
+                log.write(entry.replace('\n', ' ').encode('utf-8') + '\n')
+        elif json_entry:
+            with open('json.log', mode='a') as log:
+                json.dump(json_entry, log, indent=2)
 
     def reply(self, chat_id, message=None, photo=None, document=None, gif=None,
               location=None, preview_disabled=True, caption=None):
@@ -110,9 +118,6 @@ class PyBot():
                 'longitude': location[1]
             })).read()
             self.log('Bot sent location to ' + str(chat_id) + '.')
-        else:
-            self.log('Error: contents of message and/or chat id not correctly specified.')
-            response = None
 
     def reply_markup(self, chat_id, message, keyboard=None, selective=False,
                      force_reply=False, message_id=None, resize=True,
@@ -132,14 +137,15 @@ class PyBot():
         reply_markup = json.dumps(reply_markup)
         params = urllib.urlencode({
               'chat_id': str(chat_id),
-              'text': message.encode('utf-8'),
+              'text': message,
               'reply_markup': reply_markup,
+              'force_reply' : force_reply,
               'disable_web_page_preview': disable_preview,
-              'reply_to_message_id': str(message_id) if message_id == True else None,
-              'force_reply' : force_reply
+              'reply_to_message_id': str(message_id)
         })
         response = urllib2.urlopen(self.base_url + 'sendMessage', params).read()
-        self.log('Bot sent markup: ' + str(keyboard) + ' to ' + str(chat_id) + '.')
+        self.log('Bot sent markup: ' + '"' + message + '" ' + str(keyboard) +
+                 ' to ' + str(chat_id) + '.')
 
     def send_action(self, chat_id, action):
         act = urllib2.urlopen(self.base_url + 'sendChatAction', urllib.urlencode({
