@@ -4,6 +4,7 @@
 A Python framework for Telegram Bots.
 
 ### How do I use it?
+In order to use the provided example, please follow the steps below.
 
 #### Obtain API token from BotFather
 The first step in running your own bot is getting an API token from Telegram. You do this by starting a Telegram conversation with @BotFather and sending it the '/newbot' command. Then just follow the directions you are given.
