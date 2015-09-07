@@ -14,10 +14,15 @@ from commands.weather import WeatherCommand
 from commands.quote import QuoteCommand
 import dialogs
 
-TOKEN = '' #  enter authorization token here
-BOT_NAME = 'PyBot' #  enter name of the bot here
-LANG = 'en' #  'en' for english, 'nl' for dutch
-COMMAND_LIST = [ #  commands can be removed or added
+# create a token.txt file with your api token or alternatively,
+# enter your authorization token here directly:
+TOKEN = open('example/token.txt','r').read()
+# enter name of the bot here:
+BOT_NAME = 'PyBot'
+# 'en' for english, 'nl' for dutch:
+LANG = 'en'
+# commands can be removed or added:
+COMMAND_LIST = [
                 BBQCommand('bbq', dialogs.bbq[LANG]),
                 DiceCommand('dice', dialogs.dice[LANG]),
                 DogeCommand('doge', dialogs.doge[LANG]),
