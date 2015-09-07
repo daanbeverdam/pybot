@@ -141,6 +141,47 @@ putin = {'en':{
                }
       }
 
+quote = {'en':{
+               'usage': "Save quotes by using '/poll [name]: [quote]'. "
+               "You can also ask for a random quote using '/poll [optional "
+               "name]'. Request all quotes by adding 'all'.",
+               'quote_saved': "Quote saved."
+               },
+         'nl':{
+               'usage': "Sla je quotes op met behulp van '/poll [naam]: "
+               "[quote]'. Een willekeurige quote is aan te vragen met '/poll "
+               "[optionele naam]'. Vraag alle quotes op door 'all' toe te "
+               "voegen.",
+               'quote_saved': "Quote opgeslagen."
+               }
+      }
+
+status = {'en':{
+               'usage': "The /status commands lets you know the current status "
+               "of the bot.",
+               'reply': "PyBot is up and running. Awaiting your commands."
+               },
+         'nl':{
+               'usage': "Het /status commando geeft de huidige status weer van "
+               "de bot.",
+               'reply': "PyBot staat voor je klaar en wacht op je commando."
+               }
+      }
+
+weather = {'en':{
+               'usage': "Get the actual weather with '/weather [place name]'.",
+               'lang': 'en',
+               'reply': "It's %s degrees Celsius in %s. Weather description: "
+               "%s."
+               },
+         'nl':{
+               'usage': "Krijg de actuele weersomstandigheden met '/weather "
+               "[plaatsnaam]'.",
+               'lang': 'nl',
+               'reply': "Het is %s graden in %s. Weersomstandigheden: %s."
+               }
+      }
+
 wiki = {'en':{
                'usage': "Search wikipedia using '/wiki [query]'. For example: "
                "'/wiki Albert Einstein'.",

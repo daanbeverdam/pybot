@@ -15,14 +15,17 @@ class Command(object):
     def listen(self, message):
         tokens = message.text.split(' ')
         self.message = message
+        self.data = shelve.open('data/chat_' + str(self.message.chat_id))
         if message.text.startswith('/') and tokens[0][1:] == self.name:
-            return True
+            if len(tokens) > 1 and tokens[1] == 'help':
+                return 'help'
+            else:
+                return True
         elif self.is_active():
             return True
         return False
 
     def is_active(self):
-        self.data = shelve.open('data/chat_' + str(self.message.chat_id))
         try:
             if self.data[self.name + '_active']:
                 return True

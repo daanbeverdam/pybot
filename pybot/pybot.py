@@ -60,7 +60,9 @@ class PyBot(object):
         self.log(message.first_name_sender + ' sent "' + message.text +
                  '" in chat ' + str(message.chat_id) + '.')
         for command in self.commands:
-            if command.listen(message):
+            if command.listen(message) == 'help':
+                reply = self.reply(message.chat_id, command.usage)
+            elif command.listen(message):
                 try:
                     reply = command.reply()
                     if 'keyboard' in reply:
@@ -79,9 +81,9 @@ class PyBot(object):
             print(str(entry.encode('utf-8').replace('\n', ' ')))
             with open('readable.log', 'a') as log:
                 log.write(entry.replace('\n', ' ').encode('utf-8') + '\n')
-        elif json:
-            with open('json.log', 'a') as log:
-                log.write(str(json_entry) + ',\n')
+        elif json_entry:
+            with open('json.log', mode='a') as log:
+                json.dump(json_entry, log, indent=2)
 
     def reply(self, chat_id, message=None, photo=None, document=None, gif=None,
               location=None, preview_disabled=True, caption=None):
@@ -142,7 +144,8 @@ class PyBot(object):
               'reply_to_message_id': str(message_id)
         })
         response = urllib2.urlopen(self.base_url + 'sendMessage', params).read()
-        self.log('Bot sent markup: ' + str(keyboard) + ' to ' + str(chat_id) + '.')
+        self.log('Bot sent markup: ' + '"' + message + '" ' + str(keyboard) +
+                 ' to ' + str(chat_id) + '.')
 
     def send_action(self, chat_id, action):
         act = urllib2.urlopen(self.base_url + 'sendChatAction', urllib.urlencode({
