@@ -9,6 +9,9 @@ from commands.youtube import YouTubeCommand
 from commands.google import GoogleCommand
 from commands.poll import PollCommand
 from commands.help import HelpCommand
+from commands.status import StatusCommand
+from commands.weather import WeatherCommand
+from commands.quote import QuoteCommand
 import dialogs
 
 TOKEN = '' #  enter authorization token here
@@ -24,6 +27,9 @@ COMMAND_LIST = [ #  commands can be removed or added
                 HelpCommand('help', dialogs.help[LANG]),
                 PollCommand('poll', dialogs.poll[LANG]),
                 PutinCommand('putin', dialogs.putin[LANG]),
+                QuoteCommand('quote', dialogs.quote[LANG]),
+                StatusCommand('status', dialogs.status[LANG]),
                 WikiCommand('wiki', dialogs.wiki[LANG]),
+                WeatherCommand('weather', dialogs.weather[LANG]),
                 YouTubeCommand('youtube', dialogs.youtube[LANG])
                ]
