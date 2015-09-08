@@ -20,7 +20,7 @@ Then, open 'config.py' located in the example folder and find the line with `TOK
 ```python
 TOKEN = '123456789:ABCDEFGHIJKLMN_OPQRSTUVWXYZ'
 ```
-Next, install the framework:
+You should also fill in the `BOT_NAME` and the `LANG`uage it speaks. Currently supported are English and Dutch. Next, install the framework:
 ```
 python pybot/setup.py install
 ```
