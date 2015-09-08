@@ -16,7 +16,7 @@ import dialogs
 
 # create a token.txt file with your api token or alternatively,
 # enter your authorization token here directly:
-TOKEN = open('example/token.txt','r').read()
+TOKEN = open('example/token.txt','r').read().strip()
 # enter name of the bot here:
 BOT_NAME = 'PyBot'
 # 'en' for english, 'nl' for dutch:
