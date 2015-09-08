@@ -142,14 +142,14 @@ putin = {'en':{
       }
 
 quote = {'en':{
-               'usage': "Save quotes by using '/poll [name]: [quote]'. "
-               "You can also ask for a random quote using '/poll [optional "
+               'usage': "Save quotes by using '/quote [name]: [quote]'. "
+               "You can also ask for a random quote using '/quote [optional "
                "name]'. Request all quotes by adding 'all'.",
                'quote_saved': "Quote saved."
                },
          'nl':{
-               'usage': "Sla je quotes op met behulp van '/poll [naam]: "
-               "[quote]'. Een willekeurige quote is aan te vragen met '/poll "
+               'usage': "Sla je quotes op met behulp van '/quote [naam]: "
+               "[quote]'. Een willekeurige quote is aan te vragen met '/quote "
                "[optionele naam]'. Vraag alle quotes op door 'all' toe te "
                "voegen.",
                'quote_saved': "Quote opgeslagen."
