@@ -12,30 +12,34 @@ class QuoteCommand(Command):
         if arguments == None:
             quote_list = quotes[(random.choice(quotes.keys()))]
             reply = random.choice(quote_list)
-        elif arguments.split(' ')[0] == 'all' or arguments.split(' ')[1] == 'all':
-            quote_list = []
-            if arguments.split(' ') == 1:
-                for name in quotes:
-                    for quote in quotes[name]:
-                        quote_list.append(quote)
-            else:
-                name = arguments.split(' ')[0]
-                for quote in quotes[name]:
-                    quote_list.append(quote)
-            reply = '\n'.join(map(str, quote_list))
-        elif arguments in quotes.keys():
-            quote_list = quotes[arguments]
-            reply = random.choice(quote_list)
         else:
-            name = arguments.split(':')[0]
-            quote = arguments.split(':')[1]
-            try:
-                quotes[name].append(quote)
-                self.data['quote_store'] = quotes
-            except:
-                quotes[name] = [quote]
-                self.data['quote_store'] = quotes
-            reply = self.dialogs['quote_saved']
+            tokens = arguments.split(' ')
+            if len(tokens) > 1:
+                if ':' in arguments:
+                    name = arguments.split(':')[0]
+                    quote = '"' + arguments.split(':')[1].strip() + '"'
+                    try:
+                        quotes[name].append(quote)
+                        self.data['quote_store'] = quotes
+                    except:
+                        quotes[name] = [quote]
+                        self.data['quote_store'] = quotes
+                    reply = self.dialogs['quote_saved']
+                elif tokens[0] in quotes and tokens[1] == 'all':
+                    quote_list = []
+                    for quote in quotes[tokens[0]]:
+                        quote_list.append(quote)
+                    reply = '\n'.join(map(str, quote_list))
+            elif len(tokens) == 1:
+                if tokens[0] in quotes:
+                    quote_list = quotes[tokens[0]]
+                    reply = random.choice(quote_list)
+                if tokens[0] == 'all':
+                    quote_list = []
+                    for name in quotes:
+                        for quote in quotes[name]:
+                            quote_list.append(quote)
+                    reply = '\n'.join(map(str, quote_list))
         return {'message': reply}
 
     def check_quote_store(self):
