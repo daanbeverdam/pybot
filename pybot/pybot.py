@@ -76,9 +76,7 @@ class PyBot(object):
                     traceback.print_exc()
                     self.reply(message.chat_id,
                                self.dialogs['command_failed'] % command.name)
-        if self.name.lower() in message.text.lower():
-            self.reply(message.chat_id, 'Hi ' + message.first_name_sender + '!')
-
+                               
     def log(self, entry=None, json_entry=None):
         if entry:
             print(str(entry.encode('utf-8').replace('\n', ' ')))
