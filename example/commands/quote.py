@@ -17,7 +17,7 @@ class QuoteCommand(Command):
             tokens = arguments.split(' ')
             if len(tokens) > 1:
                 if ':' in arguments:
-                    name = arguments.split(':')[0]
+                    name = arguments.split(':')[0].title()
                     quote = '"' + arguments.split(':')[1].strip() + '"'
                     try:
                         quotes[name].append(quote)
@@ -26,15 +26,16 @@ class QuoteCommand(Command):
                         quotes[name] = [quote]
                         self.data['quote_store'] = quotes
                     reply = self.dialogs['quote_saved']
-                elif tokens[0] in quotes and tokens[1] == 'all':
+                elif tokens[0].title() in quotes and tokens[1] == 'all':
                     quote_list = []
-                    for quote in quotes[tokens[0]]:
+                    for quote in quotes[tokens[0].title()]:
                         quote_list.append(quote)
-                    reply = '\n'.join(map(str, quote_list))  + '\n -' + tokens[0]
+                    reply = ('\n'.join(map(str, quote_list))  + '\n -' +
+                             tokens[0].title())
             elif len(tokens) == 1:
-                if tokens[0] in quotes:
-                    quote_list = quotes[tokens[0]]
-                    reply = random.choice(quote_list) + ' -' + tokens[0]
+                if tokens[0].title() in quotes:
+                    quote_list = quotes[tokens[0].title()]
+                    reply = random.choice(quote_list) + ' -' + tokens[0].title()
                 if tokens[0] == 'all':
                     quote_list = []
                     for name in quotes:
