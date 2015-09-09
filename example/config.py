@@ -12,6 +12,7 @@ from commands.help import HelpCommand
 from commands.status import StatusCommand
 from commands.weather import WeatherCommand
 from commands.quote import QuoteCommand
+from commands.stats import StatsCommand
 import dialogs
 
 # create a .txt file with your api token or alternatively,
@@ -33,6 +34,7 @@ COMMAND_LIST = [
                 PollCommand('poll', dialogs.poll[LANG]),
                 PutinCommand('putin', dialogs.putin[LANG]),
                 QuoteCommand('quote', dialogs.quote[LANG]),
+                StatsCommand('stats', dialogs.stats[LANG]),
                 StatusCommand('status', dialogs.status[LANG]),
                 WikiCommand('wiki', dialogs.wiki[LANG]),
                 WeatherCommand('weather', dialogs.weather[LANG]),

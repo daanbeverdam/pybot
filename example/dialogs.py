@@ -156,6 +156,24 @@ quote = {'en':{
                }
       }
 
+stats = {'en':{
+               'usage': "The /stats command returns statistics of the "
+               "chat.",
+               'reply': "Total messages sent: %i\n"
+               "Top 3 most used commands:\n"
+               "1. %s (%i times)\n2. %s (%i times)\n3. %s (%i times)\n"
+               "Most active user: %s (%i messages)"
+               },
+         'nl':{
+               'usage': "Het /stats commando geeft de huidige "
+               "gespreksstatistieken.",
+               'reply': "Totaal verzonden berichten: %i\n"
+               "Top 3 meest gebruikte commando's:\n"
+               "1. %s (%i keer)\n2. %s (%i keer)\n3. %s (%i keer)\n"
+               "Meest actieve gebruiker: %s (%i berichten)"
+               }
+      }
+
 status = {'en':{
                'usage': "The /status commands lets you know the current status "
                "of the bot.",
