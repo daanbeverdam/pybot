@@ -25,10 +25,11 @@ class StatsCommand(Command):
         all_commands = ''
         for message in entries:
             text = message.get('text')
-            if not text.startswith('/'):
-                all_words += ' ' + text.lower()
-            if text.startswith('/'):
-                all_commands += ' ' + text
+            if text != None:
+                if not text.startswith('/'):
+                    all_words += ' ' + text.lower()
+                if text.startswith('/'):
+                    all_commands += ' ' + text
             sender = message['from']
             first_name_sender = sender['first_name']
             stat_dict.setdefault(first_name_sender, []).append(text)
