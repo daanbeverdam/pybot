@@ -35,18 +35,11 @@ class StatsCommand(Command):
                 if text.startswith('/'):
                     all_commands += ' ' + text
             first_name_sender = message['from']['first_name']
-            if text != None:
-                if not text.startswith('/'):
-                    all_words += ' ' + text.lower()
-                if text.startswith('/'):
-                    all_commands += ' ' + text
-            sender = message['from']
-            first_name_sender = sender['first_name']
             stat_dict.setdefault(first_name_sender, []).append(text)
         total_words = len(all_words.split(' '))
         words = collections.Counter(re.findall(r'\w+', all_words))
         commands = collections.Counter(re.findall(r'/\w+', all_commands))
-        most_active_users = [('Nobody', []), ('Nopebody', [])]
+        most_active_users = [('Placeholder 1', []), ('Placeholder 2', [])]
         for user in stat_dict.keys():
             most_active_users.append((user, stat_dict[user]))
         most_active_users.sort(key=lambda tup: len(tup[1]), reverse=True)
