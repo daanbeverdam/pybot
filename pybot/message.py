@@ -12,6 +12,6 @@ class Message(object):
         self.contains_command = self.check_for_command()
 
     def check_for_command(self):
-        if self.text.startswith('/'):
+        if self.text != None and self.text.startswith('/'):
             return True
         return False
