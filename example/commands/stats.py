@@ -1,5 +1,6 @@
 from pybot.command import Command
 import re
+import operator
 import json
 import collections
 
@@ -9,7 +10,10 @@ class StatsCommand(Command):
     def reply(self):
         log = json.loads(open('json.log','r').read())
         reply = self.scan_entries(log)
-        return {'message': reply}
+        try:
+            return {'message': reply}
+        except:
+            return {'message': self.dialogs['error']}
 
     def scan_entries(self, log):
         relevant_entries = []
@@ -29,28 +33,22 @@ class StatsCommand(Command):
                 all_words += ' ' + text.lower()
             if text.startswith('/'):
                 all_commands += ' ' + text
-            sender = message['from']
-            first_name_sender = sender['first_name']
+            first_name_sender = message['from']['first_name']
             stat_dict.setdefault(first_name_sender, []).append(text)
         total_words = len(all_words.split(' '))
-        words = re.findall(r'\w+', all_words)
-        commands = re.findall(r'/\w+', all_commands)
-        words = collections.Counter(words)
-        commands = collections.Counter(commands)
-        most_active_user = {'Nobody': []}
+        words = collections.Counter(re.findall(r'\w+', all_words))
+        commands = collections.Counter(re.findall(r'/\w+', all_commands))
+        most_active_users = [('Nobody', []), ('Nopebody', [])]
         for user in stat_dict.keys():
-            if len(stat_dict[user]) > len(most_active_user.values()[0]):
-                most_active_user = {user: stat_dict[user]}
+            most_active_users.append((user, stat_dict[user]))
+        most_active_users.sort(key=lambda tup: len(tup[1]), reverse=True)
         total_messages = len(entries)
         most_used_commands = commands.most_common(3)
         most_used_words = words.most_common(3)
-        return self.dialogs['reply'] % (total_messages,
+        return self.dialogs['reply'] % (total_messages, total_words,
             most_used_commands[0][0], most_used_commands[0][1],
             most_used_commands[1][0], most_used_commands[1][1],
             most_used_commands[2][0], most_used_commands[2][1],
-            most_active_user.keys()[0], len(most_active_user.values()[0]))
-
-
-
-
-
+            most_active_users[0][0], len(most_active_users[0][1]),
+            most_active_users[1][0], len(most_active_users[1][1]),
+            most_active_users[2][0], len(most_active_users[2][1]))

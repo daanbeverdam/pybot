@@ -160,17 +160,23 @@ stats = {'en':{
                'usage': "The /stats command returns statistics of the "
                "chat.",
                'reply': "Total messages sent: %i\n"
+               "Total words sent: %i\n\n"
                "Top 3 most used commands:\n"
-               "1. %s (%i times)\n2. %s (%i times)\n3. %s (%i times)\n"
-               "Most active user: %s (%i messages)"
+               "1. %s (%i times)\n2. %s (%i times)\n3. %s (%i times)\n\n"
+               "Top 3 most active users: \n1. %s (%i messages)\n"
+               "2. %s (%i messages)\n3. %s (%i messages)",
+               'error': "Sorry, not enough data yet. Chat some more!"
                },
          'nl':{
                'usage': "Het /stats commando geeft de huidige "
                "gespreksstatistieken.",
                'reply': "Totaal verzonden berichten: %i\n"
+               "Totaal verzonden woorden: %i\n\n"
                "Top 3 meest gebruikte commando's:\n"
-               "1. %s (%i keer)\n2. %s (%i keer)\n3. %s (%i keer)\n"
-               "Meest actieve gebruiker: %s (%i berichten)"
+               "1. %s (%i keer)\n2. %s (%i keer)\n3. %s (%i keer)\n\n"
+               "Top 3 meest actieve gebruikers:\n1. %s (%i berichten)\n"
+               "2. %s (%i berichten)\n3. %s (%i berichten)",
+               'error': "Sorry, nog niet genoeg data. Chat nog wat meer!"
                }
       }
 
