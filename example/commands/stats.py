@@ -20,7 +20,8 @@ class StatsCommand(Command):
         for entry in log:
             chat_id = entry['message']['chat']['id']
             if chat_id == self.message.chat_id:
-                relevant_entries.append(entry['message'])
+                if entry['message'] != None:
+                    relevant_entries.append(entry['message'])
         return self.calculate_statistics(relevant_entries)
 
     def calculate_statistics(self, entries):
@@ -34,6 +35,13 @@ class StatsCommand(Command):
             if text.startswith('/'):
                 all_commands += ' ' + text
             first_name_sender = message['from']['first_name']
+            if text != None:
+                if not text.startswith('/'):
+                    all_words += ' ' + text.lower()
+                if text.startswith('/'):
+                    all_commands += ' ' + text
+            sender = message['from']
+            first_name_sender = sender['first_name']
             stat_dict.setdefault(first_name_sender, []).append(text)
         total_words = len(all_words.split(' '))
         words = collections.Counter(re.findall(r'\w+', all_words))
