@@ -195,6 +195,7 @@ status = {'en':{
 weather = {'en':{
                'usage': "Get the actual weather with '/weather [place name]'.",
                'lang': 'en',
+               'error': "Sorry, no results found for '%s'.",
                'reply': "It's %s degrees Celsius in %s. Weather description: "
                "%s."
                },
@@ -202,6 +203,7 @@ weather = {'en':{
                'usage': "Krijg de actuele weersomstandigheden met '/weather "
                "[plaatsnaam]'.",
                'lang': 'nl',
+               'error': "Sorry, geen resultaten gevonden voor '%s'.",
                'reply': "Het is %s graden in %s. Weersomstandigheden: %s."
                }
       }
