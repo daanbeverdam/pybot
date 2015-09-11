@@ -1,3 +1,6 @@
+# credits to yukuku
+# source: https://github.com/yukuku/telebot/blob/master/multipart.py
+
 import httplib
 import mimetypes
 import urlparse
