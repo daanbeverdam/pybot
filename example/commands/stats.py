@@ -8,7 +8,7 @@ import collections
 class StatsCommand(Command):
 
     def reply(self):
-        log = json.loads(open('json.log','r').read())
+        log = json.loads(open('json.log', 'r').read())
         reply = self.scan_entries(log)
         try:
             return {'message': reply}
@@ -32,8 +32,8 @@ class StatsCommand(Command):
             if text != None:
                 if not text.startswith('/'):
                     all_words += ' ' + text.lower()
-                if text.startswith('/'):
-                    all_commands += ' ' + text
+                elif text.startswith('/'):
+                    all_commands += ' ' + text.split(' ')[0]
             first_name_sender = message['from']['first_name']
             stat_dict.setdefault(first_name_sender, []).append(text)
         total_words = len(all_words.split(' '))
