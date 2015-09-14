@@ -25,9 +25,13 @@ class QuoteCommand(Command):
         return {'message': reply}
 
     def random_quote(self):
-        random_name = random.choice(self.data['quote_store'].keys())
-        quote_list = self.data['quote_store'][random_name]
-        return random.choice(quote_list) + ' -' + random_name
+        all_quotes = self.data['quote_store'].values()
+        all_quotes = [item for sublist in all_quotes for item in sublist]
+        random_quote = random.choice(all_quotes)
+        for name, quotes in self.data['quote_store'].items():
+            if random_quote in quotes:
+                return str(random_quote) + ' -' + name
+
 
     def random_quote_by_name(self, tokens):
         quote_list = self.data['quote_store'][tokens[0].title()]
