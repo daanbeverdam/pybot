@@ -52,8 +52,8 @@ class StatsCommand(Command):
     def format_statistics(self, total_messages, total_words,
                           most_used_commands, most_active_users):
         temp_string = ""
+        counter = 1
         for entry in most_active_users:
-            counter = 1
             temp_string += "%i. %s (%i)\n" % (counter, entry[0] ,len(entry[1]))
             counter += 1
         most_active_users = temp_string
