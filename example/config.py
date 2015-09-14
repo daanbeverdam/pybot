@@ -13,6 +13,7 @@ from commands.status import StatusCommand
 from commands.weather import WeatherCommand
 from commands.quote import QuoteCommand
 from commands.stats import StatsCommand
+from commands.calculator import CalculatorCommand
 import dialogs
 
 # create a .txt file with your api token or alternatively,
@@ -25,6 +26,7 @@ LANG = open('example/prefs.txt', 'r').readlines()[2].strip()
 # commands can be removed or added:
 COMMAND_LIST = [
                 BBQCommand('bbq', dialogs.bbq[LANG]),
+                CalculatorCommand('calculator', dialogs.calculator[LANG]),
                 DiceCommand('dice', dialogs.dice[LANG]),
                 DogeCommand('doge', dialogs.doge[LANG]),
                 EchoCommand('echo', dialogs.echo[LANG]),

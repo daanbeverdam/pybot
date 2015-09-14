@@ -23,6 +23,14 @@ bbq = {'en':{
                }
       }
 
+calculator = {'en':{
+               'usage': "The /calulator command brings up a calculator."
+               },
+         'nl':{
+               'usage': "Het /calculator commando retourneert een rekenmachine."
+               }
+      }
+
 dice = {'en':{
                'usage': "Throw a die with /dice. Throw multiple dice by "
                "adding a number. For example: /dice 2.",
