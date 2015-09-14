@@ -53,7 +53,7 @@ class QuoteCommand(Command):
         quote_list = []
         for quote in self.data['quote_store'][tokens[0].title()]:
             quote_list.append(quote)
-        return ('\n'.join(map(str, quote_list))  + '\n -' +
+        return ('\n'.join(quote_list)  + '\n -' +
                 tokens[0].title())
 
     def all_quotes(self, tokens):
@@ -61,7 +61,7 @@ class QuoteCommand(Command):
         for name in self.data['quote_store']:
             for quote in self.data['quote_store'][name]:
                 quote_list.append(quote + ' -' + name)
-        return '\n'.join(map(str, quote_list))
+        return '\n'.join(quote_list)
 
     def check_quote_store(self):
         try:
