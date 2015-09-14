@@ -39,17 +39,27 @@ class StatsCommand(Command):
         total_words = len(all_words.split(' '))
         words = collections.Counter(re.findall(r'\w+', all_words))
         commands = collections.Counter(re.findall(r'/\w+', all_commands))
-        most_active_users = [('Placeholder 1', []), ('Placeholder 2', [])]
+        most_active_users = []
         for user in stat_dict.keys():
             most_active_users.append((user, stat_dict[user]))
         most_active_users.sort(key=lambda tup: len(tup[1]), reverse=True)
         total_messages = len(entries)
         most_used_commands = commands.most_common(3)
         most_used_words = words.most_common(3)
+        return self.format_statistics(total_messages, total_words,
+                                      most_used_commands, most_active_users)
+
+    def format_statistics(self, total_messages, total_words,
+                          most_used_commands, most_active_users):
+        temp_string = ""
+        for entry in most_active_users:
+            counter = 1
+            temp_string += "%i. %s (%i)\n" % (counter, entry[0] ,len(entry[1]))
+            counter += 1
+        most_active_users = temp_string
         return self.dialogs['reply'] % (total_messages, total_words,
             most_used_commands[0][0], most_used_commands[0][1],
             most_used_commands[1][0], most_used_commands[1][1],
             most_used_commands[2][0], most_used_commands[2][1],
-            most_active_users[0][0], len(most_active_users[0][1]),
-            most_active_users[1][0], len(most_active_users[1][1]),
-            most_active_users[2][0], len(most_active_users[2][1]))
+            most_active_users)
+
