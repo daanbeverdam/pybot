@@ -24,10 +24,14 @@ bbq = {'en':{
       }
 
 calculator = {'en':{
-               'usage': "The /calulator command brings up a calculator."
+               'usage': "The /calulator command brings up a calculator.",
+               'prompt': "Please type your query:",
+               'error': "Sorry, your query is invalid."
                },
          'nl':{
-               'usage': "Het /calculator commando retourneert een rekenmachine."
+               'usage': "Het /calculator commando retourneert een rekenmachine.",
+               'prompt': "Type je som:",
+               'error': "Sorry, je som is ongeldig."
                }
       }
 

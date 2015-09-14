@@ -7,10 +7,10 @@ class CalculatorCommand(Command):
         if self.is_active():
             return self.collect_input()
         else:
-            return self.start_calculator()
+            return self.start()
 
-    def start_calculator(self):
-        prompt = 'Je som?'
+    def start(self):
+        prompt = self.dialogs['prompt']
         calculator = ([['1','2','3','+'], ['4','5','6','-'],
                       ['7','8','9','*'], ['0','.','=','/']])
         self.data['calc_starter'] = self.message.sender_id
@@ -29,9 +29,16 @@ class CalculatorCommand(Command):
                 print 'collect'
                 return {'message': None}
             elif self.message.text == '=':
-                answer = "%i" % eval(self.data['calc_query'])
-                print 'answer incoming'
-                self.data['calculator_active'] = False
-                return {'message': answer, 'keyboard': None}
+                return self.answer()
         return {'message': None}
 
+    def answer(self):
+        self.stop()
+        try:
+            answer = str(eval(self.data['calc_query']))
+            return {'message': answer, 'keyboard': None}
+        except:
+            return {'message': self.dialogs['error'], 'keyboard': None}
+
+    def stop(self):
+        self.data['calculator_active'] = False
