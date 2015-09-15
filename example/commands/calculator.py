@@ -17,7 +17,8 @@ class CalculatorCommand(Command):
         self.data['calc_query'] = ''
         self.data['calculator_active'] = True
         return {'message': prompt, 'keyboard': calculator, 'one_time': False,
-               'selective': True, 'force_reply': True}
+               'selective': True, 'message_id': self.message.id,
+               'force_reply': True}
 
     def collect_input(self):
         operators = ['*', '/', '.', '+', '-']
