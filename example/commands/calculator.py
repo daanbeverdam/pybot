@@ -11,14 +11,14 @@ class CalculatorCommand(Command):
 
     def start(self):
         prompt = self.dialogs['prompt']
-        calculator = ([['1','2','3','+'], ['4','5','6','-'],
-                      ['7','8','9','*'], ['0','.','=','/']])
+        calculator = ([['1', '2', '3', '+'], ['4', '5', '6', '-'],
+                      ['7', '8', '9', '*'], ['0', '.', '=', '/']])
         self.data['calc_starter'] = self.message.sender_id
         self.data['calc_query'] = ''
         self.data['calculator_active'] = True
         return {'message': prompt, 'keyboard': calculator, 'one_time': False,
-               'selective': True, 'message_id': self.message.id,
-               'force_reply': True}
+                'selective': True, 'message_id': self.message.id,
+                'force_reply': True}
 
     def collect_input(self):
         operators = ['*', '/', '.', '+', '-']

@@ -8,14 +8,15 @@ class QuoteCommand(Command):
     def reply(self):
         arguments = self.arguments()
         self.check_quote_store()
-        if arguments == None:
+        if arguments is None:
             reply = self.random_quote()
         else:
             tokens = arguments.split(' ')
             if len(tokens) > 1:
                 if ':' in arguments:
                     reply = self.save_quote()
-                elif tokens[0].title() in self.data['quote_store'] and tokens[1] == 'all':
+                elif (tokens[0].title() in self.data['quote_store'] and
+                      tokens[1] == 'all'):
                     reply = self.all_quotes_by_name(tokens)
             elif len(tokens) == 1:
                 if tokens[0].title() in self.data['quote_store']:
@@ -31,7 +32,6 @@ class QuoteCommand(Command):
         for name, quotes in self.data['quote_store'].items():
             if random_quote in quotes:
                 return str(random_quote) + ' -' + name
-
 
     def random_quote_by_name(self, tokens):
         quote_list = self.data['quote_store'][tokens[0].title()]
@@ -53,7 +53,7 @@ class QuoteCommand(Command):
         quote_list = []
         for quote in self.data['quote_store'][tokens[0].title()]:
             quote_list.append(quote)
-        return ('\n'.join(quote_list)  + '\n -' +
+        return ('\n'.join(quote_list) + '\n -' +
                 tokens[0].title())
 
     def all_quotes(self, tokens):

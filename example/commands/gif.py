@@ -12,14 +12,16 @@ class GifCommand(Command):
             return {'message': self.usage}
         elif arguments.startswith('random'):
             if arguments == 'random':
-                url = 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC'
+                url = ('http://api.giphy.com/v1/gifs/random?'
+                       'api_key=dc6zaTOxFJmzC')
             else:
-                query = arguments.split(' ',1)[1]
+                query = arguments.split(' ', 1)[1]
                 url = ('http://api.giphy.com/v1/gifs/random?api_key'
-                       '=dc6zaTOxFJmzC&tag=' + '+'.join(map(str,query.split())))
+                       '=dc6zaTOxFJmzC&tag=' + '+'.join(map(str,
+                                                            query.split())))
         else:
             url = ('http://api.giphy.com/v1/gifs/search?q=' +
-                   '+'.join(map(str,arguments.split())) +
+                   '+'.join(map(str, arguments.split())) +
                    '&api_key=dc6zaTOxFJmzC')
         search_response = urllib.urlopen(url)
         search_results = search_response.read()

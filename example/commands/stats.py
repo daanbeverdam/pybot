@@ -29,7 +29,7 @@ class StatsCommand(Command):
         all_commands = ''
         for message in entries:
             text = message.get('text')
-            if text != None:
+            if text is not None:
                 if not text.startswith('/'):
                     all_words += ' ' + text.lower()
                 elif text.startswith('/'):
@@ -54,12 +54,14 @@ class StatsCommand(Command):
         temp_string = ""
         counter = 1
         for entry in most_active_users:
-            temp_string += "%i. %s (%i)\n" % (counter, entry[0] ,len(entry[1]))
+            temp_string += "%i. %s (%i)\n" % (counter, entry[0], len(entry[1]))
             counter += 1
         most_active_users = temp_string
         return self.dialogs['reply'] % (total_messages, total_words,
-            most_used_commands[0][0], most_used_commands[0][1],
-            most_used_commands[1][0], most_used_commands[1][1],
-            most_used_commands[2][0], most_used_commands[2][1],
-            most_active_users)
-
+                                        most_used_commands[0][0],
+                                        most_used_commands[0][1],
+                                        most_used_commands[1][0],
+                                        most_used_commands[1][1],
+                                        most_used_commands[2][0],
+                                        most_used_commands[2][1],
+                                        most_active_users)

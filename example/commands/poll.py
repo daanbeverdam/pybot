@@ -35,7 +35,7 @@ class PollCommand(Command):
                 'force_reply': True}
 
     def format(self, question, options):
-        formatted_options = [['"%s"' % question ]]
+        formatted_options = [['"%s"' % question]]
         temp_options = []
         counter = 1
         for option in options:
@@ -43,7 +43,7 @@ class PollCommand(Command):
             if counter % 2 == 0:
                 formatted_options.append(temp_options)
                 temp_options = []
-            counter +=1
+            counter += 1
         if len(temp_options) > 0:
             formatted_options.append(temp_options + [' '])
         return formatted_options
@@ -54,7 +54,8 @@ class PollCommand(Command):
             participators.append(self.message.sender_id)
             self.data['poll_participators'] = participators
             option_dict = self.data['poll_options_dict']
-            option_dict[self.message.text].append(self.message.first_name_sender)
+            option_dict[self.message.text].append(self.message.
+                                                  first_name_sender)
             self.data['poll_options_dict'] = option_dict
             return {'message': self.dialogs['store_answer'], 'keyboard': None,
                     'selective': True, 'message_id': self.message.id}
@@ -69,8 +70,8 @@ class PollCommand(Command):
         reply = self.dialogs['results'] % self.data['poll_question']
         for option, voters in self.data['poll_options_dict'].iteritems():
             reply += ('\n- ' + option + ': ' + ', '.join(voters) +
-                      ' (%d %s)' % (len(voters), self.dialogs[('vote'
-                      if len(voters) == 1 else 'votes')]))
+                      ' (%d %s)' % (len(voters), self.dialogs[(
+                                    'vote' if len(voters) == 1 else 'votes')]))
         return {'message': reply}
 
     def end_poll(self):
