@@ -86,7 +86,7 @@ class PyBot(object):
 
     def log(self, entry=None, json_entry=None):
         if entry:
-            print entry.replace('\n', ' ')
+            print entry.encode('utf-8').replace('\n', ' ')
             with open('readable.log', 'a') as log:
                 log.write(entry.encode('utf-8').replace('\n', ' ') + '\n')
         elif json_entry:
