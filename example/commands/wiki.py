@@ -19,6 +19,7 @@ class WikiCommand(Command):
                            "&titles=" + article_title + "&exchars=500")
             article_contents = json.loads(urllib.urlopen(article_url).read())
             extract = (article_contents['query']['pages']
-                       [list(article_contents['query']['pages'])[0]]['extract'])
+                       [list(article_contents['query']['pages'])
+                       [0]]['extract'])
             return {'message': extract}
         return {'message': self.dialogs['no_results'] % query}

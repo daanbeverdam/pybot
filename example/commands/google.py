@@ -22,6 +22,7 @@ class GoogleCommand(Command):
             reply = self.dialogs['reply_top'] % (len(hits), query)
             for hit in hits:
                 reply += hit['url'] + '\n'
-            reply += self.dialogs['reply_bottom'] % data['cursor']['moreResultsUrl']
+            reply += (self.dialogs['reply_bottom'] % data['cursor']
+                      ['moreResultsUrl'])
             return {'message': reply}
         return {'message': self.dialogs['no_results'] % query}

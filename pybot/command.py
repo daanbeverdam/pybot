@@ -1,5 +1,4 @@
 import shelve
-import os
 
 
 class Command(object):
@@ -13,7 +12,7 @@ class Command(object):
         self.data = None
 
     def listen(self, message):
-        tokens = message.text.split(' ')
+        tokens = message.text.split()
         self.message = message
         self.data = shelve.open('data/chat_' + str(self.message.chat_id))
         if message.text.startswith('/') and tokens[0][1:] == self.name:

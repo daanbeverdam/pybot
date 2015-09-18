@@ -9,8 +9,8 @@ class YouTubeCommand(Command):
         if self.arguments() == 'help':
             return {'message': self.usage}
         query = self.arguments()
-        if query != None:
-            query_encoded = urllib.urlencode({"search_query" : query})
+        if query is not None:
+            query_encoded = urllib.urlencode({"search_query": query})
         html_content = urllib.urlopen("http://www.youtube.com/results?" +
                                       query_encoded)
         search_results = re.findall(r'href=\"\/watch\?v=(.{11})',

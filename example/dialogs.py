@@ -3,10 +3,12 @@
 bot = {'en':{
                'command_failed': "Sorry, something went wrong. "
                "Need help? Type: '/%s help'.",
+               'no_such_command': "Sorry, I'm not familiar with that command."
                },
        'nl':{
                'command_failed': "Sorry, er ging iets mis. "
-               "Hulp nodig? Type: '/%s help'"
+               "Hulp nodig? Type: '/%s help'",
+               'no_such_command': "Sorry, dat commando ken ik niet."
                }
       }
 
@@ -20,6 +22,18 @@ bbq = {'en':{
                'usage': "Het commando /bbq geeft het huidige "
                "barbecueweercijfer voor Nederland.",
                'reply': "Het barbecueweer krijgt vandaag een %s. Oant moarn!"
+               }
+      }
+
+calculator = {'en':{
+               'usage': "The /calulator command brings up a calculator.",
+               'prompt': "Please type your query:",
+               'error': "Sorry, your query is invalid."
+               },
+         'nl':{
+               'usage': "Het /calculator commando retourneert een rekenmachine.",
+               'prompt': "Type je som:",
+               'error': "Sorry, je som is ongeldig."
                }
       }
 
@@ -122,7 +136,7 @@ poll = {'en':{
                "geannuleerd worden met /cancel.",
                'store_answer': "Dankjewel, je antwoord is opgeslagen.",
                'results': "De resultaten voor de vraag '%s':",
-               'end_poll': "De poll is beëindigd.",
+               'end_poll': u"De poll is beëindigd.",
                'not_owner': "Sorry, je bent niet de eigenaar van de actieve "
                "poll. Alleen de eigenaar can de poll annuleren met /cancel.",
                'poll_already_active': "Sorry, er is al een andere poll actief. "

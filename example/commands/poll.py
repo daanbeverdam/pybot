@@ -4,6 +4,17 @@ import shelve
 
 class PollCommand(Command):
 
+    def reply(self):
+        if not self.is_active():
+            return self.new_poll()
+        elif self.message.text in self.data['poll_options_dict']:
+            return self.store_answer()
+        elif self.message.text in self.meta_commands:
+            return self.handle_meta()
+        elif self.message.text.split(' ', 1)[0][1:] == self.name:
+            return {'message': self.dialogs['poll_already_active']}
+        return {'message': None}
+
     def new_poll(self):
         tokens = self.arguments().split('*')
         question = tokens[0].strip()
@@ -19,12 +30,12 @@ class PollCommand(Command):
         self.data['poll_starter'] = self.message.sender_id
         if question != '':
             self.data['poll_active'] = True
-            reply = question + '\n- ' + '\n- '.join(map(str, options))
+            reply = question + '\n- ' + '\n- '.join(options)
         return {'message': reply, 'keyboard': formatted_options,
                 'force_reply': True}
 
     def format(self, question, options):
-        formatted_options = [['"%s"' % question ]]
+        formatted_options = [['"%s"' % question]]
         temp_options = []
         counter = 1
         for option in options:
@@ -32,7 +43,7 @@ class PollCommand(Command):
             if counter % 2 == 0:
                 formatted_options.append(temp_options)
                 temp_options = []
-            counter +=1
+            counter += 1
         if len(temp_options) > 0:
             formatted_options.append(temp_options + [' '])
         return formatted_options
@@ -43,7 +54,8 @@ class PollCommand(Command):
             participators.append(self.message.sender_id)
             self.data['poll_participators'] = participators
             option_dict = self.data['poll_options_dict']
-            option_dict[self.message.text].append(self.message.first_name_sender)
+            option_dict[self.message.text].append(self.message.
+                                                  first_name_sender)
             self.data['poll_options_dict'] = option_dict
             return {'message': self.dialogs['store_answer'], 'keyboard': None,
                     'selective': True, 'message_id': self.message.id}
@@ -57,9 +69,9 @@ class PollCommand(Command):
     def poll_results(self):
         reply = self.dialogs['results'] % self.data['poll_question']
         for option, voters in self.data['poll_options_dict'].iteritems():
-            reply += ('\n- ' + option + ': ' + ', '.join(map(str, voters)) +
-                      ' (%d %s)' % (len(voters), self.dialogs[('vote'
-                      if len(voters) == 1 else 'votes')]))
+            reply += ('\n- ' + option + ': ' + ', '.join(voters) +
+                      ' (%d %s)' % (len(voters), self.dialogs[(
+                                    'vote' if len(voters) == 1 else 'votes')]))
         return {'message': reply}
 
     def end_poll(self):
@@ -67,14 +79,3 @@ class PollCommand(Command):
             self.data['poll_active'] = False
             return {'message': self.dialogs['end_poll'], 'keyboard': None}
         return {'message': self.dialogs['not_owner']}
-
-    def reply(self):
-        if not self.is_active():
-            return self.new_poll()
-        elif self.message.text in self.data['poll_options_dict']:
-            return self.store_answer()
-        elif self.message.text in self.meta_commands:
-            return self.handle_meta()
-        elif self.message.text.split(' ', 1)[0][1:] == self.name:
-            return {'message': self.dialogs['poll_already_active']}
-        return {'message': None}

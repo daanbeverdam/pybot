@@ -1,4 +1,5 @@
-import re, urllib
+import re
+import urllib
 from pybot.command import Command
 
 
