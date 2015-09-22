@@ -12,6 +12,7 @@ class Message(object):
         self.contains_command = self.check_for_command()
 
     def check_for_command(self):
-        if self.text is not None and self.text.startswith('/'):
+        if (self.text is not None and self.text.startswith('/') and
+                len(self.text) > 1):
             return True
         return False
