@@ -14,6 +14,7 @@ from commands.weather import WeatherCommand
 from commands.quote import QuoteCommand
 from commands.stats import StatsCommand
 from commands.calculator import CalculatorCommand
+from commands.hangman import HangmanCommand
 import dialogs
 
 # create a .txt file with your api token or alternatively,
@@ -32,6 +33,7 @@ COMMAND_LIST = [
                 EchoCommand('echo', dialogs.echo[LANG]),
                 GifCommand('gif', dialogs.gif[LANG]),
                 GoogleCommand('google', dialogs.google[LANG]),
+                HangmanCommand('hangman', dialogs.hangman[LANG]),
                 HelpCommand('help', dialogs.help[LANG]),
                 PollCommand('poll', dialogs.poll[LANG]),
                 PutinCommand('putin', dialogs.putin[LANG]),

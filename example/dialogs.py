@@ -92,6 +92,22 @@ google = {'en':{
                }
       }
 
+hangman = {'en':{
+               'usage': "Play a game of /hangman!",
+               'guessed_correct': "Correct guess!\n%s\n%s",
+               'guessed_incorrect': "Incorrect guess!\n%s\n%s",
+               'game_over': "Sorry, you lost.\nThe correct word is: %s",
+               'game_won': "You won, congratulations!\nThe word is: %s"
+               },
+         'nl':{
+               'usage': "Speel een potje galgje met /hangman.",
+               'guessed_correct': "Goed geraden!\n%s\n%s",
+               'guessed_incorrect': "Probeer een andere letter.\n%s\n%s",
+               'game_over': "Sorry, je hebt verloren.\nHet woord was: %s",
+               'game_won': "Je hebt gewonnen!\nHet woord was: %s"
+               }
+      }
+
 help = {'en':{
                'usage': "Help-ception! Please try /help for a list of "
                "commands.",
