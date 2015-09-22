@@ -32,6 +32,12 @@ class Command(object):
             self.data[self.name + '_active'] = False
         return False
 
+    def activate(self, boolean):
+        if boolean is True:
+            self.data[self.name + '_active'] = True
+        else:
+            self.data[self.name + '_active'] = False
+
     def arguments(self):
         if len(self.message.text.split(' ')) > 1:
             return self.message.text.split(' ', 1)[1]
