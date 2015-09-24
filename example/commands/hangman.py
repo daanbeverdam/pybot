@@ -63,7 +63,6 @@ class HangmanCommand(Command):
             if i in indexes:
                 displayed_word = (displayed_word[:i] + letter +
                                   displayed_word[i + 1:])
-        print displayed_word
         self.data['displayed_word'] = displayed_word
 
     def lose_life(self):
