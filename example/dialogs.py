@@ -96,15 +96,19 @@ hangman = {'en':{
                'usage': "Play a game of /hangman!",
                'guessed_correct': "Correct guess!\n%s\n%s",
                'guessed_incorrect': "Incorrect guess!\n%s\n%s",
-               'game_over': "Sorry, you lost.\nThe correct word is: %s",
-               'game_won': "You won, congratulations!\nThe word is: %s"
+               'game_over': "Sorry, you lost.\nThe correct word is: %s\n "
+               "Type /hangman for a new game.",
+               'game_won': "You won, congratulations!\nThe word is: %s\n"
+               "Type /hangman om opnieuw te spelen."
                },
          'nl':{
                'usage': "Speel een potje galgje met /hangman.",
                'guessed_correct': "Goed geraden!\n%s\n%s",
                'guessed_incorrect': "Probeer een andere letter.\n%s\n%s",
-               'game_over': "Sorry, je hebt verloren.\nHet woord was: %s",
-               'game_won': "Je hebt gewonnen!\nHet woord was: %s"
+               'game_over': "Sorry, je hebt verloren.\nHet woord was: %s\n"
+               "Type /hangman om opnieuw te spelen.",
+               'game_won': "Je hebt gewonnen!\nHet woord was: %s\n"
+               "Type /hangman om opnieuw te spelen."
                }
       }
 
