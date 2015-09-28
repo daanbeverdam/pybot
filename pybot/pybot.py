@@ -51,7 +51,7 @@ class PyBot(object):
         response = urllib2.urlopen(self.base_url + 'getUpdates',
                                    urllib.urlencode({
                                     # 'timeout': 30,
-                                    'limit': 99,
+                                    'limit': 10,
                                     'offset': offset,
                                     })).read()
         body = json.loads(response)
