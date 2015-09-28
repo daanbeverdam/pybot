@@ -6,9 +6,9 @@ from pybot.command import Command
 class WikiCommand(Command):
 
     def reply(self):
-        if self.arguments() == 'help':
+        if self.arguments == 'help':
             return {'message': self.usage}
-        query = self.arguments()
+        query = self.arguments
         search_url = ("https://en.wikipedia.org/w/api.php?action=query"
                       "&list=search&srsearch=" + query + "&utf8=&format=json")
         search_results = json.loads(urllib.urlopen(search_url).read())

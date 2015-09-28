@@ -1,6 +1,5 @@
 from pybot.command import Command
 import re
-import operator
 import json
 import collections
 

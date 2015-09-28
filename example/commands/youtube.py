@@ -6,9 +6,9 @@ from pybot.command import Command
 class YouTubeCommand(Command):
 
     def reply(self):
-        if self.arguments() == 'help':
+        if self.arguments == 'help':
             return {'message': self.usage}
-        query = self.arguments()
+        query = self.arguments
         if query is not None:
             query_encoded = urllib.urlencode({"search_query": query})
         html_content = urllib.urlopen("http://www.youtube.com/results?" +

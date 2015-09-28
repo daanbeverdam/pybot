@@ -21,6 +21,7 @@ class PyBot(object):
         self.reserved_names = ['cancel', 'results', 'done']
         self.command_names = ([command.name for command in self.commands] +
                               self.reserved_names)
+        self.is_waiting_for_input = False
 
     def check_dirs(self):
         if not os.path.exists('data'):
@@ -48,8 +49,8 @@ class PyBot(object):
             offset = 0
         response = urllib2.urlopen(self.base_url + 'getUpdates',
                                    urllib.urlencode({
-                                    'timeout': 30,
-                                    'limit': 50,
+                                    'timeout': 5,
+                                    'limit': 99,
                                     'offset': offset,
                                     })).read()
         body = json.loads(response)
@@ -60,29 +61,51 @@ class PyBot(object):
                 self.log(json_entry=result)
                 message = Message(result['message'])
                 self.handle_message(message)
+                self.handle_command(message)
         elif body['ok'] == False:
             self.log('Invalid response!')
 
     def handle_message(self, message):
         self.log(message.first_name_sender + ' sent "' + message.text +
                  '" in chat ' + str(message.chat_id) + '.')
-        for command in self.commands:
-            if command.listen(message) == 'help':
-                reply = self.reply(message.chat_id, command.usage)
-            elif command.listen(message):
-                try:
-                    reply = command.reply()
-                    if 'keyboard' in reply:
-                        self.reply_markup(message.chat_id, **reply)
-                    else:
-                        self.reply(message.chat_id, **reply)
-                except:
-                    traceback.print_exc()
+        # AI goes here
+
+    def handle_command(self, message):
+        if self.is_waiting_for_input and (self.is_waiting_for_input['from'] ==
+                                          message.sender_id):
+            if message.text == '/cancel':
+                self.reply(message.chat_id, self.dialogs['operation_canceled'])
+            else:
+                self.is_waiting_for_input['command'].arguments = message.text
+                self.handle_reply(self.is_waiting_for_input['command'],
+                                  message)
+            self.is_waiting_for_input = False
+        else:
+            for command in self.commands:
+                if command.listen(message) == 'help':
+                    reply = self.reply(message.chat_id, command.usage)
+                elif command.listen(message) == 'ask for input':
+                    self.is_waiting_for_input = {'command': command,
+                                                 'from': message.sender_id}
                     self.reply(message.chat_id,
-                               self.dialogs['command_failed'] % command.name)
-        if (message.contains_command and message.text.split()[0][1:]
-                not in self.command_names):
-            self.reply(message.chat_id, self.dialogs['no_such_command'])
+                               self.dialogs['input'] % command.name)
+                elif command.listen(message):
+                    self.handle_reply(command, message)
+            if (message.contains_command and message.text.split()[0][1:]
+                    not in self.command_names):
+                self.reply(message.chat_id, self.dialogs['no_such_command'])
+
+    def handle_reply(self, command, message):
+        try:
+            reply = command.reply()
+            if 'keyboard' in reply:
+                self.reply_markup(message.chat_id, **reply)
+            else:
+                self.reply(message.chat_id, **reply)
+        except:
+            traceback.print_exc()
+            self.reply(message.chat_id,
+                       self.dialogs['command_failed'] % command.name)
 
     def log(self, entry=None, json_entry=None):
         if entry:

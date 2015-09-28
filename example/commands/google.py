@@ -6,10 +6,10 @@ import json
 class GoogleCommand(Command):
 
     def reply(self):
-        if self.arguments() == 'help':
+        if self.arguments == 'help':
             return {'message': self.usage}
-        elif self.arguments() != None:
-            query = self.arguments()
+        elif self.arguments != None:
+            query = self.arguments
         encoded_query = urllib.urlencode({'q': query})
         url = ('http://ajax.googleapis.com/ajax/services/search/web?v=1.0&' +
                encoded_query)

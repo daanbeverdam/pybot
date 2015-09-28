@@ -42,7 +42,7 @@ class HangmanCommand(Command):
     def handle_meta(self):
         if self.message.text == '/cancel':
             self.activate(False)
-            return {'message': 'hangman ended', 'keyboard': None}
+            return {'message': self.dialogs['ended'], 'keyboard': None}
         return {'message': None}
 
     def format_keyboard(self, keyboard, rows):

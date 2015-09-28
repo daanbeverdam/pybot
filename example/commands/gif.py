@@ -7,7 +7,7 @@ from pybot.command import Command
 class GifCommand(Command):
 
     def reply(self):
-        arguments = self.arguments().lower()
+        arguments = self.arguments.lower()
         if arguments == 'help':
             return {'message': self.usage}
         elif arguments.startswith('random'):

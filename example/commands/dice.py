@@ -5,12 +5,12 @@ from pybot.command import Command
 class DiceCommand(Command):
 
     def reply(self):
-        if self.arguments() == 'help':
+        if self.arguments == 'help':
             return {'message': self.usage}
-        elif self.arguments() == None:
+        elif self.arguments == None:
             number_of_dice = 1
         else:
-            number_of_dice = int(self.arguments())
+            number_of_dice = int(self.arguments)
         if number_of_dice > 1 and number_of_dice < 11:
             reply = ""
             for dice in range(number_of_dice):

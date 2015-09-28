@@ -5,7 +5,7 @@ import os
 class HelpCommand(Command):
 
     def reply(self):
-        if self.arguments() == 'help':
+        if self.arguments == 'help':
             return {'message': self.usage}
         reply = self.dialogs['reply']
         command_list = []

@@ -6,14 +6,13 @@ import shelve
 class QuoteCommand(Command):
 
     def reply(self):
-        arguments = self.arguments()
         self.check_quote_store()
-        if arguments is None:
+        if self.arguments is None:
             reply = self.random_quote()
         else:
-            tokens = arguments.split(' ')
+            tokens = self.arguments.split(' ')
             if len(tokens) > 1:
-                if ':' in arguments:
+                if ':' in self.arguments:
                     reply = self.save_quote()
                 elif (tokens[0].title() in self.data['quote_store'] and
                       tokens[1] == 'all'):
@@ -31,15 +30,15 @@ class QuoteCommand(Command):
         random_quote = random.choice(all_quotes)
         for name, quotes in self.data['quote_store'].items():
             if random_quote in quotes:
-                return str(random_quote) + ' -' + name
+                return random_quote + ' -' + name
 
     def random_quote_by_name(self, tokens):
         quote_list = self.data['quote_store'][tokens[0].title()]
         return random.choice(quote_list) + ' -' + tokens[0].title()
 
     def save_quote(self):
-        name = self.arguments().split(':')[0].title()
-        quote = '"' + self.arguments().split(':')[1].strip() + '"'
+        name = self.arguments.split(':')[0].title()
+        quote = '"' + self.arguments.split(':')[1].strip() + '"'
         quotes = self.data['quote_store']
         try:
             quotes[name].append(quote)

@@ -16,7 +16,7 @@ class PollCommand(Command):
         return {'message': None}
 
     def new_poll(self):
-        tokens = self.arguments().split('*')
+        tokens = self.arguments.split('*')
         question = tokens[0].strip()
         self.data['poll_question'] = question
         options = []

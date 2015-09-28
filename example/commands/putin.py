@@ -8,7 +8,7 @@ from pybot.command import Command
 class PutinCommand(Command):
 
     def reply(self):
-        if self.arguments() == 'help':
+        if self.arguments == 'help':
             return {'message': self.usage}
         url = "http://api.tumblr.com/v2/blog/vladimirputindoingthings.tumblr.com/posts/text?&limit=50"
         resp = urllib2.urlopen(url).read()
