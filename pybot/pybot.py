@@ -38,7 +38,7 @@ class PyBot(object):
         while True:
             try:
                 self.check_for_updates()
-                time.sleep(0.5)
+                time.sleep(0.8)
             except:
                 traceback.print_exc()
 
@@ -50,7 +50,7 @@ class PyBot(object):
             offset = 0
         response = urllib2.urlopen(self.base_url + 'getUpdates',
                                    urllib.urlencode({
-                                    'timeout': 5,
+                                    # 'timeout': 30,
                                     'limit': 99,
                                     'offset': offset,
                                     })).read()
