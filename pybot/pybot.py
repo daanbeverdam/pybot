@@ -38,6 +38,7 @@ class PyBot(object):
         while True:
             try:
                 self.check_for_updates()
+                time.sleep(0.5)
             except:
                 traceback.print_exc()
 
