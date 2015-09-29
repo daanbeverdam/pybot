@@ -27,10 +27,6 @@ class PyBot(object):
         if not os.path.exists('data'):
             os.makedirs('data')
             print "data folder created"
-        if not os.path.exists('json.log'):
-            with open('json.log', 'w+') as json_log:
-                json_log.write('[]')
-            print "json log created"
 
     def run(self):
         self.check_dirs()
@@ -108,20 +104,14 @@ class PyBot(object):
                        self.dialogs['command_failed'] % command.name)
 
     def log(self, entry=None, json_entry=None):
-        try:
-            if entry:
-                print entry.encode('utf-8').replace('\n', ' ')
-                with open('readable.log', 'a') as log:
-                    log.write(entry.encode('utf-8').replace('\n', ' ') + '\n')
-            elif json_entry:
-                with open('json.log', 'r') as log:
-                    content = log.read()
-                value = json.loads(content)
-                value.append(json_entry)
-                with open('json.log', 'w') as log:
-                    json.dump(value, log, indent=2)
-        except:
-            print "Logging error!"
+        if entry:
+            print entry.encode('utf-8').replace('\n', ' ')
+            with open('readable.log', 'a') as log:
+                log.write(entry.encode('utf-8').replace('\n', ' ') + '\n')
+        elif json_entry:
+            with open('json.log', 'a') as log:
+                log.write(json.dumps(json_entry))
+                log.write(',\n')
 
     def reply(self, chat_id, message=None, photo=None, document=None, gif=None,
               location=None, preview_disabled=True, caption=None):
