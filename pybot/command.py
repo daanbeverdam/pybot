@@ -1,4 +1,7 @@
 import shelve
+import traceback
+import StringIO
+import urllib
 
 
 class Command(object):
@@ -40,6 +43,7 @@ class Command(object):
             self.reply()
             return True
         except:
+            print traceback.print_exc()
             return False
 
     def activate(self, boolean):
@@ -51,3 +55,6 @@ class Command(object):
     def get_arguments(self):
         if len(self.message.text.split(' ')) > 1:
             return self.message.text.split(' ', 1)[1]
+
+    def get_image(self, image_link):
+        return StringIO.StringIO(urllib.urlopen(image_link).read()).getvalue()
