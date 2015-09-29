@@ -258,6 +258,14 @@ wiki = {'en': {
 }
 }
 
+xkcd = {'en': {
+    'usage': "The command /xkcd returns the newest xkcd image."
+},
+    'nl': {
+    'usage': "Het commando /xkcd retourneert de nieuwste xkcd."
+}
+}
+
 youtube = {'en': {
     'usage': "Search YouTube with '/youtube [query]'. The first "
     "result is then returned.",
