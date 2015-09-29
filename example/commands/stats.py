@@ -7,7 +7,8 @@ import collections
 class StatsCommand(Command):
 
     def reply(self):
-        log = json.loads(open('json.log', 'r').read())
+        log = '[%s]' % str(open('json.log', 'r').read())[:-2]
+        log = json.loads(log)
         reply = self.scan_entries(log)
         try:
             return {'message': reply}
