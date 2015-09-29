@@ -108,17 +108,20 @@ class PyBot(object):
                        self.dialogs['command_failed'] % command.name)
 
     def log(self, entry=None, json_entry=None):
-        if entry:
-            print entry.encode('utf-8').replace('\n', ' ')
-            with open('readable.log', 'a') as log:
-                log.write(entry.encode('utf-8').replace('\n', ' ') + '\n')
-        elif json_entry:
-            with open('json.log', 'r') as log:
-                content = log.read()
-            value = json.loads(content)
-            value.append(json_entry)
-            with open('json.log', 'w') as log:
-                json.dump(value, log, indent=2)
+        try:
+            if entry:
+                print entry.encode('utf-8').replace('\n', ' ')
+                with open('readable.log', 'a') as log:
+                    log.write(entry.encode('utf-8').replace('\n', ' ') + '\n')
+            elif json_entry:
+                with open('json.log', 'r') as log:
+                    content = log.read()
+                value = json.loads(content)
+                value.append(json_entry)
+                with open('json.log', 'w') as log:
+                    json.dump(value, log, indent=2)
+        except:
+            print "Logging error!"
 
     def reply(self, chat_id, message=None, photo=None, document=None, gif=None,
               location=None, preview_disabled=True, caption=None):
