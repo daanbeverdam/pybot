@@ -17,5 +17,6 @@ class XKCDCommand(Command):
             image_link = content['img']
         else:
             image_link = content['img']
+        title = '"%s"' % content['title']
         xkcd_image = self.get_image(image_link)
-        return {'photo': xkcd_image}
+        return {'photo': xkcd_image, 'caption': title}
