@@ -9,8 +9,8 @@ class StatsCommand(Command):
     def reply(self):
         log = '[%s]' % str(open('json.log', 'r').read())[:-2]
         log = json.loads(log)
-        reply = self.scan_entries(log)
         try:
+            reply = self.scan_entries(log)
             return {'message': reply}
         except:
             return {'message': self.dialogs['error']}
