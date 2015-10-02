@@ -16,6 +16,7 @@ from commands.stats import StatsCommand
 from commands.calculator import CalculatorCommand
 from commands.hangman import HangmanCommand
 from commands.xkcd import XKCDCommand
+from commands.users import UsersCommand
 import dialogs
 
 # create a .txt file with your api token or alternatively,
@@ -41,6 +42,7 @@ COMMAND_LIST = [
                 QuoteCommand('quote', dialogs.quote[LANG]),
                 StatsCommand('stats', dialogs.stats[LANG]),
                 StatusCommand('status', dialogs.status[LANG]),
+                UsersCommand('users', dialogs.users[LANG]),
                 WikiCommand('wiki', dialogs.wiki[LANG]),
                 WeatherCommand('weather', dialogs.weather[LANG]),
                 XKCDCommand('xkcd', dialogs.xkcd[LANG]),

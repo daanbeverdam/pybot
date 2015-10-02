@@ -163,7 +163,7 @@ poll = {
         'results': "De resultaten voor de vraag '%s':",
         'end_poll': u"De poll is beëindigd.",
         'not_owner': "Sorry, je bent niet de eigenaar van de actieve "
-        "poll. Alleen de eigenaar can de poll annuleren met /cancel.",
+        "poll. Alleen de eigenaar van de poll annuleren met /cancel.",
         'poll_already_active': "Sorry, er is al een andere poll actief. "
         "De eigenaar moet de huidige poll eerst annuleren met /cancel.",
         'votes': "stemmen",
@@ -225,6 +225,16 @@ status = {'en': {
     'usage': "Het /status commando geeft de huidige status weer van "
     "de bot.",
     'reply': "PyBot staat voor je klaar en wacht op je commando."
+}
+}
+
+users = {'en': {
+    'usage': "The /users command returns all users that have been detected.",
+    'reply': "I have detected the following users:\n"
+},
+    'nl': {
+    'usage': "Het /users commando retourneert alle gedetecteerde gebruikers.",
+    'reply': "Ik heb de volgende gebruikers gedetecteerd:\n"
 }
 }
 
