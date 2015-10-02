@@ -55,9 +55,10 @@ class Command(object):
 
     def collect_user_data(self, message):
         try:
-            temp_dict = self.data['chat_users']
-            temp_dict[str(message.sender_id)] = message.sender
-            self.data['chat_users'] = temp_dict
+            if str(message.sender_id) not in self.data['chat_users']:
+                temp_dict = self.data['chat_users']
+                temp_dict[str(message.sender_id)] = message.sender
+                self.data['chat_users'] = temp_dict
         except:
             self.data['chat_users'] = {}
 
