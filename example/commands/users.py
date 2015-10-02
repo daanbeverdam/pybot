@@ -4,7 +4,7 @@ from pybot.command import Command
 class UsersCommand(Command):
 
     def reply(self):
-        reply = "I have detected the following users:\n"
+        reply = self.dialogs['reply']
         dictionary = self.data['chat_users']
         for user in dictionary:
             try:
