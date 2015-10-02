@@ -1,5 +1,4 @@
 from message import Message
-import multipart
 from multipart import post_multipart
 import time
 import json
@@ -54,10 +53,10 @@ class PyBot(object):
             data['offset'] = body['result'][-1]['update_id'] + 1
             data.close()
             for result in body['result']:
-                self.log(json_entry=result)
                 message = Message(result['message'])
                 self.handle_message(message)
                 self.handle_command(message)
+                self.log(json_entry=result)
         elif body['ok'] == False:
             self.log('Invalid response!')
 
