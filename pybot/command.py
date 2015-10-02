@@ -20,6 +20,7 @@ class Command(object):
         self.message = message
         self.arguments = self.get_arguments()
         self.data = shelve.open('data/chat_' + str(self.message.chat_id))
+        self.collect_user_data(message)
         if message.text.startswith('/') and tokens[0][1:] == self.name:
             if len(tokens) > 1 and tokens[1] == 'help':
                 return 'help'
@@ -51,6 +52,14 @@ class Command(object):
             self.data[self.name + '_active'] = False
         else:
             self.data[self.name + '_active'] = True
+
+    def collect_user_data(self, message):
+        try:
+            temp_dict = self.data['chat_users']
+            temp_dict[str(message.sender_id)] = message.sender
+            self.data['chat_users'] = temp_dict
+        except:
+            self.data['chat_users'] = {}
 
     def get_arguments(self):
         if len(self.message.text.split(' ')) > 1:
