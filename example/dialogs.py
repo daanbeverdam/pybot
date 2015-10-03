@@ -140,6 +140,15 @@ gif = {'en': {
 }
 }
 
+marnie = {'en': {
+    'usage': "The /marnie command returns a random picture of Marnie the dog."
+},
+    'nl': {
+    'usage': "Het /marnie commando retourneert een willekeurige foto van "
+    "'Marnie the dog'."
+}
+}
+
 poll = {
     'en': {
         'usage': "Start a poll! Use the following format: '/poll "

@@ -17,6 +17,7 @@ from commands.calculator import CalculatorCommand
 from commands.hangman import HangmanCommand
 from commands.xkcd import XKCDCommand
 from commands.users import UsersCommand
+from commands.marnie import MarnieCommand
 import dialogs
 
 # create a .txt file with your api token or alternatively,
@@ -37,6 +38,7 @@ COMMAND_LIST = [
                 GoogleCommand('google', dialogs.google[LANG]),
                 HangmanCommand('hangman', dialogs.hangman[LANG]),
                 HelpCommand('help', dialogs.help[LANG]),
+                MarnieCommand('marnie', dialogs.marnie[LANG]),
                 PollCommand('poll', dialogs.poll[LANG]),
                 PutinCommand('putin', dialogs.putin[LANG]),
                 QuoteCommand('quote', dialogs.quote[LANG]),
