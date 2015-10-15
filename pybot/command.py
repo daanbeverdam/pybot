@@ -6,7 +6,7 @@ import urllib
 
 class Command(object):
 
-    def __init__(self, name, dialogs):
+    def __init__(self, name, dialogs, accepts_none=True, admin_id=0):
         self.name = name
         self.dialogs = dialogs
         self.usage = dialogs['usage']
@@ -14,6 +14,8 @@ class Command(object):
         self.meta_commands = ['/done', '/cancel', '/results']
         self.data = None
         self.arguments = None
+        self.accepts_none_argument = accepts_none
+        self.admin = admin_id
 
     def listen(self, message):
         tokens = message.text.split()
@@ -24,7 +26,7 @@ class Command(object):
         if message.text.startswith('/') and tokens[0][1:] == self.name:
             if len(tokens) > 1 and tokens[1] == 'help':
                 return 'help'
-            if len(tokens) == 1 and not self.accepts_none_argument():
+            elif len(tokens) == 1 and self.accepts_none_argument is False:
                 return 'ask for input'
             return True
         elif self.is_active():
@@ -39,15 +41,7 @@ class Command(object):
             self.data[self.name + '_active'] = False
         return False
 
-    def accepts_none_argument(self):
-        try:
-            self.reply()
-            return True
-        except:
-            print traceback.print_exc()
-            return False
-
-    def activate(self, boolean):
+    def activate(self, boolean=True):
         if boolean is False:
             self.data[self.name + '_active'] = False
         else:
