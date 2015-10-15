@@ -27,8 +27,10 @@ TOKEN = open('example/prefs.txt', 'r').readlines()[0].strip()
 BOT_NAME = open('example/prefs.txt', 'r').readlines()[1].strip()
 # 'en' for english, 'nl' for dutch:
 LANG = open('example/prefs.txt', 'r').readlines()[2].strip()
-# chat id of the admin (optional)
+# chat id of the admin (optional):
 ADMIN_CHAT_ID = open('example/prefs.txt', 'r').readlines()[3].strip()
+# api key for weather:
+WEATHER_API = open('example/prefs.txt', 'r').readlines()[4].strip()
 # commands can be removed or added:
 COMMAND_LIST = [
                 BBQCommand('bbq', dialogs.bbq[LANG]),
@@ -48,7 +50,8 @@ COMMAND_LIST = [
                 StatusCommand('status', dialogs.status[LANG]),
                 UsersCommand('users', dialogs.users[LANG]),
                 WikiCommand('wiki', dialogs.wiki[LANG], False),
-                WeatherCommand('weather', dialogs.weather[LANG], False),
+                WeatherCommand('weather', dialogs.weather[LANG], False,
+                               api_key=WEATHER_API),
                 XKCDCommand('xkcd', dialogs.xkcd[LANG]),
                 YouTubeCommand('youtube', dialogs.youtube[LANG], False)
                ]

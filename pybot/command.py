@@ -6,7 +6,8 @@ import urllib
 
 class Command(object):
 
-    def __init__(self, name, dialogs, accepts_none=True, admin_id=0):
+    def __init__(self, name, dialogs, accepts_none=True, admin_id=0,
+                 api_key=0):
         self.name = name
         self.dialogs = dialogs
         self.usage = dialogs['usage']
@@ -16,6 +17,7 @@ class Command(object):
         self.arguments = None
         self.accepts_none_argument = accepts_none
         self.admin = admin_id
+        self.api_key = api_key
 
     def listen(self, message):
         tokens = message.text.split()
