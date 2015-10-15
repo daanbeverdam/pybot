@@ -88,7 +88,7 @@ google = {'en': {
     'nl': {
     'usage': "Doorzoek het internet met Google: '/google "
     "[zoekterm]'.",
-    'reply_top': "Top %d hits voor ''%s':\n",
+    'reply_top': "Top %d hits voor '%s':\n",
     'reply_bottom': "Voor meer resultaten: %s",
     'no_results': "Sorry, geen resultaten gevonden voor '%s'."
 }
@@ -162,7 +162,8 @@ poll = {
         'poll_already_active': "Sorry, another poll is already active. "
         "The owner must /cancel the current one first.",
         'votes': "votes",
-        'vote': "vote"},
+        'vote': "vote",
+        'everybody_voted': "Everybody has voted! %s"},
     'nl': {
         'usage': "Start een poll! Gebruik het volgende formaat: "
         "'/poll [vraag] *[optie 1] *[optie 2] *[etc]'. De resultaten "
@@ -176,7 +177,8 @@ poll = {
         'poll_already_active': "Sorry, er is al een andere poll actief. "
         "De eigenaar moet de huidige poll eerst annuleren met /cancel.",
         'votes': "stemmen",
-        'vote': "stem"}}
+        'vote': "stem",
+        'everybody_voted': "Iedereen heeft gestemd! %s"}}
 
 putin = {'en': {
     'usage': "The command /putin returns a random photo of "
