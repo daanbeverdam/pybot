@@ -57,13 +57,17 @@ class PollCommand(Command):
             option_dict[self.message.text].append(self.message.
                                                   first_name_sender)
             self.data['poll_options_dict'] = option_dict
-            return {'message': self.dialogs['store_answer'], 'keyboard': None,
-                    'selective': True, 'message_id': self.message.id}
-        return {'message': None}
+            reply = {'message': self.dialogs['store_answer'], 'keyboard': None,
+                     'selective': True, 'message_id': self.message.id}
+            if len(participators) == len(self.data['chat_users']):
+                reply = {'message': self.dialogs['everybody_voted'] %
+                         self.poll_results(), 'keyboard': None}
+            self.activate(False)
+            return reply
 
     def handle_meta(self):
         if self.message.text == '/results':
-            return self.poll_results()
+            return {'message': self.poll_results()}
         return self.end_poll()
 
     def poll_results(self):
@@ -72,10 +76,11 @@ class PollCommand(Command):
             reply += ('\n- ' + option + ': ' + ', '.join(voters) +
                       ' (%d %s)' % (len(voters), self.dialogs[(
                                     'vote' if len(voters) == 1 else 'votes')]))
-        return {'message': reply}
+        return reply
 
     def end_poll(self):
-        if self.message.sender_id == self.data['poll_starter']:
+        if (self.message.sender_id == self.data['poll_starter'] or
+                self.message.sender_id == self.admin):
             self.data['poll_active'] = False
             return {'message': self.dialogs['end_poll'], 'keyboard': None}
         return {'message': self.dialogs['not_owner']}
