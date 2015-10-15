@@ -20,33 +20,35 @@ from commands.users import UsersCommand
 from commands.marnie import MarnieCommand
 import dialogs
 
-# create a .txt file with your api token or alternatively,
+# create a prefs.txt file with your api token or alternatively,
 # enter your authorization token here directly:
 TOKEN = open('example/prefs.txt', 'r').readlines()[0].strip()
 # enter name of the bot here:
 BOT_NAME = open('example/prefs.txt', 'r').readlines()[1].strip()
 # 'en' for english, 'nl' for dutch:
 LANG = open('example/prefs.txt', 'r').readlines()[2].strip()
+# chat id of the admin (optional)
+ADMIN_CHAT_ID = open('example/prefs.txt', 'r').readlines()[3].strip()
 # commands can be removed or added:
 COMMAND_LIST = [
                 BBQCommand('bbq', dialogs.bbq[LANG]),
                 CalculatorCommand('calculator', dialogs.calculator[LANG]),
                 DiceCommand('dice', dialogs.dice[LANG]),
-                DogeCommand('doge', dialogs.doge[LANG]),
-                EchoCommand('echo', dialogs.echo[LANG]),
-                GifCommand('gif', dialogs.gif[LANG]),
-                GoogleCommand('google', dialogs.google[LANG]),
+                DogeCommand('doge', dialogs.doge[LANG], False),
+                EchoCommand('echo', dialogs.echo[LANG], False),
+                GifCommand('gif', dialogs.gif[LANG], False),
+                GoogleCommand('google', dialogs.google[LANG], False),
                 HangmanCommand('hangman', dialogs.hangman[LANG]),
                 HelpCommand('help', dialogs.help[LANG]),
                 MarnieCommand('marnie', dialogs.marnie[LANG]),
-                PollCommand('poll', dialogs.poll[LANG]),
+                PollCommand('poll', dialogs.poll[LANG], False, ADMIN_CHAT_ID),
                 PutinCommand('putin', dialogs.putin[LANG]),
                 QuoteCommand('quote', dialogs.quote[LANG]),
                 StatsCommand('stats', dialogs.stats[LANG]),
                 StatusCommand('status', dialogs.status[LANG]),
                 UsersCommand('users', dialogs.users[LANG]),
-                WikiCommand('wiki', dialogs.wiki[LANG]),
-                WeatherCommand('weather', dialogs.weather[LANG]),
+                WikiCommand('wiki', dialogs.wiki[LANG], False),
+                WeatherCommand('weather', dialogs.weather[LANG], False),
                 XKCDCommand('xkcd', dialogs.xkcd[LANG]),
-                YouTubeCommand('youtube', dialogs.youtube[LANG])
+                YouTubeCommand('youtube', dialogs.youtube[LANG], False)
                ]
