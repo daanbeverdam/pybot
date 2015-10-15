@@ -6,6 +6,7 @@ import urllib
 class HangmanCommand(Command):
 
     def reply(self):
+        self.accepts_none = True
         if not self.is_active():
             return self.start()
         elif self.message.text in self.data['hangman_letters']:
@@ -34,7 +35,7 @@ class HangmanCommand(Command):
     def get_word(self):
         url = 'http://www.tulpweb.nl/willekeurigwoord/'
         response = urllib.urlopen(url).read()
-        search = re.search(r'willekeurige woord</a> is:</p><h2>'
+        search = re.search(r'willekeurige woord is:</p><h2>'
                            '[\'"]?([^\'" >]+)', urllib.urlopen(url).read())
         word = search.group(1)[:-4]
         return word
