@@ -62,7 +62,7 @@ class PollCommand(Command):
             if len(participators) == len(self.data['chat_users']):
                 reply = {'message': self.dialogs['everybody_voted'] %
                          self.poll_results(), 'keyboard': None}
-            self.activate(False)
+                self.activate(False)
             return reply
 
     def handle_meta(self):
