@@ -128,6 +128,17 @@ help = {'en': {
 }
 }
 
+image = {'en': {
+    'usage': "Search for images with '/image [query]'.",
+    'more': "\nFor more results: ",
+    'no_results': "Sorry, no results found for '%s'."
+},
+    'nl': {
+    'usage': "Zoek naar afbeeldingen met '/image [zoekterm]'.",
+    'more': "\nVoor meer resultaten: ",
+    'no_results': "Sorry, geen resultaten gevonden voor '%s'."}
+}
+
 gif = {'en': {
     'usage': "Search for gifs using '/gif [search query]'. You can ask"
     " for a random gif using '/gif random [optional search query]'.",
