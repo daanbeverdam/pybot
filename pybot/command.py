@@ -16,7 +16,7 @@ class Command(object):
         self.data = None
         self.arguments = None
         self.accepts_none_argument = accepts_none
-        self.admin = admin_id
+        self.admin = int(admin_id)
         self.api_key = api_key
 
     def listen(self, message):
