@@ -34,7 +34,7 @@ class PyBot(object):
             try:
                 self.check_for_updates()
             except:
-                traceback.print_exc()
+                self.log(error=traceback.format_exc())
 
     def check_for_updates(self):
         data = shelve.open('main_data')
@@ -98,11 +98,11 @@ class PyBot(object):
             else:
                 self.reply(message.chat_id, **reply)
         except:
-            traceback.print_exc()
+            self.log(error=traceback.format_exc())
             self.reply(message.chat_id,
                        self.dialogs['command_failed'] % command.name)
 
-    def log(self, entry=None, json_entry=None):
+    def log(self, entry=None, json_entry=None, error=None):
         if entry:
             print entry.encode('utf-8').replace('\n', ' ')
             with open('readable.log', 'a') as log:
@@ -111,6 +111,11 @@ class PyBot(object):
             with open('json.log', 'a') as log:
                 log.write(json.dumps(json_entry))
                 log.write(',\n')
+        elif error:
+            print error
+            with open('error.log', 'a') as log:
+                log.write(str(error))
+                log.write('\n')
 
     def reply(self, chat_id, message=None, photo=None, document=None, gif=None,
               location=None, preview_disabled=True, caption=None):
