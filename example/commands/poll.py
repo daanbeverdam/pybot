@@ -28,6 +28,7 @@ class PollCommand(Command):
         self.data['poll_options_dict'] = options_dict
         self.data['poll_participators'] = []
         self.data['poll_starter'] = self.message.sender_id
+        self.data['poll_starter_name'] = self.message.first_name_sender
         if question != '':
             self.data['poll_active'] = True
             reply = question + '\n- ' + '\n- '.join(options)
@@ -83,4 +84,5 @@ class PollCommand(Command):
                 self.message.sender_id == self.admin):
             self.data['poll_active'] = False
             return {'message': self.dialogs['end_poll'], 'keyboard': None}
-        return {'message': self.dialogs['not_owner']}
+        return {'message': self.dialogs['not_owner'] %
+                self.data['poll_starter_name']}

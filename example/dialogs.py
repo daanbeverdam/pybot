@@ -169,7 +169,7 @@ poll = {
         'results': "The results for '%s':",
         'end_poll': "The poll has ended.",
         'not_owner': "Sorry, you are not the owner of the current poll. "
-        "Only the owner can /cancel it.",
+        "Only %s can /cancel it.",
         'poll_already_active': "Sorry, another poll is already active. "
         "The owner must /cancel the current one first.",
         'votes': "votes",
@@ -184,7 +184,7 @@ poll = {
         'results': "De resultaten voor de vraag '%s':",
         'end_poll': u"De poll is beëindigd.",
         'not_owner': "Sorry, je bent niet de eigenaar van de actieve "
-        "poll. Alleen de eigenaar van de poll annuleren met /cancel.",
+        "poll. Alleen %s kan de poll annuleren met /cancel.",
         'poll_already_active': "Sorry, er is al een andere poll actief. "
         "De eigenaar moet de huidige poll eerst annuleren met /cancel.",
         'votes': "stemmen",
