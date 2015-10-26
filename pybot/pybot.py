@@ -33,6 +33,9 @@ class PyBot(object):
         while True:
             try:
                 self.check_for_updates()
+            except KeyboardInterrupt:
+                print " Bot stopped"
+                break
             except:
                 self.log(error=traceback.format_exc())
 
