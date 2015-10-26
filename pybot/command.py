@@ -33,6 +33,9 @@ class Command(object):
             return True
         elif self.is_active():
             return True
+        elif (message.text.contains('@') and self.message.split('@')[0][1:] ==
+                self.name):
+            return True
         return False
 
     def is_active(self):
