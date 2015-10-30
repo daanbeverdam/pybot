@@ -21,5 +21,5 @@ class ImageCommand(Command):
         print image_link
         image = self.get_image(image_link)
         caption = '"%s"' % first_result['contentNoFormatting']
-        return {'photo': image, 'caption': caption + self.dialogs['more'] +
-                more_results_link}
+        # caption += self.dialogs['more'] + more_results_link
+        return {'photo': image, 'caption': caption}
