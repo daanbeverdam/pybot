@@ -25,7 +25,7 @@ class PyBot(object):
     def check_dirs(self):
         if not os.path.exists('data'):
             os.makedirs('data')
-            print "data folder created"
+            print "Data folder created"
 
     def run(self):
         self.check_dirs()
@@ -33,6 +33,7 @@ class PyBot(object):
         while True:
             try:
                 self.check_for_updates()
+                self.check_for_scheduled_events()
             except KeyboardInterrupt:
                 print " Bot stopped"
                 break
@@ -63,10 +64,16 @@ class PyBot(object):
         elif body['ok'] == False:
             self.log('Invalid response!')
 
+    def check_for_scheduled_events(self):
+        pass
+        # work in progress:
+        # for command in self.commands:
+        #     if command.has_scheduled_event:
+        #         self.reply(command.event.chat_id, command.event.text)
+
     def handle_message(self, message):
         self.log(message.first_name_sender + ' sent "' + message.text +
                  '" in chat ' + str(message.chat_id) + '.')
-        # AI goes here
 
     def handle_command(self, message):
         if self.is_waiting_for_input and (self.is_waiting_for_input['from'] ==
