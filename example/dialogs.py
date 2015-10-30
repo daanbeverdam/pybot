@@ -147,7 +147,9 @@ gif = {'en': {
     'nl': {
     'usage': "Zoek naar gifs met '/gif [zoekterm]'. Je kunt ook een "
     "willekeurige gif opvragen met '/gif random [optionele zoekterm]'",
-    'no_results': "Sorry, geen gifs gevonden voor '%s'."
+    'no_results': "Sorry, geen gifs gevonden voor '%s'.",
+    'no_kudos': "Sorry, no kudos are given yet.",
+    'shame_on_you': "You can't give kudos to yourself, shame on you!"
 }
 }
 
@@ -163,7 +165,9 @@ kudos = {'en': {
     "met '+1' of '/kudos [voornaam]'. Vraag de resultaten op met /kudos.",
     'kudos_given': "Kudo\'s zijn gegeven aan %s. Totale kudo\'s: %i.",
     'kudo_overview': "Kudo overzicht:",
-    'not_in_chat': "Sorry, '%s' is geen gebruiker in deze chat."
+    'not_in_chat': "Sorry, '%s' is geen gebruiker in deze chat.",
+    'no_kudos': "Sorry, er zijn nog geen kudo's gegeven.",
+    'shame_on_you': "Je kan geen kudo's aan jezelf geven, foei!"
 }
 }
 

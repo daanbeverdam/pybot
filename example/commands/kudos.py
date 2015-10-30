@@ -18,9 +18,12 @@ class KudosCommand(Command):
             return {'message': None}
 
     def kudos_overview(self):
+        try:
+            kudo_dict = sorted(self.data['kudo_dict'].items(),
+                               key=operator.itemgetter(1), reverse=True)
+        except:
+            return{'message': self.dialogs['no_kudos']}
         reply = self.dialogs['kudo_overview']
-        kudo_dict = sorted(self.data['kudo_dict'].items(),
-                           key=operator.itemgetter(1), reverse=True)
         for entry in kudo_dict:
             reply += "\n%s: %i" % (entry[0], entry[1])
         return {'message': reply}
@@ -37,6 +40,8 @@ class KudosCommand(Command):
             except:
                 return {'message': None}
         name = name.title()
+        if self.message.first_name_sender == name:
+            return {'message': self.dialogs['shame_on_you']}
         try:
             current_kudos = kudo_dict[name]
             new_kudos = current_kudos + 1
