@@ -7,7 +7,7 @@ import urllib
 class Command(object):
 
     def __init__(self, name, dialogs, accepts_none=True, admin_id=0,
-                 api_key=0):
+                 api_key=0, is_always_listening=False):
         self.name = name
         self.dialogs = dialogs
         self.usage = dialogs['usage']
@@ -18,6 +18,8 @@ class Command(object):
         self.accepts_none_argument = accepts_none
         self.admin = int(admin_id)
         self.api_key = api_key
+        self.has_scheduled_event = False
+        self.is_always_listening = is_always_listening
 
     def listen(self, message):
         tokens = message.text.split()
@@ -31,10 +33,10 @@ class Command(object):
             elif len(tokens) == 1 and self.accepts_none_argument is False:
                 return 'ask for input'
             return True
-        elif self.is_active():
-            return True
-        elif (message.text.contains('@') and self.message.split('@')[0][1:] ==
+        elif ('@' in message.text and self.message.split('@')[0][1:] ==
                 self.name):
+            return True
+        elif self.is_active() or self.is_always_listening:
             return True
         return False
 
