@@ -10,6 +10,14 @@ class Message(object):
         self.chat = message['chat']
         self.chat_id = self.chat['id']
         self.contains_command = self.check_for_command()
+        try:
+            self.reply_to_message = message.get('reply_to_message')
+            self.reply_to_sender = self.reply_to_message['from']
+            self.reply_to_sender_id = self.reply_to_sender['id']
+            self.reply_to_sender_first_name = (self.reply_to_sender
+                                               ['first_name'])
+        except:
+            self.reply_to_message = False
 
     def check_for_command(self):
         if (self.text is not None and self.text.startswith('/') and
