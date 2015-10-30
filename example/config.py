@@ -19,6 +19,8 @@ from commands.xkcd import XKCDCommand
 from commands.users import UsersCommand
 from commands.marnie import MarnieCommand
 from commands.image import ImageCommand
+from commands.start import StartCommand
+from commands.kudos import KudosCommand
 import dialogs
 
 # create a prefs.txt file with your api token or alternatively,
@@ -44,10 +46,13 @@ COMMAND_LIST = [
                 HangmanCommand('hangman', dialogs.hangman[LANG]),
                 HelpCommand('help', dialogs.help[LANG]),
                 ImageCommand('image', dialogs.image[LANG], False),
+                KudosCommand('kudos', dialogs.kudos[LANG],
+                             is_always_listening=True),
                 MarnieCommand('marnie', dialogs.marnie[LANG]),
                 PollCommand('poll', dialogs.poll[LANG], False, ADMIN_CHAT_ID),
                 PutinCommand('putin', dialogs.putin[LANG]),
                 QuoteCommand('quote', dialogs.quote[LANG]),
+                StartCommand('start', dialogs.start[LANG]),
                 StatsCommand('stats', dialogs.stats[LANG]),
                 StatusCommand('status', dialogs.status[LANG]),
                 UsersCommand('users', dialogs.users[LANG]),
