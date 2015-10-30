@@ -151,6 +151,22 @@ gif = {'en': {
 }
 }
 
+kudos = {'en': {
+    'usage': "Give kudos to your friends by replying to their messages with "
+    "'+1' or '/kudos [first name]'. Ask for the overview with /kudos.",
+    'kudos_given': "Kudos have been given to %s. Total kudos: %i.",
+    'kudo_overview': "Kudo overview:",
+    'not_in_chat': "Sorry, user '%s' is not in this chat."
+},
+    'nl': {
+    'usage': "Geef kudos aan je vrienden door hun berichten te beantwoorden "
+    "met '+1' of '/kudos [voornaam]'. Vraag de resultaten op met /kudos.",
+    'kudos_given': "Kudo\'s zijn gegeven aan %s. Totale kudo\'s: %i.",
+    'kudo_overview': "Kudo overzicht:",
+    'not_in_chat': "Sorry, '%s' is geen gebruiker in deze chat."
+}
+}
+
 marnie = {'en': {
     'usage': "The /marnie command returns a random picture of Marnie the dog."
 },
@@ -213,6 +229,16 @@ quote = {'en': {
     "[optionele naam]'. Vraag alle quotes op door 'all' toe te "
     "voegen.",
     'quote_saved': "Quote opgeslagen."
+}
+}
+
+start = {'en': {
+    'usage': "The /start command initializes the bot.",
+    'reply': "Bot enabled. Type /help for a list of commands."
+},
+    'nl': {
+    'usage': "Het /start commando initialiseert de bot.",
+    'reply': "Bot gestart. Type /help voor een lijst met commando's."
 }
 }
 
@@ -308,7 +334,7 @@ youtube = {'en': {
 }
 }
 
-empty = {'en': {
+template = {'en': {
     'usage': ""
 },
     'nl': {
