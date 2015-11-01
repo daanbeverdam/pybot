@@ -156,14 +156,14 @@ gif = {'en': {
 kudos = {'en': {
     'usage': "Give kudos to your friends by replying to their messages with "
     "'+1' or '/kudos [first name]'. Ask for the overview with /kudos.",
-    'kudos_given': "Kudos have been given to %s. Total kudos: %i.",
+    'kudos_given': "%i Kudo for %s. Total kudos: %i.",
     'kudo_overview': "Kudo overview:",
     'not_in_chat': "Sorry, user '%s' is not in this chat."
 },
     'nl': {
-    'usage': "Geef kudos aan je vrienden door hun berichten te beantwoorden "
+    'usage': "Geef kudo's aan je vrienden door hun berichten te beantwoorden "
     "met '+1' of '/kudos [voornaam]'. Vraag de resultaten op met /kudos.",
-    'kudos_given': "Kudo\'s zijn gegeven aan %s. Totale kudo\'s: %i.",
+    'kudos_given': "%i Kudo voor %s. Totaal aantal kudo\'s: %i.",
     'kudo_overview': "Kudo overzicht:",
     'not_in_chat': "Sorry, '%s' is geen gebruiker in deze chat.",
     'no_kudos': "Sorry, er zijn nog geen kudo's gegeven.",

@@ -12,8 +12,10 @@ class KudosCommand(Command):
                                             self.data['chat_users'].values()]:
                 return self.give_kudos(self.arguments)
             return {'message': self.dialogs['not_in_chat'] % self.arguments}
-        elif self.message.text == '+1':
+        elif self.message.text[:2] == '+1':
             return self.give_kudos()
+        elif self.message.text[:2] == '-1':
+            return self.give_kudos(substract=True)
         else:
             return {'message': None}
 
@@ -28,7 +30,11 @@ class KudosCommand(Command):
             reply += "\n%s: %i" % (entry[0], entry[1])
         return {'message': reply}
 
-    def give_kudos(self, name=None):
+    def give_kudos(self, name=None, substract=False):
+        if substract is True:
+            number_of_kudos = -1
+        else:
+            number_of_kudos = 1
         try:
             kudo_dict = self.data['kudo_dict']
         except:
@@ -44,10 +50,10 @@ class KudosCommand(Command):
             return {'message': self.dialogs['shame_on_you']}
         try:
             current_kudos = kudo_dict[name]
-            new_kudos = current_kudos + 1
+            new_kudos = current_kudos + number_of_kudos
             kudo_dict[name] = new_kudos
         except:
-            kudo_dict[name] = 1
+            kudo_dict[name] = number_of_kudos
         self.data['kudo_dict'] = kudo_dict
         return {'message': self.dialogs['kudos_given'] %
-                (name, self.data['kudo_dict'][name])}
+                (number_of_kudos, name, self.data['kudo_dict'][name])}
