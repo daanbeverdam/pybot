@@ -41,6 +41,23 @@ calculator = {'en': {
 }
 }
 
+changes = {'en': {
+    'usage': "The command /changes shows the most recent code changes of the "
+    "PyBot project. Visit github.com/daanbeverdam/pybot to contribute.",
+    'reply': "Most recent code changes to PyBot:",
+    'more': "Visit https://github.com/daanbeverdam/pybot/commits/master for "
+    "more."
+},
+    'nl': {
+    'usage': "Het commando /changes laat de meest recente wijzigingen zien "
+    "van het PyBot project. Ga naar github.com/daanbeverdam/pybot om bij te "
+    "dragen.",
+    'reply': "Meest recente wijzigingen:",
+    'more': "Ga naar https://github.com/daanbeverdam/pybot/commits/master "
+    " voor meer."
+}
+}
+
 dice = {
     'en': {
         'usage': "Throw a die with /dice. Throw multiple dice by "

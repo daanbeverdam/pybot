@@ -21,6 +21,7 @@ from commands.marnie import MarnieCommand
 from commands.image import ImageCommand
 from commands.start import StartCommand
 from commands.kudos import KudosCommand
+from commands.changes import ChangesCommand
 import dialogs
 
 # create a prefs.txt file with your api token or alternatively,
@@ -38,6 +39,7 @@ WEATHER_API = open('example/prefs.txt', 'r').readlines()[4].strip()
 COMMAND_LIST = [
                 BBQCommand('bbq', dialogs.bbq[LANG]),
                 CalculatorCommand('calculator', dialogs.calculator[LANG]),
+                ChangesCommand('changes', dialogs.changes[LANG]),
                 DiceCommand('dice', dialogs.dice[LANG]),
                 DogeCommand('doge', dialogs.doge[LANG], False),
                 EchoCommand('echo', dialogs.echo[LANG], False),
