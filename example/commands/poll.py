@@ -65,6 +65,7 @@ class PollCommand(Command):
                          self.poll_results(), 'keyboard': None}
                 self.activate(False)
             return reply
+        return {'message': None}
 
     def handle_meta(self):
         if self.message.text == '/results':
