@@ -200,8 +200,9 @@ marnie = {'en': {
 poll = {
     'en': {
         'usage': "Start a poll! Use the following format: '/poll "
-        "[question] *[option 1] *[option 2] *[etc]'. You can always "
-        "/cancel a poll and ask for the /results.",
+        "[question] *[option 1] *[option 2] *[etc]'. Add '~m' to allow voting "
+        "on multiple options. You can always "
+        "/cancel a poll or ask for the /results.",
         'store_answer': "Thanks, your answer has been recorded.",
         'results': "The results for '%s':",
         'end_poll': "The poll has ended.",
@@ -211,10 +212,12 @@ poll = {
         "The owner must /cancel the current one first.",
         'votes': "votes",
         'vote': "vote",
-        'everybody_voted': "Everybody has voted! %s"},
+        'everybody_voted': "Everybody has voted! %s",
+        'done_voting': "Thanks, I'll hide your keyboard now."},
     'nl': {
         'usage': "Start een poll! Gebruik het volgende formaat: "
-        "'/poll [vraag] *[optie 1] *[optie 2] *[etc]'. De resultaten "
+        "'/poll [vraag] *[optie 1] *[optie 2] *[etc]'. Voeg '~m' toe wanneer "
+        "er meerdere antwoorden mogelijk zijn. De resultaten "
         "kunnen opgevraagd worden met /results en de poll kan "
         "geannuleerd worden met /cancel.",
         'store_answer': "Dankjewel, je antwoord is opgeslagen.",
@@ -226,7 +229,8 @@ poll = {
         "De eigenaar moet de huidige poll eerst annuleren met /cancel.",
         'votes': "stemmen",
         'vote': "stem",
-        'everybody_voted': "Iedereen heeft gestemd! %s"}}
+        'everybody_voted': "Iedereen heeft gestemd! %s",
+        'done_voting': "Bedankt, de antwoordopties worden nu verborgen."}}
 
 putin = {'en': {
     'usage': "The command /putin returns a random photo of "

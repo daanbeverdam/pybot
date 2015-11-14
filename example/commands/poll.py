@@ -16,6 +16,13 @@ class PollCommand(Command):
         return {'message': None}
 
     def new_poll(self):
+        if self.arguments[:2] in ['~m', '~M']:
+            self.data['poll_multi'] = True
+            self.arguments = self.arguments[2:]
+            one_time = False
+        else:
+            self.data['poll_multi'] = False
+            one_time = True
         tokens = self.arguments.split('*')
         question = tokens[0].strip()
         self.data['poll_question'] = question
@@ -33,7 +40,7 @@ class PollCommand(Command):
             self.data['poll_active'] = True
             reply = question + '\n- ' + '\n- '.join(options)
         return {'message': reply, 'keyboard': formatted_options,
-                'force_reply': True}
+                'force_reply': True, 'one_time': one_time}
 
     def format(self, question, options):
         formatted_options = [['"%s"' % question]]
@@ -45,13 +52,20 @@ class PollCommand(Command):
                 formatted_options.append(temp_options)
                 temp_options = []
             counter += 1
-        if len(temp_options) > 0:
+        if self.data['poll_multi'] is True:
+            temp_options.append('/done')
+        if len(temp_options) == 1:
             formatted_options.append(temp_options + [' '])
+        elif len(temp_options) == 2:
+            formatted_options.append(temp_options)
         return formatted_options
 
     def store_answer(self):
         participators = self.data['poll_participators']
-        if self.message.sender_id not in participators:
+        if (self.message.sender_id not in participators or
+                self.data['poll_multi'] is True and
+                self.message.first_name_sender not in self.data
+                ['poll_options_dict'][self.message.text]):
             participators.append(self.message.sender_id)
             self.data['poll_participators'] = participators
             option_dict = self.data['poll_options_dict']
@@ -60,7 +74,10 @@ class PollCommand(Command):
             self.data['poll_options_dict'] = option_dict
             reply = {'message': self.dialogs['store_answer'], 'keyboard': None,
                      'selective': True, 'message_id': self.message.id}
-            if len(participators) == len(self.data['chat_users']):
+            if self.data['poll_multi'] is True:
+                reply = {'message': self.dialogs['store_answer']}
+            if (len(participators) == len(self.data['chat_users']) and
+                    self.data['poll_multi'] is False):
                 reply = {'message': self.dialogs['everybody_voted'] %
                          self.poll_results(), 'keyboard': None}
                 self.activate(False)
@@ -70,6 +87,9 @@ class PollCommand(Command):
     def handle_meta(self):
         if self.message.text == '/results':
             return {'message': self.poll_results()}
+        elif self.message.text == '/done':
+            return {'message': self.dialogs['done_voting'], 'keyboard': None,
+                    'selective': True, 'message_id': self.message.id}
         return self.end_poll()
 
     def poll_results(self):
