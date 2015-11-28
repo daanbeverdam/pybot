@@ -128,7 +128,8 @@ class PyBot(object):
                 log.write('\n')
 
     def reply(self, chat_id, message=None, photo=None, document=None, gif=None,
-              location=None, preview_disabled=True, caption=None):
+              location=None, preview_disabled=True, caption=None,
+              file_name=None, extension=None):
         if message:
             response = urllib2.urlopen(self.base_url + 'sendMessage',
                                        urllib.urlencode({
@@ -148,8 +149,11 @@ class PyBot(object):
                                       [('photo', 'photo.jpg', photo)])
             self.log('Bot sent photo to ' + str(chat_id) + '.')
         elif gif or document:
-            file_name = 'image.gif' if gif else 'document.file'
             self.send_action(chat_id, 'upload_document')
+            if gif:
+                file_name = 'image.gif'
+            else:
+                file_name = str(file_name + extension)
             response = post_multipart(self.base_url + 'sendDocument',
                                       [('chat_id', str(chat_id))],
                                       [('document', (file_name),

@@ -257,6 +257,16 @@ quote = {'en': {
 }
 }
 
+say = {'en': {
+    'usage': "The command /say [text] returns spoken text. Use flag ~nl for "
+    "Dutch."
+},
+    'nl': {
+    'usage': "Het commando /say [tekst] retourneert gesproken tekst. "
+    "Gebruik ~en voor Engelse tekst."
+}
+}
+
 start = {'en': {
     'usage': "The /start command initializes the bot.",
     'reply': "Bot enabled. Type /help for a list of commands."

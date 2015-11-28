@@ -22,6 +22,7 @@ from commands.image import ImageCommand
 from commands.start import StartCommand
 from commands.kudos import KudosCommand
 from commands.changes import ChangesCommand
+from commands.say import SayCommand
 import dialogs
 
 # create a prefs.txt file with your api token or alternatively,
@@ -35,6 +36,8 @@ LANG = open('example/prefs.txt', 'r').readlines()[2].strip()
 ADMIN_CHAT_ID = open('example/prefs.txt', 'r').readlines()[3].strip()
 # api key for weather:
 WEATHER_API = open('example/prefs.txt', 'r').readlines()[4].strip()
+# api key for say command:
+SAY_API = open('example/prefs.txt', 'r').readlines()[5].strip()
 # commands can be removed or added:
 COMMAND_LIST = [
                 BBQCommand('bbq', dialogs.bbq[LANG]),
@@ -54,6 +57,8 @@ COMMAND_LIST = [
                 PollCommand('poll', dialogs.poll[LANG], False, ADMIN_CHAT_ID),
                 PutinCommand('putin', dialogs.putin[LANG]),
                 QuoteCommand('quote', dialogs.quote[LANG]),
+                SayCommand('say', dialogs.say[LANG], False, language=LANG,
+                           api_key=SAY_API),
                 StartCommand('start', dialogs.start[LANG]),
                 StatsCommand('stats', dialogs.stats[LANG]),
                 StatusCommand('status', dialogs.status[LANG]),
