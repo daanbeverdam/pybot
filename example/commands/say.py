@@ -1,8 +1,6 @@
 from pybot.command import Command
 import urllib2
 import urllib
-import requests
-import json
 import StringIO
 
 class SayCommand(Command):
