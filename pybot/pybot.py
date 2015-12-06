@@ -7,6 +7,7 @@ import urllib2
 import shelve
 import traceback
 import os
+from datetime import datetime
 
 
 class PyBot(object):
@@ -33,7 +34,6 @@ class PyBot(object):
         while True:
             try:
                 self.check_for_updates()
-                self.check_for_scheduled_events()
             except KeyboardInterrupt:
                 print " Bot stopped"
                 break
@@ -41,9 +41,9 @@ class PyBot(object):
                 self.log(error=traceback.format_exc())
 
     def check_for_updates(self):
-        data = shelve.open('main_data')
+        self.main_data = shelve.open('main_data')
         try:
-            offset = data['offset']
+            offset = self.main_data['offset']
         except:
             offset = 0
         response = urllib2.urlopen(self.base_url + 'getUpdates',
@@ -54,8 +54,8 @@ class PyBot(object):
                                     })).read()
         body = json.loads(response)
         if body['ok'] and body['result'] != []:
-            data['offset'] = body['result'][-1]['update_id'] + 1
-            data.close()
+            self.main_data['offset'] = body['result'][-1]['update_id'] + 1
+            self.main_data.close()
             for result in body['result']:
                 message = Message(result['message'])
                 self.handle_message(message)
@@ -65,11 +65,14 @@ class PyBot(object):
             self.log('Invalid response!')
 
     def check_for_scheduled_events(self):
-        pass
-        # work in progress:
-        # for command in self.commands:
-        #     if command.has_scheduled_event:
-        #         self.reply(command.event.chat_id, command.event.text)
+        scheduled_events = shelve.open('scheduled_events')
+        current = datetime.now()
+        for chat_id in scheduled_events:
+            for event in chat_id:
+                if ((current.year, current.month, current.day) == event['date']
+                        and (current.hour, current.minute) == event['time']):
+                    self.reply(chat_id, event['text'])
+        scheduled_events.close()
 
     def handle_message(self, message):
         self.log(message.first_name_sender + ' sent "' + message.text +
