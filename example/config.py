@@ -22,6 +22,7 @@ from commands.image import ImageCommand
 from commands.start import StartCommand
 from commands.kudos import KudosCommand
 from commands.changes import ChangesCommand
+from commands.reminder import ReminderCommand
 import dialogs
 
 # create a prefs.txt file with your api token or alternatively,
@@ -54,6 +55,7 @@ COMMAND_LIST = [
                 PollCommand('poll', dialogs.poll[LANG], False, ADMIN_CHAT_ID),
                 PutinCommand('putin', dialogs.putin[LANG]),
                 QuoteCommand('quote', dialogs.quote[LANG]),
+                ReminderCommand('reminder', dialogs.reminder[LANG]),
                 StartCommand('start', dialogs.start[LANG]),
                 StatsCommand('stats', dialogs.stats[LANG]),
                 StatusCommand('status', dialogs.status[LANG]),

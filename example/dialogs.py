@@ -257,6 +257,19 @@ quote = {'en': {
 }
 }
 
+reminder = {'en': {
+    'usage': "Save a reminder! Format: /reminder [dd-mm-yyyy] [hh:mm] "
+    "[reminder text].",
+    'reminder_saved': "Reminder %s saved! %s"
+},
+    'nl': {
+    'usage': "Vergeetachtig? Maak een herinnering met: /reminder [dd-mm-jjjj] "
+    "[uu:mm] [herinnering tekst].",
+    'reminder_saved': "Reminder %s saved! %s"
+}
+}
+
+
 start = {'en': {
     'usage': "The /start command initializes the bot.",
     'reply': "Bot enabled. Type /help for a list of commands."

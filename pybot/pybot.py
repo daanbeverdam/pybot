@@ -34,6 +34,7 @@ class PyBot(object):
         while True:
             try:
                 self.check_for_updates()
+                self.check_for_scheduled_events()
             except KeyboardInterrupt:
                 print " Bot stopped"
                 break
@@ -68,10 +69,13 @@ class PyBot(object):
         scheduled_events = shelve.open('scheduled_events')
         current = datetime.now()
         for chat_id in scheduled_events:
-            for event in chat_id:
-                if ((current.year, current.month, current.day) == event['date']
-                        and (current.hour, current.minute) == event['time']):
-                    self.reply(chat_id, event['text'])
+            if scheduled_events[chat_id]:
+                for event in list(scheduled_events[chat_id]):
+                    print event
+                    if ((current.year, current.month, current.day) == event['date']
+                            and (current.hour, current.minute) == event['time']):
+                        self.reply(chat_id, event['text'])
+                        scheduled_events[chat_id] = scheduled_events[chat_id].remove(event)
         scheduled_events.close()
 
     def handle_message(self, message):
