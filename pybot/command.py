@@ -34,7 +34,7 @@ class Command(object):
             elif len(tokens) == 1 and self.accepts_none_argument is False:
                 return 'ask for input'
             return True
-        elif ('@' in message.text and self.message.split('@')[0][1:] ==
+        elif ('@' in message.text and self.message.text.split('@')[0][1:] ==
                 self.name):
             return True
         elif self.is_active() or self.is_always_listening:

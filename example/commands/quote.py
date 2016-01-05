@@ -20,7 +20,7 @@ class QuoteCommand(Command):
             elif len(tokens) == 1:
                 if tokens[0].title() in self.data['quote_store']:
                     reply = self.random_quote_by_name(tokens)
-                if tokens[0] == 'all':
+                elif tokens[0] == 'all':
                     reply = self.all_quotes(tokens)
         return {'message': reply}
 

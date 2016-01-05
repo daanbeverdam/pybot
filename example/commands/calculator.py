@@ -27,7 +27,6 @@ class CalculatorCommand(Command):
                 query = self.data['calc_query']
                 query += self.message.text
                 self.data['calc_query'] = query
-                print 'collect'
                 return {'message': None}
             elif self.message.text == '=':
                 return self.answer()
