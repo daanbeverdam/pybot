@@ -16,12 +16,28 @@ class PollCommand(Command):
         return {'message': None}
 
     def new_poll(self):
+        one_time = True
         if self.arguments[:2] in ['~m', '~M']:
             self.data['poll_multi'] = True
-            self.arguments = self.arguments[2:]
             one_time = False
+            if self.arguments[:3] in ['~ma', '~MA', '~mA', '~Ma']:
+                self.data['poll_allow_add'] = True
+                self.arguments = self.arguments[3:]
+            else:
+                self.data['poll_allow_add'] = False
+                self.arguments = self.arguments[2:]
+        elif self.arguments[:2] in ['~a', '~A']:
+            self.data['poll_allow_add'] = True
+            if self.arguments[:3] in ['~am', '~AM', '~aM', '~Am']:
+                self.data['poll_multi'] = True
+                one_time = False
+                self.arguments = self.arguments[3:]
+            else:
+                self.data['poll_multi'] = False
+                self.arguments = self.arguments[2:]
         else:
             self.data['poll_multi'] = False
+            self.data['poll_allow_add'] = False
             one_time = True
         tokens = self.arguments.split('*')
         question = tokens[0].strip()
