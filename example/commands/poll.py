@@ -7,6 +7,8 @@ class PollCommand(Command):
     def reply(self):
         if not self.is_active():
             return self.new_poll()
+        elif self.data['poll_allow_add'] is True and self.arguments is not None and self.arguments.split()[0] in ['*', 'add']:
+            return self.add_poll_option()
         elif self.message.text in self.data['poll_options_dict']:
             return self.store_answer()
         elif self.message.text in self.meta_commands:
@@ -15,13 +17,30 @@ class PollCommand(Command):
             return {'message': self.dialogs['poll_already_active']}
         return {'message': None}
 
-    def new_poll(self):
+    def new_poll(self, keep_old_results=False):
+        one_time = True
+        self.data['poll_original_arguments'] = self.arguments
         if self.arguments[:2] in ['~m', '~M']:
             self.data['poll_multi'] = True
-            self.arguments = self.arguments[2:]
             one_time = False
+            if self.arguments[:3] in ['~ma', '~MA', '~mA', '~Ma']:
+                self.data['poll_allow_add'] = True
+                self.arguments = self.arguments[3:]
+            else:
+                self.data['poll_allow_add'] = False
+                self.arguments = self.arguments[2:]
+        elif self.arguments[:2] in ['~a', '~A']:
+            self.data['poll_allow_add'] = True
+            if self.arguments[:3] in ['~am', '~AM', '~aM', '~Am']:
+                self.data['poll_multi'] = True
+                one_time = False
+                self.arguments = self.arguments[3:]
+            else:
+                self.data['poll_multi'] = False
+                self.arguments = self.arguments[2:]
         else:
             self.data['poll_multi'] = False
+            self.data['poll_allow_add'] = False
             one_time = True
         tokens = self.arguments.split('*')
         question = tokens[0].strip()
@@ -32,8 +51,15 @@ class PollCommand(Command):
             options.append(option.strip())
             options_dict[option.strip()] = []
         formatted_options = self.format(question, options)
-        self.data['poll_options_dict'] = options_dict
-        self.data['poll_participators'] = []
+        if not keep_old_results:
+            self.data['poll_options_dict'] = options_dict #
+            self.data['poll_participators'] = [] #
+        else:
+            new_option = self.arguments.split('*')[-1].strip()
+            poll_option_dict = self.data['poll_options_dict']
+            poll_option_dict[new_option] = []
+            self.data['poll_options_dict'] = poll_option_dict
+            print self.data['poll_options_dict']
         self.data['poll_starter'] = self.message.sender_id
         self.data['poll_starter_name'] = self.message.first_name_sender
         if question != '':
@@ -83,6 +109,10 @@ class PollCommand(Command):
                 self.activate(False)
             return reply
         return {'message': None}
+
+    def add_poll_option(self):
+        self.arguments = self.data['poll_original_arguments'] + '*' + self.arguments[3:]
+        return self.new_poll(keep_old_results=True)
 
     def handle_meta(self):
         if self.message.text == '/results':
