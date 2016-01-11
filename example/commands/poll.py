@@ -7,7 +7,7 @@ class PollCommand(Command):
     def reply(self):
         if not self.is_active():
             return self.new_poll()
-        elif self.data['poll_allow_add'] is True and self.arguments is not None and self.arguments.split()[0] in ['*', 'add']:
+        elif self.data['poll_allow_add'] is True and self.arguments is not None and self.arguments.split()[0] == 'add':
             return self.add_poll_option()
         elif self.message.text in self.data['poll_options_dict']:
             return self.store_answer()
