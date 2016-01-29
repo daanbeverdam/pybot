@@ -101,7 +101,13 @@ class PyBot(object):
                     self.handle_reply(command, message)
             if (message.contains_command and message.text.split()[0][1:]
                     not in self.command_names):
-                self.reply(message.chat_id, self.dialogs['no_such_command'])
+                if '@' not in message.text:
+                    self.reply(message.chat_id, self.dialogs['no_such_command'])
+                else:
+                    if (message.contains_command and message.text
+                            .split('@')[0][1:] not in self.command_names):
+                        self.reply(message.chat_id, self.dialogs['no_such_command'])
+
 
     def handle_reply(self, command, message):
         try:
