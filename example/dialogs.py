@@ -201,8 +201,9 @@ poll = {
     'en': {
         'usage': "Start a poll! Use the following format: '/poll "
         "[question] *[option 1] *[option 2] *[etc]'. Add '~m' to allow voting "
-        "on multiple options. You can always "
-        "/cancel a poll or ask for the /results.",
+        "on multiple options. Add '~a' to allow adding poll options with "
+        "/poll add [option]'. You can "
+        "always /cancel a poll or ask for the /results.",
         'store_answer': "Thanks, your answer has been recorded.",
         'results': "The results for '%s':",
         'end_poll': "The poll has ended.",
@@ -217,7 +218,8 @@ poll = {
     'nl': {
         'usage': "Start een poll! Gebruik het volgende formaat: "
         "'/poll [vraag] *[optie 1] *[optie 2] *[etc]'. Voeg '~m' toe wanneer "
-        "er meerdere antwoorden mogelijk zijn. De resultaten "
+        "er meerdere antwoorden mogelijk zijn. Voeg '~a' toe om anderen "
+        "opties te laten toevoegen met '/poll add [optie]'. De resultaten "
         "kunnen opgevraagd worden met /results en de poll kan "
         "geannuleerd worden met /cancel.",
         'store_answer': "Dankjewel, je antwoord is opgeslagen.",
