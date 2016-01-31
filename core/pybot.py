@@ -1,4 +1,5 @@
 from message import Message
+from update import Update
 from multipart import post_multipart
 import time
 import json
@@ -27,52 +28,56 @@ class PyBot(object):
         if not os.path.exists('data'):
             os.makedirs('data')
             print "Data folder created"
+        if not os.path.exists('logs'):
+            os.makedirs('logs')
+            print "Logs folder created"
 
     def run(self):
         self.check_dirs()
-        print "Bot started"
+        print "Bot started..."
         while True:
             try:
                 self.check_for_updates()
             except KeyboardInterrupt:
-                print " Bot stopped"
+                print "Keyboard interrupt! Bot stopped."
                 break
             except:
                 self.log(error=traceback.format_exc())
 
     def check_for_updates(self):
-        self.main_data = shelve.open('main_data')
-        try:
-            offset = self.main_data['offset']
-        except:
-            offset = 0
-        response = urllib2.urlopen(self.base_url + 'getUpdates',
-                                   urllib.urlencode({
-                                    'timeout': 30,
-                                    'limit': 100,
-                                    'offset': offset,
-                                    })).read()
-        body = json.loads(response)
-        if body['ok'] and body['result'] != []:
-            self.main_data['offset'] = body['result'][-1]['update_id'] + 1
-            self.main_data.close()
-            for result in body['result']:
-                message = Message(result['message'])
-                self.handle_message(message)
-                self.handle_command(message)
-                self.log(json_entry=result)
-        elif body['ok'] == False:
-            self.log('Invalid response!')
+        self.main_data = shelve.open('data/main')
+        offset = self.main_data.get('offset')
+        parameters = {'timeout': 30, 'limit': 100, 'offset': offset}
+        update_url = self.base_url + 'getUpdates' + urllib.urlencode(parameters)
+        response = urllib2.urlopen(update_url).read()
+        update = json.loads(response)
 
-    def check_for_scheduled_events(self):
-        scheduled_events = shelve.open('scheduled_events')
-        current = datetime.now()
-        for chat_id in scheduled_events:
-            for event in chat_id:
-                if ((current.year, current.month, current.day) == event['date']
-                        and (current.hour, current.minute) == event['time']):
-                    self.reply(chat_id, event['text'])
-        scheduled_events.close()
+        if update['ok'] and update['result']:
+            self.main_data['offset'] = update['result'][-1]['update_id'] + 1
+            self.main_data.close()
+            for result in update['result']:
+                message = Message(result['message'])
+                # self.handle_message(message)
+                self.handle(message)
+                self.log(json_entry=result)  # TODO: make log types?
+
+        elif not update['ok']:
+            self.log("Couldn't get correct response! Update not OK.")
+
+    # def check_for_scheduled_events(self):
+    #     scheduled_events = shelve.open('scheduled_events')
+    #     current = datetime.now()
+    #     for chat_id in scheduled_events:
+    #         for event in chat_id:
+    #             if ((current.year, current.month, current.day) == event['date']
+    #                     and (current.hour, current.minute) == event['time']):
+    #                 self.reply(chat_id, event['text'])
+    #     scheduled_events.close()
+
+    def handle(self, message):
+        for command in self.commands:
+            if command.listen(message):
+                self.reply(command.reply())
 
     def handle_message(self, message):
         self.log(message.first_name_sender + ' sent "' + message.text +
@@ -124,15 +129,15 @@ class PyBot(object):
     def log(self, entry=None, json_entry=None, error=None):
         if entry:
             print entry.encode('utf-8').replace('\n', ' ')
-            with open('readable.log', 'a') as log:
+            with open('logs/readable.log', 'a') as log:
                 log.write(entry.encode('utf-8').replace('\n', ' ') + '\n')
         elif json_entry:
-            with open('json.log', 'a') as log:
+            with open('logs/json.log', 'a') as log:
                 log.write(json.dumps(json_entry))
                 log.write(',\n')
         elif error:
             print error
-            with open('error.log', 'a') as log:
+            with open('logs/error.log', 'a') as log:
                 log.write(str(error))
                 log.write('\n')
 

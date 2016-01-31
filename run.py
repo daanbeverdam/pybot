@@ -1,4 +1,4 @@
-from pybot.pybot import PyBot
+from core.pybot import PyBot
 import config
 import dialogs
 
