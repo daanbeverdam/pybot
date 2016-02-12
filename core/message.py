@@ -19,7 +19,7 @@ class Message(object):
         if message.get('sticker'):
             self.sticker = Sticker(message.get('sticker'))
         if message.get('photo'):
-            self.photo = [Photo(message.get('photo')) for p in ph]
+            self.photo = [Photo(ph) for ph in message.get('photo')]
         self.caption = message.get('caption')
         if message.get('document'):
             self.document = Document(message.get('document'))
@@ -32,5 +32,6 @@ class Message(object):
 
     def contains_command(self):
         if self.text and self.text.startswith('/') and len(self.text) > 1:
+            self.command = self.text.split()[0].split('@')[0]
             return True
         return False

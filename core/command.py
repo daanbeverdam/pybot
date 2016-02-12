@@ -3,13 +3,14 @@ import traceback
 import StringIO
 import urllib
 from response import Response
+from user import User
 
 
 class Command(object):
 
     def __init__(self, name, dialogs={}, requires_arguments=False, admin_id=0,
                  api_key=0, is_always_listening=False, language='en'):
-        self.name = name
+        self.name = name  # command name including slash /
         self.dialogs = dialogs
         self.usage = dialogs.get('usage')
         self.message = None
@@ -17,30 +18,25 @@ class Command(object):
         self.arguments = None
         self.requires_arguments = requires_arguments
         self.admin = int(admin_id)  # TODO: make user?
-        self.api_key = api_key
+        self.api_key = api_key  # optional; only if the command needs it
         self.is_waiting_for_input = False
+        self.is_waiting_for = User()
         self.has_scheduled_event = False
         self.is_always_listening = is_always_listening
+        self.is_waiting_for_input = False
         self.default_language = language
-        self.response = Response()
 
     def listen(self, message):
         self.message = message
+        self.response = Response(self.message.chat.id)
         self.arguments = self.get_arguments()
         self.data = shelve.open('data/chat_' + str(message.chat.id))
         self.collect_user_data(message)
 
         tokens = message.text.split()
-        if tokens[0] == self.name:
-            # if len(tokens) > 1 and tokens[1] == 'help':
-            #     self.response.text = self.usage
-            #     return self.response
-            # if len(tokens) == 1 and self.accepts_none_argument is False:
-            #     return 'ask for input'
+        if tokens[0].lower().split('@')[0] == self.name:
             return True
-        elif '@' in message.text and self.message.text.split('@')[0] == self.name:
-            return True
-        elif self.is_active() or self.is_always_listening:
+        elif self.is_active() or self.is_always_listening or self.is_waiting_for_input:
             return True
         return False
 

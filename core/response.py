@@ -7,16 +7,16 @@ from send_sticker import SendSticker
 
 class Response(object):
     """Represents a response from the bot."""
-    def __init__(self):
-        self.send_message = SendMessage()
-        # self.forward_message = ForwardMessage()
-        # self.send_photo = SendPhoto()
-        # self.send_audio = SendAudio()
-        # self.sticker = SendSticker()
+    def __init__(self, chat_id=None):
+        self.chat_id = chat_id
+        self.send_message = SendMessage(self.chat_id)
+        self.forward_message = ForwardMessage(self.chat_id)
+        self.send_photo = SendPhoto(self.chat_id)
+        self.send_audio = SendAudio(self.chat_id)
+        self.sticker = SendSticker(self.chat_id)
 
         # # Document:
         # self.document = None  # file_id or string representation of document
-        # # Sticker:
         # # Video:
         # self.video = None  # file_id or string representation of video
         # # self.caption and self.duration also available for videos
@@ -25,4 +25,3 @@ class Response(object):
         # # Location:
         # self.latitude = None
         # self.longitude = None
-        # # Reply to and keyboard markups are available for all of the above:

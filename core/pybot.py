@@ -1,4 +1,6 @@
+import requests
 from message import Message
+from response import Response
 from multipart import post_multipart
 import time
 import json
@@ -40,7 +42,7 @@ class PyBot(object):
                 print "Keyboard interrupt! Bot stopped."
                 break
             except:
-                self.log(error=traceback.format_exc())
+                self.log(traceback.format_exc(), 'error')
 
     def check_for_updates(self):
         self.main_data = shelve.open('data/main')
@@ -56,11 +58,10 @@ class PyBot(object):
             for result in update['result']:
                 message = Message(result['message'])
                 self.handle(message)
-                print message.__dict__
-                self.log(json_entry=result)
+                self.log(result['message'], 'json')
 
         elif not update['ok']:
-            self.log("Couldn't get correct response! Update not OK.")
+            self.log("Couldn't get correct response! Update not OK.", 'error')
 
     # def check_for_scheduled_events(self):
     #     scheduled_events = shelve.open('scheduled_events')
@@ -74,93 +75,84 @@ class PyBot(object):
 
     def handle(self, message):
         for command in self.commands:
+            
             if command.listen(message):
+                
+                if command.is_waiting_for_input and command.is_waiting_for.id == message.sender.id:
+                    command.arguments = message.text
+                    command.is_waiting_for_input = False
+                    response = command.reply()
+                
                 if command.requires_arguments and not command.arguments:
                     command.response.send_message.text = self.dialogs['input'] % command.name
                     command.is_waiting_for_input = True
-                    command.is_waiting_for_input_from = message.sender
+                    command.is_waiting_for = message.sender
                     response = command.response
+                
                 else:
                     response = command.reply()
-                self.reply(message.chat.id, response)
-            elif command.is_waiting_for_input:
-                print 'eyyyy'
-                if command.is_waiting_for_input_from.id == message.sender.id:
-                    command.arguments = message.text
-                    response = command.reply()
-                    self.reply(message.chat.id, response)
+                
+                self.reply(response)
 
-    # def handle_message(self, message):
-    #     self.log(message.first_name_sender + ' sent "' + message.text +
-    #              '" in chat ' + str(message.chat_id) + '.')
-    #
-    # def handle_command(self, message):
-    #     if self.is_waiting_for_input and (self.is_waiting_for_input['from'] ==
-    #                                       message.sender_id):
-    #         if message.text == '/cancel':
-    #             self.reply(message.chat_id, self.dialogs['operation_canceled'])
-    #         else:
-    #             self.is_waiting_for_input['command'].arguments = message.text
-    #             self.handle_reply(self.is_waiting_for_input['command'],
-    #                               message)
-    #         self.is_waiting_for_input = False
-    #     else:
-    #         for command in self.commands:
-    #             if command.listen(message) == 'help':
-    #                 reply = self.reply(message.chat_id, command.usage)
-    #             elif command.listen(message) == 'ask for input':
-    #                 self.is_waiting_for_input = {'command': command,
-    #                                              'from': message.sender_id}
-    #                 self.reply(message.chat_id,
-    #                            self.dialogs['input'] % command.name)
-    #             elif command.listen(message):
-    #                 self.handle_reply(command, message)
-    #             command.data.close()
-    #         if (message.contains_command and message.text.split()[0][1:]
-    #                 not in self.command_names):
-    #             if '@' not in message.text:
-    #                 self.reply(message.chat_id, self.dialogs['no_such_command'])
-    #             else:
-    #                 if (message.contains_command and message.text
-    #                         .split('@')[0][1:] not in self.command_names):
-    #                     self.reply(message.chat_id, self.dialogs['no_such_command'])
+        if message.contains_command() and message.command.lower() not in self.command_names:
+            response = Response(message.chat.id)
+            response.send_message.text = self.dialogs['no_such_command']
+            self.reply(response)
 
-    # def handle_reply(self, command, message):
-    #     try:
-    #         reply = command.reply()
-    #         if 'keyboard' in reply:
-    #             self.reply_markup(message.chat_id, **reply)
-    #         else:
-    #             self.reply(message.chat_id, **reply)
-    #     except:
-    #         self.log(error=traceback.format_exc())
-    #         self.reply(message.chat_id,
-    #                    self.dialogs['command_failed'] % command.name)
+    def log(self, entry, log_type='readable', file_name=None):
+        if file_name:
+            entry = entry.encode('utf-8').replace('\n', ' ')
+            with open('logs/' + file_name, 'a') as log:
+                log.write(entry + '\n')
 
-    def log(self, entry=None, json_entry=None, error=None):
-        # TODO: make log types?
-        if entry:
-            print entry.encode('utf-8').replace('\n', ' ')
-            with open('logs/readable.log', 'a') as log:
-                log.write(entry.encode('utf-8').replace('\n', ' ') + '\n')
-        elif json_entry:
+        elif log_type == 'readable' or log_type == 'error':
+            entry = entry.encode('utf-8').replace('\n', ' ')
+            with open('logs/' + log_type + '.log', 'a') as log:
+                log.write(entry + '\n')
+
+        elif log_type == 'json':
             with open('logs/json.log', 'a') as log:
-                log.write(json.dumps(json_entry))
-                log.write(',\n')
-        elif error:
-            print error
-            with open('logs/error.log', 'a') as log:
-                log.write(str(error))
-                log.write('\n')
+                log.write(json.dumps(entry) + '\n')
 
-    def reply(self, chat_id, response):
-        """Sends responses, accept a response object."""
+        else:
+            print "Error! Please specify correct log type or a file name."
+
+        print entry
+
+    def reply(self, response):
+        """Sends responses to user, accept a response object."""
+        request_url = self.base_url
+        files = None
+
         if response.send_message.text:
-            request_url = self.base_url + 'sendMessage'
+            request_url += 'sendMessage'
             parameters = response.send_message.to_dict()
             self.log(self.name + ': ' + response.send_message.text + ' to chat ' + str(response.send_message.chat_id) + '.')
-        parameters['chat_id'] = chat_id
-        request = urllib2.urlopen(request_url, urllib.urlencode(parameters))
+
+        elif response.forward_message.from_chat_id:
+            request_url += 'forwardMessage'
+            parameters = response.forward_message.to_dict()
+
+        elif response.send_photo.photo:
+            request_url += 'sendPhoto'
+            if not response.send_photo.name:
+                response.send_photo.name = 'photo.jpg'
+            dictionary = response.send_photo.to_dict()
+            files = response.send_photo.get_files()
+            data = response.send_photo.get_data()
+            print data
+            parameters = [('chat_id', str(response.chat_id))]
+
+        elif response.send_sticker.sticker:
+            request_url += 'sendSticker'
+            parameters = responses.send_sticker.to_dict()
+
+        if files:
+            # Files should be sent via a multipart/form-data request.
+            r = requests.post(request_url, files=files, data=data)
+        else:
+            # For text-based messages, a simple urlopen should do the trick.
+            r = urllib2.urlopen(request_url, urllib.urlencode(parameters))
 
     #     if message:
     #         response = urllib2.urlopen(self.base_url + 'sendMessage',
