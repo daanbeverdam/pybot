@@ -30,12 +30,14 @@ TOKEN = env[0].strip()
 BOT_NAME = env[1].strip()
 # 'en' for english, 'nl' for dutch:
 LANG = env[2].strip()
+# database name:
+DATABASE = env[3].strip()
 # chat id of the bot admin (optional):
-ADMIN_CHAT_ID = env[3].strip()
+ADMIN_CHAT_ID = env[4].strip()
 # api key for Open Weather Map:
-WEATHER_API = env[4].strip()
+WEATHER_API = env[5].strip()
 # api key for Voicerss:
-SAY_API = env[5].strip()
+SAY_API = env[6].strip()
 # list of commands:
 COMMAND_LIST = [
     # CalculatorCommand('calculator', dialogs.calculator[LANG]),

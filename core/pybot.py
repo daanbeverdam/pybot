@@ -1,7 +1,6 @@
-import requests
 from message import Message
 from response import Response
-from multipart import post_multipart
+import requests
 import time
 import json
 import urllib
@@ -9,32 +8,49 @@ import urllib2
 import shelve
 import traceback
 import os
+from pymongo import MongoClient  # for accessing the database
 from datetime import datetime
 
 
 class PyBot(object):
     """Main class that handles incoming messages and replies appropriately."""
-    def __init__(self, name, token, dialogs, commands):
+
+    def __init__(self, name, token, dialogs, commands, database):
+        """Initializer. Creates the variables needed for functioning."""
+
         self.name = name
         self.token = token
+        self.db = MongoClient()[database]
         self.base_url = 'https://api.telegram.org/bot' + self.token + '/'
         self.dialogs = dialogs
         self.commands = commands
         self.reserved_names = ['cancel', 'results', 'done']  # TODO: make seperate commands
         self.command_names = [command.name for command in self.commands]
-        self.is_waiting_for_input = False
 
     def check_dirs(self):
+        """Checks if the needed directories exist and creates them if they don't."""
+
         if not os.path.exists('data'):
             os.makedirs('data')
             print "Data folder created"
+        
         if not os.path.exists('logs'):
             os.makedirs('logs')
             print "Logs folder created"
 
+    def check_documents(self):
+        """Checks if the required documents exist."""
+
+        if not self.db.main.find_one():
+            self.db.main = {'offset': 0}
+
     def run(self):
+        """Main loop of the bot."""
+
         self.check_dirs()
+        self.check_documents()
         print "Bot started..."
+        
         while True:
             try:
                 self.check_for_updates()
@@ -45,20 +61,21 @@ class PyBot(object):
                 self.log(traceback.format_exc(), 'error')
 
     def check_for_updates(self):
-        self.main_data = shelve.open('data/main')
-        offset = self.main_data.get('offset')
+        """Checks for updates via long polling."""
+
+        offset = self.db.main['offset']
         parameters = {'timeout': 30, 'limit': 100, 'offset': offset}
         update_url = self.base_url + 'getUpdates'
         request = urllib2.urlopen(update_url, urllib.urlencode(parameters))
         update = json.loads(request.read())
 
         if update['ok'] and update['result']:
-            self.main_data['offset'] = update['result'][-1]['update_id'] + 1
-            self.main_data.close()
+            self.db.main['offset'] = update['result'][-1]['update_id'] + 1
+            
             for result in update['result']:
+                self.log(result, 'json')
                 message = Message(result['message'])
                 self.handle(message)
-                self.log(result['message'], 'json')
 
         elif not update['ok']:
             self.log("Couldn't get correct response! Update not OK.", 'error')
@@ -74,25 +91,33 @@ class PyBot(object):
     #     scheduled_events.close()
 
     def handle(self, message):
+        """Handles incoming messages by looping through the commands."""
+
         for command in self.commands:
-            
+            response = Response(message.chat.id)
+
             if command.listen(message):
                 
                 if command.is_waiting_for_input and command.is_waiting_for.id == message.sender.id:
                     command.arguments = message.text
                     command.is_waiting_for_input = False
-                    response = command.reply()
+                    response = command.reply(response)
                 
-                if command.requires_arguments and not command.arguments:
-                    command.response.send_message.text = self.dialogs['input'] % command.name
+                elif command.requires_arguments and not command.arguments:
+                    response = Response(message.chat.id)
                     command.is_waiting_for_input = True
                     command.is_waiting_for = message.sender
-                    response = command.response
+                    response.send_message.text = self.dialogs['input'] % command.name
                 
                 else:
-                    response = command.reply()
+                    response = command.reply(response)
                 
-                self.reply(response)
+                if response:
+                    self.reply(response)
+
+                elif len(response) > 1:
+                    for r in response:
+                        self.reply(response)
 
         if message.contains_command() and message.command.lower() not in self.command_names:
             response = Response(message.chat.id)
@@ -100,27 +125,30 @@ class PyBot(object):
             self.reply(response)
 
     def log(self, entry, log_type='readable', file_name=None):
+        """Logs entries into their respective log files."""
+
         if file_name:
             entry = entry.encode('utf-8').replace('\n', ' ')
             with open('logs/' + file_name, 'a') as log:
                 log.write(entry + '\n')
 
-        elif log_type == 'readable' or log_type == 'error':
+        elif log_type in ['readable', 'error']:
             entry = entry.encode('utf-8').replace('\n', ' ')
             with open('logs/' + log_type + '.log', 'a') as log:
                 log.write(entry + '\n')
 
-        elif log_type == 'json':
-            with open('logs/json.log', 'a') as log:
+        elif log_type in ['json', 'response']:
+            with open('logs/' + log_type + '.log', 'a') as log:
                 log.write(json.dumps(entry) + '\n')
 
         else:
-            print "Error! Please specify correct log type or a file name."
+            self.log("Error! Please specify correct log_type or file_name.", 'error')
 
         print entry
 
     def reply(self, response):
-        """Sends responses to user, accept a response object."""
+        """Sends response to user, accepts a response object."""
+        
         request_url = self.base_url
         files = None
 
@@ -135,24 +163,32 @@ class PyBot(object):
 
         elif response.send_photo.photo:
             request_url += 'sendPhoto'
+            
             if not response.send_photo.name:
                 response.send_photo.name = 'photo.jpg'
+            
             dictionary = response.send_photo.to_dict()
             files = response.send_photo.get_files()
             data = response.send_photo.get_data()
-            print data
-            parameters = [('chat_id', str(response.chat_id))]
 
         elif response.send_sticker.sticker:
             request_url += 'sendSticker'
-            parameters = responses.send_sticker.to_dict()
+            parameters = response.send_sticker.to_dict()
+
+        else:
+            self.log('No valid response!', 'error')
 
         if files:
             # Files should be sent via a multipart/form-data request.
             r = requests.post(request_url, files=files, data=data)
+            r = json.loads(r.text)
+        
         else:
             # For text-based messages, a simple urlopen should do the trick.
             r = urllib2.urlopen(request_url, urllib.urlencode(parameters))
+            r = json.loads(r.read())
+
+        self.log(r['result'], 'response')
 
     #     if message:
     #         response = urllib2.urlopen(self.base_url + 'sendMessage',

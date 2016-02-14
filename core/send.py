@@ -9,23 +9,19 @@ class Send(object):
     def __init__(self, chat_id=None):
         self.chat_id = chat_id  # a valid response must always have chat_id
         self.reply_to_message_id = None
+        self.force_reply = False
         self.reply_markup = ReplyKeyboardMarkup()
-        self.reply_keyboard_hide = ReplyKeyboardHide()
-        self.force_reply = ForceReply()
 
     def to_dict(self):
-        """Returns self as dictionary."""
+        """Returns a copy of self as dictionary."""
         dictionary = {}
         dictionary.update(self.__dict__)
-        dictionary['reply_markup'] = self.reply_markup.__dict__
-        dictionary['reply_keyboard_hide'] = self.reply_keyboard_hide.__dict__
-        dictionary['force_reply'] = self.force_reply.__dict__
+        dictionary['reply_markup'] = {}
+        dictionary['reply_markup'].update(self.reply_markup.__dict__)
+        if dictionary['reply_markup']['hide_keyboard']:
+            del dictionary['reply_markup']['keyboard']  # keyboard and hide_keyboard can't co-exist
+        dictionary['reply_markup'] = json.dumps(dictionary['reply_markup'])
         return dictionary
-
-    def to_tuples(self):
-        """Returns self as array of tuples."""
-        tuples = self.to_dict().items()
-        return tuples
 
     def get_files(self):
         """Returns name and media file as tuple. Used for multipart/form-data request."""
@@ -46,5 +42,4 @@ class Send(object):
         for key in dictionary:
             if key not in media_types:
                 data[key] = dictionary[key]
-        data['reply_markup'] = json.dumps(data['reply_markup'])
         return data

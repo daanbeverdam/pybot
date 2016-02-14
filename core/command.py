@@ -28,15 +28,13 @@ class Command(object):
 
     def listen(self, message):
         self.message = message
-        self.response = Response(self.message.chat.id)
         self.arguments = self.get_arguments()
         self.data = shelve.open('data/chat_' + str(message.chat.id))
         self.collect_user_data(message)
 
-        tokens = message.text.split()
-        if tokens[0].lower().split('@')[0] == self.name:
+        if self.is_active() or self.is_always_listening or self.is_waiting_for_input:
             return True
-        elif self.is_active() or self.is_always_listening or self.is_waiting_for_input:
+        elif message.text.split()[0].lower().split('@')[0] == self.name:
             return True
         return False
 
@@ -64,7 +62,7 @@ class Command(object):
             self.data['chat_users'] = {}
 
     def get_arguments(self):
-        if len(self.message.text.split()) > 1:
+        if self.message.text and len(self.message.text.split()) > 1:
             return self.message.text.split(' ', 1)[1]
 
     def get_image(self, image_link):

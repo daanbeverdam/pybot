@@ -14,18 +14,25 @@ class Message(object):
         self.text = message.get('text')
         self.chat = Chat(message.get('chat'))
         self.sender = User(message.get('from'))
-        if message.get('forward_from'):
-            self.forward_from = User(message.get('forward_from'))
-        if message.get('sticker'):
-            self.sticker = Sticker(message.get('sticker'))
-        if message.get('photo'):
-            self.photo = [Photo(ph) for ph in message.get('photo')]
+        self.forward_from = message.get('forward_from')
+        self.reply_to_message = message.get('reply_to_message')
+        self.sticker = message.get('sticker')
+        self.photo = message.get('photo')
         self.caption = message.get('caption')
-        if message.get('document'):
+        self.document = message.get('document')
+        self.voice = message.get('voice')
+
+        if self.forward_from:
+            self.forward_from = User(message.get('forward_from'))
+        if self.sticker:
+            self.sticker = Sticker(message.get('sticker'))
+        if self.photo:
+            self.photo = [Photo(ph) for ph in message.get('photo')]
+        if self.document:
             self.document = Document(message.get('document'))
-        if message.get('voice'):
+        if self.voice:
             self.voice = Voice(message.get('voice'))
-        if message.get('reply_to_message'):
+        if self.reply_to_message:
             self.reply_to_message = Message(message.get('reply_to_message'))
 
         # TODO: video, contact, location, user left chat, etc..
