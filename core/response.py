@@ -7,6 +7,7 @@ from send_sticker import SendSticker
 
 class Response(object):
     """Represents a response from the bot."""
+
     def __init__(self, chat_id=None):
         self.send_message = SendMessage(chat_id)
         self.forward_message = ForwardMessage(chat_id)

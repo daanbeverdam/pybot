@@ -7,7 +7,8 @@ from voice import Voice
 
 
 class Message(object):
-    """Message class for a Telegram message."""
+    """Represents a Telegram message."""
+
     def __init__(self, message):
         self.id = message.get('message_id')
         self.date = message.get('date')

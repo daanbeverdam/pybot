@@ -3,12 +3,13 @@ from core.response import Response
 
 
 class EchoCommand(Command):
-
+    """Command that returns the message sent by the user."""
+    
     def reply(self, response):
+        
         if self.message.sticker:
-            respons.send_sticker.sticker = message.sticker
+            response.send_sticker.sticker = self.message.sticker.file_id
         elif self.message.text:
             response.send_message.text = self.arguments
-        # self.response.send_message.reply_markup.keyboard = [['a','b']]
-        # self.response.send_message.reply_markup.hide_keyboard = True
+
         return response
