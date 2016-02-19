@@ -1,7 +1,7 @@
-from pybot.command import Command
+from core.command import Command
 
 
 class StatusCommand(Command):
 
-    def reply(self):
+    def reply(self, response):
         return {'message': self.dialogs['reply']}

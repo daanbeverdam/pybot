@@ -1,11 +1,11 @@
-from pybot.command import Command
+from core.command import Command
 import urllib
 import json
 
 
 class GoogleCommand(Command):
 
-    def reply(self):
+    def reply(self, response):
         query = self.arguments
         encoded_query = urllib.urlencode({'q': query})
         url = ('http://ajax.googleapis.com/ajax/services/search/web?v=1.0&' +

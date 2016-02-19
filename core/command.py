@@ -20,7 +20,6 @@ class Command(object):
         self.requires_arguments = requires_arguments
         self.admin = int(admin_id)
         self.api_key = api_key  # optional; only if the command needs it
-        self.is_waiting_for_input = False
         self.is_waiting_for = User()
         self.has_scheduled_event = False
         self.is_always_listening = is_always_listening
@@ -38,34 +37,31 @@ class Command(object):
            Accepts a message object and returns a truth value."""
         self.message = message
         self.arguments = self.get_arguments()
-        self.data = shelve.open('data/chat_' + str(message.chat.id))
+        self.data = self.db.chats.find_one({'id': self.message.chat.id})  # necessary?
         if self.is_active() or self.is_always_listening or self.is_waiting_for_input:
             return True
-        elif message.text.split()[0].lower().split('@')[0] == self.name:
+        elif message.text and message.text.split()[0].lower().split('@')[0] == self.name:
             return True
         return False
 
     def is_active(self):
         """Returns whether the command is activated or not."""
-        try:
-            if self.data[self.name + '_active']:
-                return True
-        except:
-            self.data[self.name + '_active'] = False
+        result = self.db.chats.find_one({'id': self.message.chat.id, 'commands.' + self.name + '.active': {'$exists': True}})
+        if result:
+            return result['commands'][self.name]['active']
         return False
 
     def activate(self, boolean=True):
         """Activates or deactivates the command."""
-        if boolean is False:
-            self.data[self.name + '_active'] = False
-        else:
-            self.data[self.name + '_active'] = True
+        query = {'id': self.message.chat.id}
+        update = {'$set': {'commands.' + self.name + '.active': boolean}}
+        self.db.chats.update(query, update, upsert=True)
 
     def get_arguments(self):
         """Returns the command arguments."""
         if self.message.text and len(self.message.text.split()) > 1:
             return self.message.text.split(' ', 1)[1]
 
-    def get_image(self, url):
-        """Returns a string representation of an image."""
+    def to_string(self, url):
+        """Returns a string representation of a document. Accepts url."""
         return StringIO(urllib.urlopen(url).read()).getvalue()

@@ -1,10 +1,10 @@
-from pybot.command import Command
+from core.command import Command
 import shelve
 
 
 class PollCommand(Command):
 
-    def reply(self):
+    def reply(self, response):
         if not self.is_active():
             return self.new_poll()
         elif self.data['poll_allow_add'] is True and self.arguments is not None and self.arguments.split()[0] == 'add':

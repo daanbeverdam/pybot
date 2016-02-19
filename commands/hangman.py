@@ -1,11 +1,11 @@
-from pybot.command import Command
+from core.command import Command
 import re
 import urllib
 
 
 class HangmanCommand(Command):
 
-    def reply(self):
+    def reply(self, response):
         self.accepts_none = True
         if not self.is_active():
             return self.start()

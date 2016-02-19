@@ -1,9 +1,9 @@
-from pybot.command import Command
+from core.command import Command
 
 
 class CalculatorCommand(Command):
 
-    def reply(self):
+    def reply(self, response):
         if self.is_active():
             return self.collect_input()
         else:

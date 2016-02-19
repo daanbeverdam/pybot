@@ -16,6 +16,14 @@ bot = {'en': {
 }
 }
 
+cancel = {'en': {
+    'reply': '%s canceled.'
+},
+    'nl': {
+    'reply': '%s geannuleerd.'
+    }
+}
+
 bbq = {'en': {
     'usage': "The command /bbq determines if the weather "
     "circumstances in the Netherlands are suitable for barbecuing.",
@@ -62,7 +70,7 @@ dice = {
     'en': {
         'usage': "Throw a die with /dice. Throw multiple dice by "
         "adding a number. For example: /dice 2.",
-        'reply': "You threw: %s.",
+        'reply': "You threw: %i.",
         'reply_0': "Please throw at least 1 die.",
         'reply_max': "Sorry, the maximum number of dice you can throw "
         "is 10."},
@@ -70,7 +78,7 @@ dice = {
         'usage': "Gooi een dobbelsteen met /dice. Om meerdere "
         "dobbelstenen voeg je een getal toe. Bijvoorbeeld: "
         "'/dice 2'.",
-        'reply': "Je gooide %s.",
+        'reply': "Je gooide %i.",
         'reply_0': "Gooi ten minste 1 dobbelsteen, alsjeblieft.",
         'reply_max': "Sorry, het maximum aantal dobbelstenen dat je kan "
         "gooien is 10."}}
@@ -164,9 +172,7 @@ gif = {'en': {
     'nl': {
     'usage': "Zoek naar gifs met '/gif [zoekterm]'. Je kunt ook een "
     "willekeurige gif opvragen met '/gif random [optionele zoekterm]'",
-    'no_results': "Sorry, geen gifs gevonden voor '%s'.",
-    'no_kudos': "Sorry, no kudos are given yet.",
-    'shame_on_you': "You can't give kudos to yourself, shame on you!"
+    'no_results': "Sorry, geen gifs gevonden voor '%s'."
 }
 }
 
@@ -283,20 +289,22 @@ stats = {'en': {
     'usage': "The /stats command returns statistics of the "
     "chat.",
     'reply': "Total messages sent: %i\n"
-    "Total words sent: %i\n\n"
-    "Top 3 most used commands:\n"
-    "1. %s (%i times)\n2. %s (%i times)\n3. %s (%i times)\n\n"
-    "Most active users (number of messages):\n%s",
+    "Total words sent: %i\n"
+    "Total photos sent: %i\n"
+    "Total stickers sent: %i\n"
+    "Most used commands:\n%s"
+    "Most active users (messages/words/average):\n%s",
     'error': "Sorry, not enough data yet. Chat some more!"
 },
     'nl': {
     'usage': "Het /stats commando geeft de huidige "
     "gespreksstatistieken.",
     'reply': "Totaal verzonden berichten: %i\n"
+    "Totaal verzonden foto's: %i\n"
+    "Totaal verzonden stickers: %i\n"
     "Totaal verzonden woorden: %i\n\n"
-    "Top 3 meest gebruikte commando's:\n"
-    "1. %s (%i keer)\n2. %s (%i keer)\n3. %s (%i keer)\n\n"
-    "Meest actieve gebruikers (aantal berichten):\n%s",
+    "Meest gebruikte commando's:\n%s"
+    "Meest actieve gebruikers (berichten/woorden/gemiddelde):\n%s",
     'error': "Sorry, nog niet genoeg data. Chat nog wat meer!"
 }
 }

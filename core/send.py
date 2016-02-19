@@ -6,6 +6,7 @@ import json
 
 class Send(object):
     """Base class for Send objects."""
+
     def __init__(self, chat_id=None):
         self.chat_id = chat_id  # a valid response must always have chat_id
         self.reply_to_message_id = None

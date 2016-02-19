@@ -18,12 +18,10 @@ class PyBot(object):
     def __init__(self, name, token, dialogs, commands, database):
         self.name = name
         self.token = token
-        print "Connecting to database..."
         self.db = MongoClient()[database]
         self.base_url = 'https://api.telegram.org/bot' + self.token + '/'
         self.dialogs = dialogs
         self.commands = commands
-        self.reserved_names = ['cancel', 'results', 'done']  # TODO: make seperate commands
         self.command_names = [command.name for command in self.commands]
 
     def check_dirs(self):
@@ -41,10 +39,16 @@ class PyBot(object):
         if not self.db.main.find_one():
             self.db.main.insert_one({'offset': 0})
 
+    def bind_db(self):
+        """Binds database to commands."""
+        for command in self.commands:
+            command.db = self.db
+
     def run(self):
         """Main loop of the bot."""
         self.check_dirs()
         self.check_documents()
+        self.bind_db()
         print "Bot started..."
 
         while True:
@@ -74,22 +78,10 @@ class PyBot(object):
                 self.log(result, 'json')
                 self.log(self.name + " received a message from " + message.sender.first_name +
                          " in chat " + str(message.chat.id) + ".")
-                self.handle(message)
                 self.collect(message)
+                self.handle(message)
         elif not update['ok']:
             self.log("Couldn't get correct response! Update not OK.", 'error')
-
-    # def check_for_scheduled_events(self):
-    #      """Checks and sends scheduled responses."""
-    #
-    #     scheduled_events = shelve.open('scheduled_events')
-    #     current = datetime.now()
-    #     for chat_id in scheduled_events:
-    #         for event in chat_id:
-    #             if ((current.year, current.month, current.day) == event['date']
-    #                     and (current.hour, current.minute) == event['time']):
-    #                 self.reply(chat_id, event['text'])
-    #     scheduled_events.close()
 
     def handle(self, message):
         """Handles incoming messages by looping through the commands."""
@@ -163,8 +155,17 @@ class PyBot(object):
             request_url += 'sendSticker'
             parameters = response.send_sticker.to_dict()
             self.log(self.name + " sent a sticker to chat " + str(response.send_message.chat_id) + ".")
+        elif response.send_document.document:
+            request_url += 'sendDocument'
+            if not response.send_document.name:
+                self.log('File name not specified! This could cause issues.', 'error')
+            dictionary = response.send_document.to_dict()
+            files = response.send_document.get_files()
+            data = response.send_document.get_data()
+            self.log(self.name + " sent a document to chat " + str(response.send_message.chat_id) + ".")
         else:
             self.log('No valid response!', 'error')
+            return None
 
         if files:
             # Files should be sent via a multipart/form-data request.
@@ -204,83 +205,18 @@ class PyBot(object):
                 'statistics.total_words': words,
                 'statistics.total_stickers': sticker,
                 'statistics.total_photos': photo,
-                'statistics.' + str(user['id']) + '.total_messages': 1,
-                'statistics.' + str(user['id']) + '.total_words': words,
-                'statistics.' + str(user['id']) + '.total_stickers': sticker,
-                'statistics.' + str(user['id']) + '.total_photos': photo
+                'statistics.users.' + str(user['id']) + '.total_messages': 1,
+                'statistics.users.' + str(user['id']) + '.total_words': words,
+                'statistics.users.' + str(user['id']) + '.total_stickers': sticker,
+                'statistics.users.' + str(user['id']) + '.total_photos': photo
             },
-            '$addToSet': {
-                'users': user
-            }
+            '$set': {'users.' + str(user['id']): user}
         }
 
         if command:
             update['$inc']['statistics.commands.' + command] = 1
 
         self.db.chats.update(query, update, upsert=True)
-        print self.db.chats.find_one(query)
-
-    #     if message:
-    #         response = urllib2.urlopen(self.base_url + 'sendMessage',
-    #                                    urllib.urlencode()).read()
-    #         self.log('Bot sent reply "' + message + '" to ' +
-    #                  str(chat_id) + '.')
-    #     elif photo:
-    #         self.send_action(chat_id, 'upload_photo')
-    #         parameters = [('chat_id', str(chat_id))]
-    #         if caption:
-    #             parameters.append(('caption', caption.encode('utf-8')))
-    #         response = post_multipart(self.base_url + 'sendPhoto', parameters,
-    #                                   [('photo', 'photo.jpg', photo)])
-    #         self.log('Bot sent photo to ' + str(chat_id) + '.')
-    #     elif gif or document:
-    #         self.send_action(chat_id, 'upload_document')
-    #         if gif:
-    #             file_name = 'image.gif'
-    #         else:
-    #             file_name = str(file_name + extension)
-    #         response = post_multipart(self.base_url + 'sendDocument',
-    #                                   [('chat_id', str(chat_id))],
-    #                                   [('document', (file_name),
-    #                                    (gif if gif else document))])
-    #         self.log('Bot sent document to ' + str(chat_id) + '.')
-    #     elif location:
-    #         response = urllib2.urlopen(self.base_url + 'sendLocation',
-    #                                    urllib.urlencode({
-    #                                     'chat_id': str(chat_id),
-    #                                     'latitude': location[0],
-    #                                     'longitude': location[1]
-    #                                     })).read()
-    #         self.log('Bot sent location to ' + str(chat_id) + '.')
-    #
-    # def reply_markup(self, chat_id, message, keyboard=None, selective=False,
-    #                  force_reply=False, message_id=None, resize=True,
-    #                  one_time=True, disable_preview=True):
-    #     if keyboard:
-    #         reply_markup = ({
-    #             'keyboard': keyboard,
-    #             'resize_keyboard': resize,
-    #             'one_time_keyboard': one_time,
-    #             'selective': selective
-    #         })
-    #     else:
-    #         reply_markup = ({
-    #             'hide_keyboard': True,
-    #             'selective': selective
-    #         })
-    #     reply_markup = json.dumps(reply_markup)
-    #     params = urllib.urlencode({
-    #           'chat_id': str(chat_id),
-    #           'text': message.encode('utf-8'),
-    #           'reply_markup': reply_markup,
-    #           'force_reply': force_reply,
-    #           'disable_web_page_preview': disable_preview,
-    #           'reply_to_message_id': str(message_id)
-    #     })
-    #     response = urllib2.urlopen(self.base_url + 'sendMessage',
-    #                                params).read()
-    #     self.log('Bot sent markup: ' + '"' + message + '" ' + str(keyboard) +
-    #              ' to ' + str(chat_id) + '.')
 
     # def send_action(self, chat_id, action):
     #     act = urllib2.urlopen(self.base_url + 'sendChatAction',
@@ -289,4 +225,4 @@ class PyBot(object):
     #                            'action': str(action)
     #                            })).read()
     #     self.log('Bot sent action "' + action + '" to ' + str(chat_id) + '.')
-# )
+    # )

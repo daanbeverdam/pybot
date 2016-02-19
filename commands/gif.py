@@ -1,16 +1,17 @@
 import json
 import StringIO
 import urllib
-from pybot.command import Command
+from core.command import Command
 
 
 class GifCommand(Command):
+    """Command that returns giphy gifs to the user."""
 
-    def reply(self):
-        arguments = self.arguments.lower()
-        if arguments == 'help':
-            return {'message': self.usage}
-        elif arguments.startswith('random'):
+    def reply(self, response):
+        arguments = self.arguments
+
+        if arguments.startswith('random'):
+
             if arguments == 'random':
                 url = ('http://api.giphy.com/v1/gifs/random?'
                        'api_key=dc6zaTOxFJmzC')
@@ -19,19 +20,26 @@ class GifCommand(Command):
                 url = ('http://api.giphy.com/v1/gifs/random?api_key'
                        '=dc6zaTOxFJmzC&tag=' + '+'.join(map(str,
                                                             query.split())))
+
         else:
             url = ('http://api.giphy.com/v1/gifs/search?q=' +
                    '+'.join(map(str, arguments.split())) +
                    '&api_key=dc6zaTOxFJmzC')
+
         search_response = urllib.urlopen(url)
         search_results = search_response.read()
         results = json.loads(search_results)
+
         if results['data'] != []:
             if 'random' in arguments:
                 gif_url = results['data']['image_original_url']
             else:
                 gif_url = results['data'][0]['images']['original']['url']
         else:
-            return {'message': self.dialogs['no_results'] % arguments}
-        gif = StringIO.StringIO(urllib.urlopen(gif_url).read()).getvalue()
-        return {'gif': gif}
+            response.send_message.text = self.dialogs['no_results'] % arguments
+            return response
+
+        gif = self.to_string(gif_url)
+        response.send_document.document = gif
+        response.send_document.name = 'giphy.gif'
+        return response

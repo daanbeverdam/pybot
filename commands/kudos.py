@@ -1,10 +1,10 @@
-from pybot.command import Command
+from core.command import Command
 import operator
 
 
 class KudosCommand(Command):
 
-    def reply(self):
+    def reply(self, response):
         if self.message.text.split()[0][1:] == self.name:
             if self.arguments is None:
                 return self.kudos_overview()

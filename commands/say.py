@@ -1,11 +1,11 @@
-from pybot.command import Command
+from core.command import Command
 import urllib2
 import urllib
 import StringIO
 
 class SayCommand(Command):
 
-    def reply(self):
+    def reply(self, response):
         language = self.determine_language()
         text = urllib.quote_plus(self.arguments)
         url = ('http://api.voicerss.org/?key=' + self.api_key + '&src=' +

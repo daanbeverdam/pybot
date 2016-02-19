@@ -1,11 +1,11 @@
-from pybot.command import Command
+from core.command import Command
 import json
 import urllib
 
 
 class WeatherCommand(Command):
 
-    def reply(self):
+    def reply(self, response):
         query = self.arguments
         url = ('http://api.openweathermap.org/data/2.5/weather?q=' + query +
                '&units=metric&lang=' + self.dialogs['lang'] + '&appid=' +

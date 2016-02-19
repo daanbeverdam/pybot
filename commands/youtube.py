@@ -1,11 +1,11 @@
 import re
 import urllib
-from pybot.command import Command
+from core.command import Command
 
 
 class YouTubeCommand(Command):
 
-    def reply(self):
+    def reply(self, response):
         if self.arguments == 'help':
             return {'message': self.usage}
         query = self.arguments

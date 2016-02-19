@@ -1,11 +1,11 @@
-from pybot.command import Command
+from core.command import Command
 import random
 import shelve
 
 
 class QuoteCommand(Command):
 
-    def reply(self):
+    def reply(self, response):
         self.check_quote_store()
         if self.arguments is None:
             reply = self.random_quote()

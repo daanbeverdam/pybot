@@ -1,11 +1,11 @@
 import json
 import urllib
-from pybot.command import Command
+from core.command import Command
 
 
 class WikiCommand(Command):
 
-    def reply(self):
+    def reply(self, response):
         search_url = ("https://en.wikipedia.org/w/api.php?action=query&list=se"
                       "arch&srsearch=" + self.arguments + "&utf8=&format=json")
         search_results = json.loads(urllib.urlopen(search_url).read())

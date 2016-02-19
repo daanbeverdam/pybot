@@ -1,4 +1,4 @@
-from pybot.command import Command
+from core.command import Command
 import json
 import urllib
 import random
@@ -6,7 +6,7 @@ import random
 
 class XKCDCommand(Command):
 
-    def reply(self):
+    def reply(self, response):
         url = 'http://xkcd.com/info.0.json'
         content = json.loads(urllib.urlopen(url).read())
         newest_comic = content['num']

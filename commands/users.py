@@ -1,9 +1,9 @@
-from pybot.command import Command
+from core.command import Command
 
 
 class UsersCommand(Command):
 
-    def reply(self):
+    def reply(self, response):
         reply = self.dialogs['reply']
         dictionary = self.data['chat_users']
         for user in dictionary:

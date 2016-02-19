@@ -1,10 +1,10 @@
-from pybot.command import Command
+from core.command import Command
 import os
 
 
 class HelpCommand(Command):
 
-    def reply(self):
+    def reply(self, response):
         if self.arguments == 'help':
             return {'message': self.usage}
         reply = self.dialogs['reply']
