@@ -13,7 +13,7 @@ class CalculatorCommand(Command):
         prompt = self.dialogs['prompt']
         calculator = ([['1', '2', '3', '+'], ['4', '5', '6', '-'],
                       ['7', '8', '9', '*'], ['0', '.', '=', '/']])
-        self.data['calc_starter'] = self.message.sender_id
+        self.data['calc_starter'] = self.message.sender.id
         self.data['calc_query'] = ''
         self.data['calculator_active'] = True
         return {'message': prompt, 'keyboard': calculator, 'one_time': False,
@@ -22,7 +22,7 @@ class CalculatorCommand(Command):
 
     def collect_input(self):
         operators = ['*', '/', '.', '+', '-']
-        if self.message.sender_id == self.data['calc_starter']:
+        if self.message.sender.id == self.data['calc_starter']:
             if self.message.text.isdigit() or self.message.text in operators:
                 query = self.data['calc_query']
                 query += self.message.text

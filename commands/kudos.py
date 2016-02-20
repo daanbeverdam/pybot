@@ -46,7 +46,7 @@ class KudosCommand(Command):
             except:
                 return {'message': None}
         name = name.title()
-        if self.message.first_name_sender == name:
+        if self.message.sender.first_name == name:
             return {'message': self.dialogs['shame_on_you']}
         try:
             current_kudos = kudo_dict[name]

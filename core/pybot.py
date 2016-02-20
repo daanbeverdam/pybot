@@ -22,7 +22,7 @@ class PyBot(object):
         self.base_url = 'https://api.telegram.org/bot' + self.token + '/'
         self.dialogs = dialogs
         self.commands = commands
-        self.command_names = [command.name for command in self.commands]
+        self.command_names = [command.name for command in self.commands] + ['/cancel', '/done']
 
     def check_dirs(self):
         """Checks if the needed directories exist and creates them if they don't."""
@@ -89,22 +89,38 @@ class PyBot(object):
             response = Response(message.chat.id)
 
             if command.listen(message):
+                print command.name + ' activated!'
 
-                if command.is_waiting_for_input and command.is_waiting_for.id == message.sender.id:
-                    command.arguments = message.text
-                    command.is_waiting_for_input = False
-                    response = command.reply(response)
-                elif command.requires_arguments and not command.arguments:
-                    response = Response(message.chat.id)
-                    command.is_waiting_for_input = True
-                    command.is_waiting_for = message.sender
-                    response.send_message.text = self.dialogs['input'] % command.name
-                else:
-                    response = command.reply(response)
+                try:
+
+                    if message.text == '/cancel':
+                        response = command.cancel(response)
+
+                    elif message.text == '/done':
+                        response = command.done(response)
+
+                    elif command.is_waiting_for_input and command.is_waiting_for.id == message.sender.id:
+                        command.arguments = message.text
+                        command.is_waiting_for_input = False
+                        response = command.reply(response)
+
+                    elif command.requires_arguments and not command.arguments:
+                        response = Response(message.chat.id)
+                        command.is_waiting_for_input = True
+                        command.is_waiting_for = message.sender
+                        response.send_message.text = self.dialogs['input'] % command.name
+
+                    else:
+                        response = command.reply(response)
+
+                except:
+                    response.send_message.text = self.dialogs['command_failed'] % command.name
+                    self.log(traceback.format_exc(), 'error')
 
                 if isinstance(response, list):
                     for rsp in response:
                         self.reply(rsp)
+
                 elif response:
                     self.reply(response)
 
@@ -184,6 +200,7 @@ class PyBot(object):
         words = 0
         sticker = 0
         photo = 0
+        document = 0
         command = None
 
         if message.text:
@@ -195,6 +212,8 @@ class PyBot(object):
             sticker = 1
         elif message.photo:
             photo = 1
+        elif message.document:
+            document = 1
 
         query = {
             'id': message.chat.id
@@ -205,10 +224,12 @@ class PyBot(object):
                 'statistics.total_words': words,
                 'statistics.total_stickers': sticker,
                 'statistics.total_photos': photo,
+                'statistics.total_documents': document,
                 'statistics.users.' + str(user['id']) + '.total_messages': 1,
                 'statistics.users.' + str(user['id']) + '.total_words': words,
                 'statistics.users.' + str(user['id']) + '.total_stickers': sticker,
-                'statistics.users.' + str(user['id']) + '.total_photos': photo
+                'statistics.users.' + str(user['id']) + '.total_photos': photo,
+                'statistics.users.' + str(user['id']) + '.total_documents': document
             },
             '$set': {'users.' + str(user['id']): user}
         }

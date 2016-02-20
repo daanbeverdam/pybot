@@ -44,9 +44,36 @@ class Command(object):
             return True
         return False
 
+    def cancel(self, response):
+        """Cancels the command. Each command should have this function."""
+        if self.is_waiting_for_input or self.is_active():
+            self.is_waiting_for_input = False
+            self.activate(False)
+            response.send_message.text = "OK, no worries."
+            return response
+        return None
+
+    def done(self, response):
+        """Tells the command the user is done. Each command should have this function."""
+        return None
+
+    def db_set(self, key, value):
+        """Writes a key-value pair to the database."""
+        query = {'id': self.message.chat.id}
+        update = {'$set': {'commands.' + self.name + '.' + key: value}}
+        return self.db.chats.update(query, update, upsert=True)
+
+    def db_get(self, query=None):
+        """Gets a search result from the database."""
+        if not query:
+            query = {'id': self.message.chat.id}
+        return self.db.chats.find_one(query)['commands'][self.name]
+
     def is_active(self):
         """Returns whether the command is activated or not."""
-        result = self.db.chats.find_one({'id': self.message.chat.id, 'commands.' + self.name + '.active': {'$exists': True}})
+        result = self.db.chats.find_one({'id': self.message.chat.id,
+                                         'commands.' + self.name + '.active': {'$exists': True}
+                                         })
         if result:
             return result['commands'][self.name]['active']
         return False

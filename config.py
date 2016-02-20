@@ -6,7 +6,7 @@ from commands.cancel import CancelCommand
 # from commands.wiki import WikiCommand
 # from commands.youtube import YouTubeCommand
 # from commands.google import GoogleCommand
-# from commands.poll import PollCommand
+from commands.poll import PollCommand
 # from commands.help import HelpCommand
 # from commands.status import StatusCommand
 # from commands.weather import WeatherCommand
@@ -41,7 +41,6 @@ WEATHER_API = env[5].strip()
 SAY_API = env[6].strip()
 # list of commands:
 COMMAND_LIST = [
-    CancelCommand('/cancel', dialogs.cancel[LANG]),
     # CalculatorCommand('/calculator', dialogs.calculator[LANG]),
     ChangesCommand('/changes', dialogs.changes[LANG]),
     DiceCommand('/dice', dialogs.dice[LANG]),
@@ -52,7 +51,7 @@ COMMAND_LIST = [
     # HangmanCommand('/hangman', dialogs.hangman[LANG]),
     # HelpCommand('/help', dialogs.help[LANG]),
     # KudosCommand('/kudos', dialogs.kudos[LANG], is_always_listening=True),
-    # PollCommand('/poll', dialogs.poll[LANG], False, ADMIN_CHAT_ID),
+    PollCommand('/poll', dialogs.poll[LANG], False, ADMIN_CHAT_ID),
     # QuoteCommand('/quote', dialogs.quote[LANG]),
     # SayCommand('/say', dialogs.say[LANG], False, language=LANG, api_key=SAY_API),
     # StartCommand('/start', dialogs.start[LANG]),
