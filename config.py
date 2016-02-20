@@ -3,6 +3,7 @@ from commands.doge import DogeCommand
 from commands.gif import GifCommand
 from commands.echo import EchoCommand
 from commands.cancel import CancelCommand
+from commands.results import ResultsCommand
 # from commands.wiki import WikiCommand
 # from commands.youtube import YouTubeCommand
 # from commands.google import GoogleCommand
@@ -51,8 +52,9 @@ COMMAND_LIST = [
     # HangmanCommand('/hangman', dialogs.hangman[LANG]),
     # HelpCommand('/help', dialogs.help[LANG]),
     # KudosCommand('/kudos', dialogs.kudos[LANG], is_always_listening=True),
-    PollCommand('/poll', dialogs.poll[LANG], False, ADMIN_CHAT_ID),
+    PollCommand('/poll', dialogs.poll[LANG], True, ADMIN_CHAT_ID),
     # QuoteCommand('/quote', dialogs.quote[LANG]),
+    ResultsCommand('/results', dialogs.results[LANG]),
     # SayCommand('/say', dialogs.say[LANG], False, language=LANG, api_key=SAY_API),
     # StartCommand('/start', dialogs.start[LANG]),
     StatsCommand('/stats', dialogs.stats[LANG]),

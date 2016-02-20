@@ -265,6 +265,18 @@ quote = {'en': {
 }
 }
 
+results = {'en': {
+    'reply': "The results for '%s':",
+    'vote': 'vote',
+    'votes': 'votes'
+},
+    'nl': {
+    'reply': "De resultaten voor de vraag '%s':",
+    'vote': 'stem',
+    'votes': 'stemmen'
+}
+}
+
 say = {'en': {
     'usage': "The command /say [text] returns spoken text. Use flag ~nl for "
     "Dutch."

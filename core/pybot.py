@@ -104,7 +104,7 @@ class PyBot(object):
                         command.is_waiting_for_input = False
                         response = command.reply(response)
 
-                    elif command.requires_arguments and not command.arguments:
+                    elif command.requires_arguments and not command.arguments and not command.is_active():
                         response = Response(message.chat.id)
                         command.is_waiting_for_input = True
                         command.is_waiting_for = message.sender
