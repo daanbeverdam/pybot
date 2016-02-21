@@ -268,12 +268,14 @@ quote = {'en': {
 results = {'en': {
     'reply': "The results for '%s':",
     'vote': 'vote',
-    'votes': 'votes'
+    'votes': 'votes',
+    'not_active': 'Poll is not active anymore.'
 },
     'nl': {
     'reply': "De resultaten voor de vraag '%s':",
     'vote': 'stem',
-    'votes': 'stemmen'
+    'votes': 'stemmen',
+    'not_active': 'Poll is niet meer actief.'
 }
 }
 

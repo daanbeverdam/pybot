@@ -89,7 +89,6 @@ class PyBot(object):
             response = Response(message.chat.id)
 
             if command.listen(message):
-                print command.name + ' activated!'
 
                 try:
 
