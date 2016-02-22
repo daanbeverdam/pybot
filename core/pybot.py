@@ -131,11 +131,11 @@ class PyBot(object):
     def log(self, entry, log_type='readable', file_name=None):
         """Logs entries into their respective log files."""
         if file_name:
-            entry = entry.encode('utf-8').replace('\n', ' ')
+            entry = entry.replace('\n', ' ')
             with open('logs/' + file_name, 'a') as log:
                 log.write(entry + '\n')
         elif log_type in ['readable', 'error']:
-            entry = entry.encode('utf-8').replace('\n', ' ')
+            entry = entry.replace('\n', ' ')
             with open('logs/' + log_type + '.log', 'a') as log:
                 log.write(entry + '\n')
             print entry  # readable responses also get printed to the terminal
@@ -152,6 +152,7 @@ class PyBot(object):
 
         if response.send_message.text:
             request_url += 'sendMessage'
+            response.send_message.text = response.send_message.text
             parameters = response.send_message.to_dict()
             self.log(self.name + " sent '" + response.send_message.text + "' to chat " + str(response.send_message.chat_id) + ".")
         elif response.forward_message.from_chat_id:

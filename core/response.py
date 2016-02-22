@@ -16,5 +16,4 @@ class Response(object):
         self.send_audio = SendAudio(chat_id)
         self.send_sticker = SendSticker(chat_id)
         self.send_document = SendDocument(chat_id)
-
         # TODO: send_location, etc..

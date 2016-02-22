@@ -5,7 +5,10 @@ import shelve
 class PollCommand(Command):
 
     def reply(self, response):
-        if not self.is_active():
+        if not self.message.text:
+            return None
+
+        elif not self.is_active():
             return self.new_poll(response)
 
         elif self.db_get()['allow_add'] and self.arguments and self.arguments.split()[0] == 'add':
@@ -14,10 +17,9 @@ class PollCommand(Command):
         elif self.message.text in self.db_get()['options_dict']:
             return self.store_answer(response)
 
-        elif self.message.text.split(' ', 1)[0][1:] == self.name:
-            return {'message': self.dialogs['poll_already_active']}
-
-        return None
+        elif self.message.text.split(' ', 1)[0] == self.name:
+            response.send_message.text = self.dialogs['poll_already_active']
+            return response
 
     def new_poll(self, response, keep_old_results=False):
         one_time = True
