@@ -2,7 +2,6 @@ from commands.dice import DiceCommand
 from commands.doge import DogeCommand
 from commands.gif import GifCommand
 from commands.echo import EchoCommand
-from commands.cancel import CancelCommand
 from commands.results import ResultsCommand
 # from commands.wiki import WikiCommand
 # from commands.youtube import YouTubeCommand
