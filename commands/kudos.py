@@ -5,22 +5,24 @@ import operator
 class KudosCommand(Command):
 
     def reply(self, response):
-        if self.message.text and self.message.text.split()[0] == self.name:
+        if self.message.text:
 
-            if not self.arguments:
-                return self.kudos_overview(response)
+            if self.message.text.split()[0] == self.name:
 
-            elif self.arguments.title() in [i['first_name'] for i in self.get_chat_users().values()]:
-                return self.give_kudos(response, self.arguments)
+                if not self.arguments:
+                    return self.kudos_overview(response)
 
-            response.send_message.text = self.dialogs['not_in_chat'] % self.arguments
-            return response
+                elif self.arguments.title() in [i['first_name'] for i in self.get_chat_users().values()]:
+                    return self.give_kudos(response, self.arguments)
 
-        elif self.message.text[:2] == '+1':
-            return self.give_kudos(response)
+                response.send_message.text = self.dialogs['not_in_chat'] % self.arguments
+                return response
 
-        elif self.message.text[:2] == '-1':
-            return self.give_kudos(response, substract=True)
+            elif self.message.text[:2] == '+1':
+                return self.give_kudos(response)
+
+            elif self.message.text[:2] == '-1':
+                return self.give_kudos(response, substract=True)
 
     def kudos_overview(self, response):
         result = self.db.chats.find_one({'id': self.message.chat.id, 'commands./kudos.overview': {'$exists': True}})

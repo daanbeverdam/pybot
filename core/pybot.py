@@ -220,7 +220,7 @@ class PyBot(object):
         if message.text:
             tokens = message.text.split()
             words = len(tokens)
-            command_list = [token for token in tokens if token.startswith('/')]
+            command_list = [token for token in tokens if token.startswith('/') and len(token) > 2]
             command = command_list[0] if len(command_list) > 0 else None
 
         elif message.sticker:
