@@ -5,55 +5,75 @@ import operator
 class KudosCommand(Command):
 
     def reply(self, response):
-        if self.message.text.split()[0][1:] == self.name:
-            if self.arguments is None:
-                return self.kudos_overview()
-            elif self.arguments.title() in [i['first_name'] for i in
-                                            self.data['chat_users'].values()]:
-                return self.give_kudos(self.arguments)
-            return {'message': self.dialogs['not_in_chat'] % self.arguments}
+        if self.message.text.split()[0] == self.name:
+
+            if not self.arguments:
+                return self.kudos_overview(response)
+
+            elif self.arguments.title() in [i['first_name'] for i in self.get_chat_users().values()]:
+                return self.give_kudos(response, self.arguments)
+
+            response.send_message.text = self.dialogs['not_in_chat'] % self.arguments
+            return response
+
         elif self.message.text[:2] == '+1':
-            return self.give_kudos()
+            return self.give_kudos(response)
+
         elif self.message.text[:2] == '-1':
-            return self.give_kudos(substract=True)
+            return self.give_kudos(response, substract=True)
+
+    def kudos_overview(self, response):
+        result = self.db.chats.find_one({'id': self.message.chat.id, 'commands./kudos.overview': {'$exists': True}})
+
+        if result:
+            overview = self.db_get()['overview']
+            reply = self.dialogs['kudo_overview']
+            overview = sorted(overview.items(), key=operator.itemgetter(1), reverse=True)
+
+            for entry in overview:
+                reply += "\n%s: %i" % (entry[0], entry[1])
+
+            response.send_message.text = reply
+
         else:
-            return {'message': None}
+            response.send_message.text = self.dialogs['no_kudos']
 
-    def kudos_overview(self):
-        try:
-            kudo_dict = sorted(self.data['kudo_dict'].items(),
-                               key=operator.itemgetter(1), reverse=True)
-        except:
-            return{'message': self.dialogs['no_kudos']}
-        reply = self.dialogs['kudo_overview']
-        for entry in kudo_dict:
-            reply += "\n%s: %i" % (entry[0], entry[1])
-        return {'message': reply}
+        return response
 
-    def give_kudos(self, name=None, substract=False):
-        if substract is True:
+    def give_kudos(self, response, name=None, substract=False):
+        result = self.db.chats.find_one({'id': self.message.chat.id, 'commands./kudos.overview': {'$exists': True}})
+
+        if not result:
+            self.db_set('overview', {})
+
+        if substract:
             number_of_kudos = -1
+
         else:
             number_of_kudos = 1
-        try:
-            kudo_dict = self.data['kudo_dict']
-        except:
-            self.data['kudo_dict'] = {}
-            kudo_dict = self.data['kudo_dict']
-        if name is None:
+
+        if not name:
+
             try:
-                name = self.message.reply_to_sender_first_name
+                name = self.message.reply_to_message.sender.first_name
+
             except:
-                return {'message': None}
+                return None
+
         name = name.title()
+
         if self.message.sender.first_name == name:
-            return {'message': self.dialogs['shame_on_you']}
-        try:
-            current_kudos = kudo_dict[name]
-            new_kudos = current_kudos + number_of_kudos
-            kudo_dict[name] = new_kudos
-        except:
-            kudo_dict[name] = number_of_kudos
-        self.data['kudo_dict'] = kudo_dict
-        return {'message': self.dialogs['kudos_given'] %
-                (number_of_kudos, name, self.data['kudo_dict'][name])}
+            response.send_message.text = self.dialogs['shame_on_you']
+            return response
+
+        query = {
+            'id': self.message.chat.id
+        }
+        update = {
+            '$inc': {
+                'commands./kudos.overview.' + name: number_of_kudos
+            }
+        }
+        print self.db.chats.update(query, update, upsert=True)
+        response.send_message.text = self.dialogs['kudos_given'] % (number_of_kudos, name, self.db_get()['overview'][name])
+        return response

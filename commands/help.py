@@ -14,4 +14,5 @@ class HelpCommand(Command):
                 command_list.append('/' + name[:-3])
         command_list.sort()
         reply += '\n' + '\n'.join(map(str, command_list))
-        return {'message': reply}
+        response.send_message.text = reply
+        return response

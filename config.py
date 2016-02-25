@@ -5,7 +5,7 @@ from commands.echo import EchoCommand
 from commands.results import ResultsCommand
 # from commands.wiki import WikiCommand
 # from commands.youtube import YouTubeCommand
-# from commands.google import GoogleCommand
+from commands.google import GoogleCommand
 from commands.poll import PollCommand
 # from commands.help import HelpCommand
 # from commands.status import StatusCommand
@@ -17,7 +17,7 @@ from commands.stats import StatsCommand
 # from commands.xkcd import XKCDCommand
 # from commands.users import UsersCommand
 # from commands.start import StartCommand
-# from commands.kudos import KudosCommand
+from commands.kudos import KudosCommand
 from commands.changes import ChangesCommand
 # from commands.say import SayCommand
 import dialogs
@@ -47,10 +47,10 @@ COMMAND_LIST = [
     DogeCommand('/doge', dialogs.doge[LANG], requires_arguments=True),
     EchoCommand('/echo', dialogs.echo[LANG], requires_arguments=True),
     GifCommand('/gif', dialogs.gif[LANG], requires_arguments=True),
-    # GoogleCommand('/google', dialogs.google[LANG], False),
+    GoogleCommand('/google', dialogs.google[LANG], False),
     # HangmanCommand('/hangman', dialogs.hangman[LANG]),
     # HelpCommand('/help', dialogs.help[LANG]),
-    # KudosCommand('/kudos', dialogs.kudos[LANG], is_always_listening=True),
+    KudosCommand('/kudos', dialogs.kudos[LANG], is_always_listening=True),
     PollCommand('/poll', dialogs.poll[LANG], True, ADMIN_CHAT_ID),
     # QuoteCommand('/quote', dialogs.quote[LANG]),
     ResultsCommand('/results', dialogs.results[LANG]),

@@ -57,6 +57,12 @@ class Command(object):
         """Tells the command the user is done. Each command should have this function."""
         return None
 
+    def get_chat_users(self, as_list=False):
+        query = {'id': self.message.chat.id}
+        if as_list:
+            return self.db.chats.find_one(query)['users'].items()
+        return self.db.chats.find_one(query)['users']
+
     def db_set(self, key, value):
         """Writes a key-value pair to the database."""
         query = {'id': self.message.chat.id}

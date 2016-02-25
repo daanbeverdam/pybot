@@ -42,7 +42,6 @@ class Send(object):
     def get_data(self):
         """Returns attributes of self as dictionary, excluding media file.
         Used for multipart/form-data request."""
-        self.encode_text()
         media_types = ['photo', 'sticker', 'document', 'audio']
         dictionary = self.to_dict()
         data = {}
@@ -56,9 +55,10 @@ class Send(object):
 
     def encode_text(self, encoding='utf-8'):
         """Encodes all string variables to utf-8."""
+        media_types = ['photo', 'sticker', 'document', 'audio']
         for key in self.__dict__:
 
-            if isinstance(self.__dict__[key], basestring):
+            if isinstance(self.__dict__[key], basestring) and key not in media_types:
                 self.__dict__[key] = self.__dict__[key].encode(encoding)
 
         if self.__dict__['reply_markup'].keyboard:

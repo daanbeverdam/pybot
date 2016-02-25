@@ -27,7 +27,7 @@ class StatsCommand(Command):
 
         c = 1
 
-        for command in sorted(command_stats, key=command_stats.get, reverse=True):
+        for command in sorted(command_stats, key=command_stats.get, reverse=True)[:5]:
             count = command_stats[command]
             most_used_commands += u"%i. %s: %i\n" % (c, command, count)
             c += 1

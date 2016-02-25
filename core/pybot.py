@@ -52,11 +52,14 @@ class PyBot(object):
         print "Bot started..."
 
         while True:
+
             try:
                 self.check_for_updates()
+
             except KeyboardInterrupt:
                 print "Keyboard interrupt! Bot stopped."
                 break
+
             except:
                 self.log(traceback.format_exc(), 'error')
 
@@ -73,6 +76,7 @@ class PyBot(object):
                 '$set': {
                 'offset': int(update['result'][-1]['update_id'] + 1)
                 }})
+
             for result in update['result']:
                 message = Message(result['message'])
                 self.log(result, 'json')
@@ -80,6 +84,7 @@ class PyBot(object):
                          " in chat " + str(message.chat.id) + ".")
                 self.collect(message)
                 self.handle(message)
+
         elif not update['ok']:
             self.log("Couldn't get correct response! Update not OK.", 'error')
 
@@ -134,14 +139,17 @@ class PyBot(object):
             entry = entry.replace('\n', ' ')
             with open('logs/' + file_name, 'a') as log:
                 log.write(entry + '\n')
+
         elif log_type in ['readable', 'error']:
             entry = entry.replace('\n', ' ')
             with open('logs/' + log_type + '.log', 'a') as log:
                 log.write(entry + '\n')
             print entry  # readable responses also get printed to the terminal
+
         elif log_type in ['json', 'response']:
             with open('logs/' + log_type + '.log', 'a') as log:
                 log.write(json.dumps(entry) + '\n')
+
         else:
             self.log("Error! Please specify correct log_type or file_name.", 'error')
 
@@ -155,10 +163,12 @@ class PyBot(object):
             response.send_message.text = response.send_message.text
             parameters = response.send_message.to_dict()
             self.log(self.name + " sent '" + response.send_message.text + "' to chat " + str(response.send_message.chat_id) + ".")
+
         elif response.forward_message.from_chat_id:
             request_url += 'forwardMessage'
             parameters = response.forward_message.to_dict()
             self.log(self.name + " forwarded a message to chat " + str(response.send_message.chat_id) + ".")
+
         elif response.send_photo.photo:
             request_url += 'sendPhoto'
             if not response.send_photo.name:
@@ -167,10 +177,12 @@ class PyBot(object):
             files = response.send_photo.get_files()
             data = response.send_photo.get_data()
             self.log(self.name + " sent a photo to chat " + str(response.send_message.chat_id) + ".")
+
         elif response.send_sticker.sticker:
             request_url += 'sendSticker'
             parameters = response.send_sticker.to_dict()
             self.log(self.name + " sent a sticker to chat " + str(response.send_message.chat_id) + ".")
+
         elif response.send_document.document:
             request_url += 'sendDocument'
             if not response.send_document.name:
@@ -179,6 +191,7 @@ class PyBot(object):
             files = response.send_document.get_files()
             data = response.send_document.get_data()
             self.log(self.name + " sent a document to chat " + str(response.send_message.chat_id) + ".")
+
         else:
             self.log('No valid response!', 'error')
             return None
@@ -187,6 +200,7 @@ class PyBot(object):
             # Files should be sent via a multipart/form-data request.
             r = requests.post(request_url, files=files, data=data)
             r = json.loads(r.text)
+
         else:
             # For text-based messages, a simple urlopen should do the trick.
             r = urllib2.urlopen(request_url, urllib.urlencode(parameters))
@@ -206,12 +220,15 @@ class PyBot(object):
         if message.text:
             tokens = message.text.split()
             words = len(tokens)
-            command_list = [token for token in tokens if token in self.command_names]
+            command_list = [token for token in tokens if token.startswith('/')]
             command = command_list[0] if len(command_list) > 0 else None
+
         elif message.sticker:
             sticker = 1
+
         elif message.photo:
             photo = 1
+
         elif message.document:
             document = 1
 
@@ -236,6 +253,7 @@ class PyBot(object):
 
         if command:
             update['$inc']['statistics.commands.' + command] = 1
+            update['$inc']['statistics.users.' + str(user['id']) + '.commands.' + command] = 1
 
         self.db.chats.update(query, update, upsert=True)
 

@@ -181,7 +181,10 @@ kudos = {'en': {
     "'+1' or '/kudos [first name]'. Ask for the overview with /kudos.",
     'kudos_given': "%i Kudo for %s. Total kudos: %i.",
     'kudo_overview': "Kudo overview:",
-    'not_in_chat': "Sorry, user '%s' is not in this chat."
+    'no_kudos': "Sorry, no kudos have been given yet.",
+    'not_in_chat': "Sorry, user '%s' is not in this chat.",
+    'shame_on_you': "You can't give kudos to yourself, shame on you!"
+
 },
     'nl': {
     'usage': "Geef kudo's aan je vrienden door hun berichten te beantwoorden "

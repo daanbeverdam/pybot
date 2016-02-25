@@ -21,5 +21,7 @@ class GoogleCommand(Command):
                 reply += hit['url'] + '\n'
             reply += (self.dialogs['reply_bottom'] % data['cursor']
                       ['moreResultsUrl'])
-            return {'message': reply}
-        return {'message': self.dialogs['no_results'] % query}
+            response.send_message.text = reply
+        else:
+            response.send_message.text = self.dialogs['no_results'] % query
+        return response
