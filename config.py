@@ -8,7 +8,7 @@ from commands.results import ResultsCommand
 from commands.google import GoogleCommand
 from commands.poll import PollCommand
 # from commands.help import HelpCommand
-# from commands.status import StatusCommand
+from commands.status import StatusCommand
 # from commands.weather import WeatherCommand
 # from commands.quote import QuoteCommand
 from commands.stats import StatsCommand
@@ -16,7 +16,7 @@ from commands.stats import StatsCommand
 # from commands.hangman import HangmanCommand
 # from commands.xkcd import XKCDCommand
 # from commands.users import UsersCommand
-# from commands.start import StartCommand
+from commands.start import StartCommand
 from commands.kudos import KudosCommand
 from commands.changes import ChangesCommand
 # from commands.say import SayCommand
@@ -55,9 +55,9 @@ COMMAND_LIST = [
     # QuoteCommand('/quote', dialogs.quote[LANG]),
     ResultsCommand('/results', dialogs.results[LANG]),
     # SayCommand('/say', dialogs.say[LANG], False, language=LANG, api_key=SAY_API),
-    # StartCommand('/start', dialogs.start[LANG]),
+    StartCommand('/start', dialogs.start[LANG]),
     StatsCommand('/stats', dialogs.stats[LANG]),
-    # StatusCommand('/status', dialogs.status[LANG]),
+    StatusCommand('/status', dialogs.status[LANG]),
     # UsersCommand('/users', dialogs.users[LANG]),
     # WikiCommand('/wiki', dialogs.wiki[LANG], False),
     # WeatherCommand('/weather', dialogs.weather[LANG], False, api_key=WEATHER_API),

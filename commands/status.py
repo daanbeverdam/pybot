@@ -4,4 +4,5 @@ from core.command import Command
 class StatusCommand(Command):
 
     def reply(self, response):
-        return {'message': self.dialogs['reply']}
+        response.send_message.text = self.dialogs['reply']
+        return response

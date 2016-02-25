@@ -5,4 +5,5 @@ class StartCommand(Command):
     # Every bot should have a start command
 
     def reply(self, response):
-        return {'message': self.dialogs['reply']}
+        response.send_message.text = self.dialogs['reply']
+        return response
