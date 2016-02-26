@@ -142,14 +142,14 @@ hangman = {'en': {
 }
 
 help = {'en': {
-    'usage': "Help-ception! Please try /help for a list of "
-    "commands.",
-    'reply': "Here is a list of all available commands:"
+    'usage': "Help-ception! Please tap /help for useful information and tips.",
+    'reply': "Type '/' to see a list of available commands. Type <command> + 'help' "
+    "to get more information about a specific command.",
 },
     'nl': {
-    'usage': "Help-ception! Probeer /help voor een lijst met alle "
-    "beschikbare commando's.",
-    'reply': "Hier is een lijst met alle beschikbare commando's:"
+    'usage': "Help-ception! Probeer /help voor meer informatie en tips.",
+    'reply': "Type '/' om een lijst met beschikbare commando's te zien. Type "
+    "<command> + 'help' om meer info te krijgen over een specifiek commando."
 }
 }
 
@@ -257,14 +257,16 @@ quote = {'en': {
     'usage': "Save quotes by using '/quote [name]: [quote]'. "
     "You can also ask for a random quote using '/quote [optional "
     "name]'. Request all quotes by adding 'all'.",
-    'quote_saved': "Quote saved."
+    'quote_saved': "Quote saved.",
+    'no_quotes': "No quotes saved yet!"
 },
     'nl': {
     'usage': "Sla je quotes op met behulp van '/quote [naam]: "
     "[quote]'. Een willekeurige quote is aan te vragen met '/quote "
     "[optionele naam]'. Vraag alle quotes op door 'all' toe te "
     "voegen.",
-    'quote_saved': "Quote opgeslagen."
+    'quote_saved': "Quote opgeslagen.",
+    'no_quotes': "Nog geen quotes opgeslagen!"
 }
 }
 

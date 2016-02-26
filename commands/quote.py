@@ -4,66 +4,82 @@ import shelve
 
 
 class QuoteCommand(Command):
+    """Command that saves and returns quotes."""
 
     def reply(self, response):
-        self.check_quote_store()
-        if self.arguments is None:
+        self.check_quotes()
+        print 'self.quotes = ', self.quotes
+
+        if not self.arguments and self.quotes == {}:
+            reply = self.dialogs['no_quotes']
+
+        elif not self.arguments:
             reply = self.random_quote()
+
         else:
-            tokens = self.arguments.split(' ')
+            tokens = self.arguments.split()
+
             if len(tokens) > 1:
+
                 if ':' in self.arguments:
                     reply = self.save_quote()
-                elif (tokens[0].title() in self.data['quote_store'] and
-                      tokens[1] == 'all'):
+
+                elif tokens[0].title() in self.quotes and tokens[1] == 'all':
                     reply = self.all_quotes_by_name(tokens)
+
             elif len(tokens) == 1:
-                if tokens[0].title() in self.data['quote_store']:
+
+                if tokens[0].title() in self.quotes:
                     reply = self.random_quote_by_name(tokens)
+
                 elif tokens[0] == 'all':
                     reply = self.all_quotes(tokens)
-        return {'message': reply}
+
+        response.send_message.text = reply
+        return response
 
     def random_quote(self):
-        all_quotes = self.data['quote_store'].values()
-        all_quotes = [item for sublist in all_quotes for item in sublist]
+        all_quotes = []
+        for quote_list in self.quotes.values():
+            for quote in quote_list:
+                all_quotes.append(quote)
+
         random_quote = random.choice(all_quotes)
-        for name, quotes in self.data['quote_store'].items():
+        print 'random_quote = ', random_quote
+        for name, quotes in self.quotes.items():
             if random_quote in quotes:
                 return random_quote + ' -' + name
 
     def random_quote_by_name(self, tokens):
-        quote_list = self.data['quote_store'][tokens[0].title()]
+        quote_list = self.quotes[tokens[0].title()]
         return random.choice(quote_list) + ' -' + tokens[0].title()
 
     def save_quote(self):
         name = self.arguments.split(':')[0].title()
         quote = '"' + self.arguments.split(':')[1].strip() + '"'
-        quotes = self.data['quote_store']
-        try:
-            quotes[name].append(quote)
-            self.data['quote_store'] = quotes
-        except:
-            quotes[name] = [quote]
-            self.data['quote_store'] = quotes
+        query = {'id': self.message.chat.id}
+        update = {'$push': {'commands./quote.quotes.' + name: quote}}
+        self.db.chats.update(query, update, upsert=True)
         return self.dialogs['quote_saved']
 
     def all_quotes_by_name(self, tokens):
         quote_list = []
-        for quote in self.data['quote_store'][tokens[0].title()]:
+        for quote in self.quotes[tokens[0].title()]:
             quote_list.append(quote)
         return ('\n'.join(quote_list) + '\n -' +
                 tokens[0].title())
 
     def all_quotes(self, tokens):
         quote_list = []
-        for name in self.data['quote_store']:
-            for quote in self.data['quote_store'][name]:
+        for name in self.quotes:
+            for quote in self.quotes[name]:
                 quote_list.append(quote + ' -' + name)
         return '\n'.join(quote_list)
 
-    def check_quote_store(self):
-        try:
-            quote_store = self.data['quote_store']
-        except:
-            self.data['quote_store'] = {}
+    def check_quotes(self):
+        query = {'id': self.message.chat.id, 'commands./quote.quotes': {'$exists': True}}
+        result = self.db.chats.find_one(query)
+        if not result:
+            self.db_set('quotes', {})
+        self.quotes = self.db_get()['quotes']
+

@@ -120,6 +120,9 @@ class PyBot(object):
                         command.is_waiting_for = message.sender
                         response.send_message.text = self.dialogs['input'] % command.name
 
+                    elif command.arguments and command.arguments.lower() == 'help' and message.text.split()[0] == command.name:
+                        response = command.get_help(response)
+
                     else:
                         response = command.reply(response)
 

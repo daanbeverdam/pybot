@@ -45,7 +45,7 @@ class Command(object):
         return False
 
     def cancel(self, response):
-        """Cancels the command. Each command should have this function."""
+        """Cancels the command."""
         if self.is_waiting_for_input or self.is_active():
             self.is_waiting_for_input = False
             self.activate(False)
@@ -54,8 +54,13 @@ class Command(object):
         return None
 
     def done(self, response):
-        """Tells the command the user is done. Each command should have this function."""
+        """Tells the command the user is done."""
         return None
+
+    def get_help(self, response):
+        """Returns information on how to use the command."""
+        response.send_message.text = self.usage
+        return response
 
     def get_chat_users(self, as_list=False):
         query = {'id': self.message.chat.id}

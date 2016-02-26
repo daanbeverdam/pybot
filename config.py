@@ -7,10 +7,10 @@ from commands.results import ResultsCommand
 # from commands.youtube import YouTubeCommand
 from commands.google import GoogleCommand
 from commands.poll import PollCommand
-# from commands.help import HelpCommand
+from commands.help import HelpCommand
 from commands.status import StatusCommand
 # from commands.weather import WeatherCommand
-# from commands.quote import QuoteCommand
+from commands.quote import QuoteCommand
 from commands.stats import StatsCommand
 # from commands.calculator import CalculatorCommand
 # from commands.hangman import HangmanCommand
@@ -49,10 +49,10 @@ COMMAND_LIST = [
     GifCommand('/gif', dialogs.gif[LANG], requires_arguments=True),
     GoogleCommand('/google', dialogs.google[LANG], False),
     # HangmanCommand('/hangman', dialogs.hangman[LANG]),
-    # HelpCommand('/help', dialogs.help[LANG]),
+    HelpCommand('/help', dialogs.help[LANG]),
     KudosCommand('/kudos', dialogs.kudos[LANG], is_always_listening=True),
     PollCommand('/poll', dialogs.poll[LANG], True, ADMIN_CHAT_ID),
-    # QuoteCommand('/quote', dialogs.quote[LANG]),
+    QuoteCommand('/quote', dialogs.quote[LANG]),
     ResultsCommand('/results', dialogs.results[LANG]),
     # SayCommand('/say', dialogs.say[LANG], False, language=LANG, api_key=SAY_API),
     StartCommand('/start', dialogs.start[LANG]),
