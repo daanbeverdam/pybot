@@ -17,7 +17,7 @@ class StatsCommand(Command):
         most_used_commands = u""
         c = 1
 
-        for user_id in sorted(user_stats, key=user_stats.get, reverse=True):
+        for user_id in sorted(user_stats, key=lambda i: user_stats[i]['total_messages'], reverse=True):
             msgs = user_stats[user_id]['total_messages']
             wrds = user_stats[user_id]['total_words']
             name = users[user_id]['first_name']
