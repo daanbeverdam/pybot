@@ -79,10 +79,16 @@ class PyBot(object):
 
             for result in update['result']:
                 message = Message(result['message'])
-                self.log(result, 'json')
-                self.log(self.name + " received a message from " + message.sender.first_name +
-                         " in chat " + str(message.chat.id) + ".")
-                self.collect(message)
+
+                try:
+                    self.log(result, 'json')
+                    self.log(self.name + " received a message from " + message.sender.first_name +
+                             " in chat " + str(message.chat.id) + ".")
+                    self.collect(message)
+
+                except:  # catch exceptions in logging/collecting, so it doesn't interfere with functionality
+                    self.log(traceback.format_exc(), 'error')
+
                 self.handle(message)
 
         elif not update['ok']:
@@ -220,8 +226,10 @@ class PyBot(object):
         if message.text:
             tokens = message.text.split()
             words = len(tokens)
-            command_list = [token for token in tokens if token.startswith('/') and len(token) > 2]
-            command = command_list[0] if len(command_list) > 0 else None
+            if tokens[0].startswith('/'):
+                command = tokens[0]
+            else:
+                command = None
 
         elif message.sticker:
             sticker = 1
