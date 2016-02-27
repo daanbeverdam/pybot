@@ -211,11 +211,10 @@ class PyBot(object):
             r = json.loads(r.text)
 
         else:
-            # For text-based messages, a simple urlopen should do the trick.
-            r = urllib2.urlopen(request_url, urllib.urlencode(parameters))
-            r = json.loads(r.read())
-
-        self.log(r['result'], 'response')
+            r = requests.get(request_url, params=parameters)
+            r = json.loads(r.text)
+        
+	self.log(r, 'response')
 
     def collect(self, message):
         """Stores statistics and user information in database."""
