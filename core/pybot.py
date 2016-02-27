@@ -169,7 +169,6 @@ class PyBot(object):
 
         if response.send_message.text:
             request_url += 'sendMessage'
-            response.send_message.text = response.send_message.text
             parameters = response.send_message.to_dict()
             self.log(self.name + " sent '" + response.send_message.text + "' to chat " + str(response.send_message.chat_id) + ".")
 
@@ -182,6 +181,7 @@ class PyBot(object):
             request_url += 'sendPhoto'
             if not response.send_photo.name:
                 response.send_photo.name = 'photo.jpg'
+                self.log("No filename was specified, using 'photo.jpg'. Please specify filenames!", 'error')
             dictionary = response.send_photo.to_dict()
             files = response.send_photo.get_files()
             data = response.send_photo.get_data()
@@ -213,7 +213,7 @@ class PyBot(object):
         else:
             r = requests.get(request_url, params=parameters)
             r = json.loads(r.text)
-        
+
 	self.log(r, 'response')
 
     def collect(self, message):

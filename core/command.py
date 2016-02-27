@@ -95,6 +95,23 @@ class Command(object):
         update = {'$set': {'commands.' + self.name + '.active': boolean}}
         self.db.chats.update(query, update, upsert=True)
 
+    def chunk(self, text):
+        """Chunks text if length exceeds Telegrams character limit. Returns list of chunks."""
+        max_length = 4096
+        chunks_needed = len(text) / max_length
+
+        if chunks_needed > 0:
+            chunks = []
+            x = 0
+
+            for i in range(chunks_needed):
+                chunks.append(text[max_length * x:max_length * (x + 1)])
+                x += 1
+
+            return chunks
+
+        return [text]
+
     def get_arguments(self):
         """Returns the command arguments."""
         if self.message.text and len(self.message.text.split()) > 1:

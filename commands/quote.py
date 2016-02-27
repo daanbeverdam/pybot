@@ -1,6 +1,7 @@
 from core.command import Command
 import random
 import shelve
+from core.response import Response
 
 
 class QuoteCommand(Command):
@@ -34,8 +35,15 @@ class QuoteCommand(Command):
                 elif tokens[0] == 'all':
                     reply = self.all_quotes(tokens)
 
-        response.send_message.text = reply
-        return response
+        chunks = self.chunk(reply)
+        responses = []
+
+        for reply in chunks:
+            response = Response(self.message.chat.id)
+            response.send_message.text = reply
+            responses.append(response)
+
+        return responses
 
     def random_quote(self):
         all_quotes = []
