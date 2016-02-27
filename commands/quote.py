@@ -8,7 +8,6 @@ class QuoteCommand(Command):
 
     def reply(self, response):
         self.check_quotes()
-        print 'self.quotes = ', self.quotes
 
         if not self.arguments and self.quotes == {}:
             reply = self.dialogs['no_quotes']
@@ -45,7 +44,6 @@ class QuoteCommand(Command):
                 all_quotes.append(quote)
 
         random_quote = random.choice(all_quotes)
-        print 'random_quote = ', random_quote
         for name, quotes in self.quotes.items():
             if random_quote in quotes:
                 return random_quote + ' -' + name
@@ -56,6 +54,8 @@ class QuoteCommand(Command):
 
     def save_quote(self):
         name = self.arguments.split(':')[0].title()
+        if name == 'all':
+            return self.dialogs['all_reserved']
         quote = '"' + self.arguments.split(':')[1].strip() + '"'
         query = {'id': self.message.chat.id}
         update = {'$push': {'commands./quote.quotes.' + name: quote}}

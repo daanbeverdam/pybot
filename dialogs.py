@@ -223,7 +223,8 @@ poll = {
         'votes': "votes",
         'vote': "vote",
         'everybody_voted': "Everybody has voted! %s",
-        'done_voting': "Thanks, I'll hide your keyboard now."},
+        'done_voting': "Thanks, I'll hide your keyboard now.",
+        'all_reserved': "Sorry, it's not possible to use the name 'All'."},
     'nl': {
         'usage': "Start een poll! Gebruik het volgende formaat: "
         "'/poll [vraag] *[optie 1] *[optie 2] *[etc]'. Voeg '~m' toe wanneer "
@@ -241,7 +242,8 @@ poll = {
         'votes': "stemmen",
         'vote': "stem",
         'everybody_voted': "Iedereen heeft gestemd! %s",
-        'done_voting': "Bedankt, de antwoordopties worden nu verborgen."}}
+        'done_voting': "Bedankt, de antwoordopties worden nu verborgen.",
+        'all_reserved': "Sorry, je kan de naam 'All' niet gebruiken."}}
 
 putin = {'en': {
     'usage': "The command /putin returns a random photo of "
