@@ -208,13 +208,12 @@ class PyBot(object):
         if files:
             # Files should be sent via a multipart/form-data request.
             r = requests.post(request_url, files=files, data=data)
-            r = json.loads(r.text)
 
         else:
             r = requests.get(request_url, params=parameters)
-            r = json.loads(r.text)
 
-	self.log(r, 'response')
+        r = json.loads(r.text)
+        self.log(r, 'response')
 
     def collect(self, message):
         """Stores statistics and user information in database."""
