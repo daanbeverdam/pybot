@@ -130,7 +130,7 @@ class PollCommand(Command):
                 response.send_message.text = self.dialogs['store_answer']
                 response.send_message.reply_markup.hide_keyboard = True
                 response.send_message.reply_markup.selective = True
-                response.reply_to_message_id = self.message.id
+                response.send_message.reply_to_message_id = self.message.id
 
             chat_users = self.db.chats.find_one({'id': self.message.chat.id})['users']
 
@@ -160,7 +160,7 @@ class PollCommand(Command):
         response.send_message.text = self.dialogs['done_voting']
         response.send_message.reply_markup.hide_keyboard = True
         response.send_message.reply_markup.selective = True
-        response.reply_to_message_id = self.message.id
+        response.send_message.reply_to_message_id = self.message.id
         return response
 
     def poll_results(self):
