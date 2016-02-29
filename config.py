@@ -9,7 +9,7 @@ from commands.google import GoogleCommand
 from commands.poll import PollCommand
 from commands.help import HelpCommand
 from commands.status import StatusCommand
-# from commands.weather import WeatherCommand
+from commands.weather import WeatherCommand
 from commands.quote import QuoteCommand
 from commands.stats import StatsCommand
 # from commands.calculator import CalculatorCommand
@@ -60,7 +60,7 @@ COMMAND_LIST = [
     StatusCommand('/status', dialogs.status[LANG]),
     # UsersCommand('/users', dialogs.users[LANG]),
     # WikiCommand('/wiki', dialogs.wiki[LANG], False),
-    # WeatherCommand('/weather', dialogs.weather[LANG], False, api_key=WEATHER_API),
+    WeatherCommand('/weather', dialogs.weather[LANG], True, api_key=WEATHER_API),
     # XKCDCommand('/xkcd', dialogs.xkcd[LANG]),
     # YouTubeCommand('/youtube', dialogs.youtube[LANG], False)
 ]
