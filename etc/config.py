@@ -3,8 +3,7 @@ from commands.doge import DogeCommand
 from commands.gif import GifCommand
 from commands.echo import EchoCommand
 from commands.results import ResultsCommand
-# from commands.wiki import WikiCommand
-# from commands.youtube import YouTubeCommand
+from commands.wiki import WikiCommand
 from commands.google import GoogleCommand
 from commands.poll import PollCommand
 from commands.help import HelpCommand
@@ -12,18 +11,14 @@ from commands.status import StatusCommand
 from commands.weather import WeatherCommand
 from commands.quote import QuoteCommand
 from commands.stats import StatsCommand
-# from commands.calculator import CalculatorCommand
-# from commands.hangman import HangmanCommand
-# from commands.xkcd import XKCDCommand
-# from commands.users import UsersCommand
 from commands.start import StartCommand
 from commands.kudos import KudosCommand
 from commands.changes import ChangesCommand
-# from commands.say import SayCommand
+from commands.say import SayCommand
 import dialogs
 from pymongo import MongoClient  # for accessing the database
 
-env = open('.env').readlines()
+env = open('etc/.env').readlines()
 # Edit the .env file or alternatively, enter your environment variables manually.
 # telegram API token:
 TOKEN = env[0].strip()
@@ -48,19 +43,15 @@ COMMAND_LIST = [
     EchoCommand('/echo', dialogs.echo[LANG], requires_arguments=True),
     GifCommand('/gif', dialogs.gif[LANG], requires_arguments=True),
     GoogleCommand('/google', dialogs.google[LANG], False),
-    # HangmanCommand('/hangman', dialogs.hangman[LANG]),
     HelpCommand('/help', dialogs.help[LANG]),
     KudosCommand('/kudos', dialogs.kudos[LANG], is_always_listening=True),
     PollCommand('/poll', dialogs.poll[LANG], True, ADMIN_CHAT_ID),
     QuoteCommand('/quote', dialogs.quote[LANG]),
     ResultsCommand('/results', dialogs.results[LANG]),
-    # SayCommand('/say', dialogs.say[LANG], False, language=LANG, api_key=SAY_API),
+    SayCommand('/say', dialogs.say[LANG], True, language=LANG, api_key=SAY_API),
     StartCommand('/start', dialogs.start[LANG]),
     StatsCommand('/stats', dialogs.stats[LANG]),
     StatusCommand('/status', dialogs.status[LANG]),
-    # UsersCommand('/users', dialogs.users[LANG]),
-    # WikiCommand('/wiki', dialogs.wiki[LANG], False),
+    WikiCommand('/wiki', dialogs.wiki[LANG], False),
     WeatherCommand('/weather', dialogs.weather[LANG], True, api_key=WEATHER_API),
-    # XKCDCommand('/xkcd', dialogs.xkcd[LANG]),
-    # YouTubeCommand('/youtube', dialogs.youtube[LANG], False)
 ]

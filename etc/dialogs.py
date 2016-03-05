@@ -321,9 +321,9 @@ stats = {'en': {
     'usage': "Het /stats commando geeft de huidige "
     "gespreksstatistieken.",
     'reply': "Totaal verzonden berichten: %i\n"
+    "Totaal verzonden woorden: %i\n"
     "Totaal verzonden foto's: %i\n"
-    "Totaal verzonden stickers: %i\n"
-    "Totaal verzonden woorden: %i\n\n"
+    "Totaal verzonden stickers: %i\n\n"
     "Meest gebruikte commando's:\n%s"
     "Meest actieve gebruikers (berichten/woorden/gemiddelde):\n%s",
     'error': "Sorry, nog niet genoeg data. Chat nog wat meer!"

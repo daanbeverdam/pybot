@@ -18,18 +18,19 @@ class PyBot(object):
     def __init__(self, name, token, dialogs, commands, database):
         self.name = name
         self.token = token
-        self.db = MongoClient()[database]
+        self.db = self.connect_db(database)
         self.base_url = 'https://api.telegram.org/bot' + self.token + '/'
         self.dialogs = dialogs
         self.commands = commands
         self.command_names = [command.name for command in self.commands] + ['/cancel', '/done']
 
+    def connect_db(self, name):
+        client = MongoClient()
+        database = client[name]
+        return database
+
     def check_dirs(self):
         """Checks if the needed directories exist and creates them if they don't."""
-        if not os.path.exists('data'):
-            os.makedirs('data')
-            print "Data folder created"
-
         if not os.path.exists('logs'):
             os.makedirs('logs')
             print "Logs folder created"
@@ -200,6 +201,13 @@ class PyBot(object):
             files = response.send_document.get_files()
             data = response.send_document.get_data()
             self.log(self.name + " sent a document to chat " + str(response.send_message.chat_id) + ".")
+
+        elif response.send_audio.audio:
+            request_url += 'sendAudio'
+            dictionary = response.send_audio.to_dict()
+            files = response.send_audio.get_files()
+            data = response.send_audio.get_data()
+            self.log(self.name + " sent an audio file to chat " + str(response.send_message.chat_id) + ".")
 
         else:
             self.log('No valid response!', 'error')

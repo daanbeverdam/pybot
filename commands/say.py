@@ -3,15 +3,19 @@ import urllib2
 import urllib
 import StringIO
 
+
 class SayCommand(Command):
+    """Returns spoken text."""
 
     def reply(self, response):
         language = self.determine_language()
         text = urllib.quote_plus(self.arguments)
         url = ('http://api.voicerss.org/?key=' + self.api_key + '&src=' +
                text + '&hl=' + language + '&f=48khz_16bit_stereo')
-        audio = StringIO.StringIO(urllib.urlopen(url).read()).getvalue()
-        return {'document': audio, 'extension': '.mp3', 'file_name': text}
+        audio = self.to_string(url)
+        response.send_audio.audio = audio
+        response.send_audio.title = text + '.mp3'
+        return response
 
     def determine_language(self):
         if self.arguments[:3] == '~en':

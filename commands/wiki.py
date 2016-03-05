@@ -17,8 +17,11 @@ class WikiCommand(Command):
             article_contents = json.loads(urllib.urlopen(article_url).read())
             wiki_url = ('https://en.wikipedia.org/wiki/' +
                         article_title.replace(' ', '_'))
-            extract = (article_contents['query']['pages']
-                       [list(article_contents['query']['pages'])
-                       [0]]['extract'] + '\n' + wiki_url)
-            return {'message': extract}
-        return {'message': self.dialogs['no_results'] % self.arguments}
+            # extract = (article_contents['query']['pages']
+            #            [list(article_contents['query']['pages'])
+            #            [0]]['extract'] + '\n' + wiki_url)
+            # response.send_message.text = extract
+            response.send_message.text = wiki_url
+            return response
+        response.send_message.text = self.dialogs['no_results'] % self.arguments
+        return response

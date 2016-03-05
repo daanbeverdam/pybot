@@ -34,8 +34,12 @@ class Send(object):
 
         for key in dictionary:
 
-            if key in media_types:
+            if key in media_types and dictionary.get('name'):
                 files[key] = (dictionary['name'], dictionary[key])
+
+            elif key in media_types and dictionary.get('title'):
+                files[key] = (dictionary['title'], dictionary[key])
+
 
         return files
 

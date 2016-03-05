@@ -155,6 +155,7 @@ class PollCommand(Command):
             response.send_message.reply_markup.hide_keyboard = True
             return response
         response.send_message.text = self.dialogs['not_owner'] % self.db_get()['starter_name']
+        return response
 
     def done(self, response):
         response.send_message.text = self.dialogs['done_voting']

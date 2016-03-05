@@ -23,7 +23,7 @@ class Command(object):
         self.is_waiting_for = User()
         self.has_scheduled_event = False
         self.is_always_listening = is_always_listening
-        self.is_waiting_for_input = False
+        self.is_waiting_for_input = False  # TODO: make this a function which consults the database
         self.default_language = language
 
     def reply(self, response):

@@ -7,7 +7,6 @@ class ResultsCommand(Command):
     def reply(self, response):
         query = {'id': self.message.chat.id}
         result = self.db.chats.find_one(query)['commands']['/poll']
-        print result
         reply = self.dialogs['reply'] % result['question']
 
         for option, voters in result['options_dict'].iteritems():
@@ -18,6 +17,5 @@ class ResultsCommand(Command):
         if result['active'] is False:
             reply += '\n' + self.dialogs['not_active']
 
-        print result['active']
         response.send_message.text = reply
         return response
