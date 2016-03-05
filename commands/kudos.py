@@ -76,5 +76,6 @@ class KudosCommand(Command):
                 'commands./kudos.overview.' + name: number_of_kudos
             }
         }
+        self.db.chats.update(query, update, upsert=True)
         response.send_message.text = self.dialogs['kudos_given'] % (number_of_kudos, name, self.db_get()['overview'][name])
         return response
