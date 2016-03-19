@@ -100,14 +100,19 @@ class PyBot(object):
         for command in self.commands:
             response = Response(message.chat.id)
 
+            if message.text:
+                first_word = message.text.split()[0].split('@')[0]
+            else:
+                first_word = None
+
             if command.listen(message):
 
                 try:
 
-                    if message.text == '/cancel':
+                    if first_word == '/cancel':
                         response = command.cancel(response)
 
-                    elif message.text == '/done':
+                    elif first_word == '/done':
                         response = command.done(response)
 
                     elif command.is_waiting_for_input and command.is_waiting_for.id == message.sender.id:
@@ -265,7 +270,11 @@ class PyBot(object):
                 'statistics.users.' + str(user['id']) + '.total_photos': photo,
                 'statistics.users.' + str(user['id']) + '.total_documents': document
             },
-            '$set': {'users.' + str(user['id']): user}
+            '$set': {
+                'users.' + str(user['id']): user,
+                'title': message.chat.title,
+                'type': message.chat.type
+            }
         }
 
         if command:
