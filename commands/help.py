@@ -1,5 +1,4 @@
 from core.command import Command
-import os
 
 
 class HelpCommand(Command):
