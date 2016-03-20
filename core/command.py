@@ -98,13 +98,14 @@ class Command(object):
     def chunk(self, text):
         """Chunks text if length exceeds Telegrams character limit. Returns list of chunks."""
         max_length = 4096
-        chunks_needed = len(text) / max_length
+        chunks_needed = len(text) / max_length + 1
 
         if chunks_needed > 0:
             chunks = []
             x = 0
 
             for i in range(chunks_needed):
+
                 chunks.append(text[max_length * x:max_length * (x + 1)])
                 x += 1
 
