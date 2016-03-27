@@ -1,6 +1,5 @@
 from core.command import Command
 import random
-import shelve
 from core.response import Response
 
 
