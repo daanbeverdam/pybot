@@ -16,24 +16,24 @@ from commands.kudos import KudosCommand
 from commands.changes import ChangesCommand
 from commands.say import SayCommand
 import dialogs
-from pymongo import MongoClient  # for accessing the database
+import json
 
-env = open('etc/.env').readlines()
+config = json.loads(open('etc/config.json').read())
 # Edit the .env file or alternatively, enter your environment variables manually.
 # telegram API token:
-TOKEN = env[0].strip()
+TOKEN = config['token']
 # name of the bot:
-BOT_NAME = env[1].strip()
+BOT_NAME = config['name']
 # 'en' for english, 'nl' for dutch:
-LANG = env[2].strip()
+LANG = config['language']
 # database name:
-DATABASE = env[3].strip()
+DATABASE = config['database']
 # chat id of the bot admin (optional):
-ADMIN_CHAT_ID = env[4].strip()
-# api key for Open Weather Map:
-WEATHER_API = env[5].strip()
-# api key for Voicerss:
-SAY_API = env[6].strip()
+ADMIN_CHAT_ID = config.get('admin_id')
+# api key for Open Weather Map (optional):
+WEATHER_API = config.get('weather_api')
+# api key for Voicerss (optional):
+SAY_API = config.get('say_api')
 # list of commands:
 COMMAND_LIST = [
     # CalculatorCommand('/calculator', dialogs.calculator[LANG]),
