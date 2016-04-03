@@ -36,13 +36,12 @@ WEATHER_API = config.get('weather_api')
 SAY_API = config.get('say_api')
 # list of commands:
 COMMAND_LIST = [
-    # CalculatorCommand('/calculator', dialogs.calculator[LANG]),
     ChangesCommand('/changes', dialogs.changes[LANG]),
     DiceCommand('/dice', dialogs.dice[LANG]),
     DogeCommand('/doge', dialogs.doge[LANG], requires_arguments=True),
     EchoCommand('/echo', dialogs.echo[LANG], requires_arguments=True),
     GifCommand('/gif', dialogs.gif[LANG], requires_arguments=True),
-    GoogleCommand('/google', dialogs.google[LANG], False),
+    GoogleCommand('/google', dialogs.google[LANG], requires_arguments=True),
     HelpCommand('/help', dialogs.help[LANG]),
     KudosCommand('/kudos', dialogs.kudos[LANG], is_always_listening=True),
     PollCommand('/poll', dialogs.poll[LANG], True, ADMIN_CHAT_ID),
@@ -52,6 +51,6 @@ COMMAND_LIST = [
     StartCommand('/start', dialogs.start[LANG]),
     StatsCommand('/stats', dialogs.stats[LANG]),
     StatusCommand('/status', dialogs.status[LANG]),
-    WikiCommand('/wiki', dialogs.wiki[LANG], False),
-    WeatherCommand('/weather', dialogs.weather[LANG], True, api_key=WEATHER_API),
+    WikiCommand('/wiki', dialogs.wiki[LANG], requires_arguments=True),
+    WeatherCommand('/weather', dialogs.weather[LANG], requires_arguments=True, api_key=WEATHER_API),
 ]
