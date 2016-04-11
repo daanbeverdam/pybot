@@ -1,5 +1,4 @@
 from reply_keyboard_markup import ReplyKeyboardMarkup
-from force_reply import ForceReply
 import json
 
 
@@ -22,8 +21,18 @@ class Send(object):
 
         if dictionary['reply_markup']['hide_keyboard']:
             del dictionary['reply_markup']['keyboard']  # keyboard and hide_keyboard can't co-exist
+        elif not dictionary['reply_markup']['hide_keyboard'] and not dictionary['reply_markup']['keyboard']:
+            del dictionary['reply_markup']  # delete reply_markup if it's not necessary
 
-        dictionary['reply_markup'] = json.dumps(dictionary['reply_markup'])
+        if dictionary.get('reply_markup'):
+            dictionary['reply_markup'] = json.dumps(dictionary['reply_markup'])
+
+        # Telegram now validates data, so empty dictionary items need to be removed.
+        unnecessary_keys = [key for key, value in dictionary.iteritems() if not value]
+
+        for key in unnecessary_keys:
+            del dictionary[key]
+
         return dictionary
 
     def get_files(self):
@@ -39,7 +48,6 @@ class Send(object):
 
             elif key in media_types and dictionary.get('title'):
                 files[key] = (dictionary['title'], dictionary[key])
-
 
         return files
 
@@ -65,7 +73,7 @@ class Send(object):
             if isinstance(self.__dict__[key], basestring) and key not in media_types:
                 self.__dict__[key] = self.__dict__[key].encode(encoding)
 
-        if self.__dict__['reply_markup'].keyboard:
+        if self.__dict__.get('reply_markup') and self.__dict__.get('reply_markup').keyboard:
 
             for l in self.__dict__['reply_markup'].keyboard:
 
