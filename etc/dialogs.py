@@ -62,7 +62,7 @@ changes = {'en': {
     "dragen.",
     'reply': "Meest recente wijzigingen:",
     'more': "Ga naar https://github.com/daanbeverdam/pybot/commits/master "
-    " voor meer."
+    "voor meer."
 }
 }
 
