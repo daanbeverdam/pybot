@@ -1,15 +1,12 @@
 from message import Message
 from response import Response
 import requests
-import time
 import json
 import urllib
 import urllib2
-import shelve
 import traceback
 import os
 from pymongo import MongoClient  # for accessing the database
-from datetime import datetime
 
 
 class PyBot(object):
@@ -188,7 +185,6 @@ class PyBot(object):
             if not response.send_photo.name:
                 response.send_photo.name = 'photo.jpg'
                 self.log("No filename was specified, using 'photo.jpg'. Please specify filenames!", 'error')
-            dictionary = response.send_photo.to_dict()
             files = response.send_photo.get_files()
             data = response.send_photo.get_data()
             self.log(self.name + " sent a photo to chat " + str(response.send_message.chat_id) + ".")
@@ -202,14 +198,12 @@ class PyBot(object):
             request_url += 'sendDocument'
             if not response.send_document.name:
                 self.log('File name not specified! This could cause issues.', 'error')
-            dictionary = response.send_document.to_dict()
             files = response.send_document.get_files()
             data = response.send_document.get_data()
             self.log(self.name + " sent a document to chat " + str(response.send_message.chat_id) + ".")
 
         elif response.send_audio.audio:
             request_url += 'sendAudio'
-            dictionary = response.send_audio.to_dict()
             files = response.send_audio.get_files()
             data = response.send_audio.get_data()
             self.log(self.name + " sent an audio file to chat " + str(response.send_message.chat_id) + ".")
