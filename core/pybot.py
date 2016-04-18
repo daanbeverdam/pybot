@@ -173,7 +173,7 @@ class PyBot(object):
         if response.send_message.text:
             request_url += 'sendMessage'
             parameters = response.send_message.to_dict()
-            self.log(self.name + " sent '" + response.send_message.text + "' to chat " + str(response.send_message.chat_id) + ".")
+            self.log(self.name + " sent a message to chat " + str(response.send_message.chat_id) + ".")
 
         elif response.forward_message.from_chat_id:
             request_url += 'forwardMessage'
