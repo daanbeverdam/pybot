@@ -18,10 +18,10 @@ class KudosCommand(Command):
                 response.send_message.text = self.dialogs['not_in_chat'] % self.arguments
                 return response
 
-            elif self.message.text[:2] == '+1':
+            elif self.message.text[:2] == '+1' or self.message.text[-2:] == '+1':
                 return self.give_kudos(response)
 
-            elif self.message.text[:2] == '-1':
+            elif self.message.text[:2] == '-1' or self.message.text[-2:] == '-1':
                 return self.give_kudos(response, substract=True)
 
     def kudos_overview(self, response):
