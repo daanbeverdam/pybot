@@ -1,6 +1,9 @@
 /build
 *.pyc
 .DS_Store
-logs/*
+pybot/logs/*
 data/*
 config.json
+*.egg-info
+__pycache__
+*.db

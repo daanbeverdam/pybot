@@ -1,6 +1,6 @@
-from core.pybot import PyBot
-from etc import config
-from etc import dialogs
+from pybot.core.bot import PyBot
+from pybot.etc import config
+from pybot.etc import dialogs
 
 if __name__ == "__main__":
     bot = PyBot(config.BOT_NAME, config.TOKEN, dialogs.bot[config.LANG],
