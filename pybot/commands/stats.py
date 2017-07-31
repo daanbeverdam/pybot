@@ -5,6 +5,7 @@ class StatsCommand(Command):
     """Command that returns the statistics of the current chat."""
 
     def reply(self, response):
+        self.collect(self.message)
         query = {
             'id': self.message.chat.id
         }
@@ -41,3 +42,57 @@ class StatsCommand(Command):
         reply = self.dialogs['reply'] % formatting
         response.send_message.text = reply
         return response
+
+    def collect():
+        """Stores statistics and user information in database."""
+        user = message.sender.__dict__
+        words = 0
+        sticker = 0
+        photo = 0
+        document = 0
+        command = None
+
+        if message.text:
+            tokens = message.text.split()
+            words = len(tokens)
+            if tokens[0].startswith('/'):
+                command = tokens[0]
+            else:
+                command = None
+
+        elif message.sticker:
+            sticker = 1
+
+        elif message.photo:
+            photo = 1
+
+        elif message.document:
+            document = 1
+
+        query = {
+            'id': message.chat.id
+        }
+        update = {
+            '$inc': {
+                'statistics.total_messages': 1,
+                'statistics.total_words': words,
+                'statistics.total_stickers': sticker,
+                'statistics.total_photos': photo,
+                'statistics.total_documents': document,
+                'statistics.users.' + str(user['id']) + '.total_messages': 1,
+                'statistics.users.' + str(user['id']) + '.total_words': words,
+                'statistics.users.' + str(user['id']) + '.total_stickers': sticker,
+                'statistics.users.' + str(user['id']) + '.total_photos': photo,
+                'statistics.users.' + str(user['id']) + '.total_documents': document
+            },
+            '$set': {
+                'users.' + str(user['id']): user,
+                'title': message.chat.title,
+                'type': message.chat.type
+            }
+        }
+
+        if command:
+            update['$inc']['statistics.commands.' + command] = 1
+            update['$inc']['statistics.users.' + str(user['id']) + '.commands.' + command] = 1
+        self.db.chats.update(query, update, upsert=True)

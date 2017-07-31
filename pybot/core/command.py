@@ -4,6 +4,7 @@ import io
 import urllib
 from pybot.core.response import Response
 from pybot.core.user import User
+from pybot.helpers.core import Core
 
 
 class Command(object):
@@ -25,6 +26,7 @@ class Command(object):
         self.is_always_listening = is_always_listening
         self.is_waiting_for_input = False  # TODO: make this a function which consults the database
         self.default_language = language
+        self.helper = Core()
 
     def reply(self, response):
         """Each command should have a reply function which accepts and returns
@@ -37,7 +39,6 @@ class Command(object):
            Accepts a message object and returns a truth value."""
         self.message = message
         self.arguments = self.get_arguments()
-        self.data = self.db.chats.find_one({'id': self.message.chat.id})  # necessary?
         if self.is_active() or self.is_always_listening or self.is_waiting_for_input:
             return True
         elif message.text and message.text.split()[0].lower().split('@')[0] == self.name:
@@ -62,41 +63,17 @@ class Command(object):
         response.send_message.text = self.usage
         return response
 
-    def get_chat_users(self, as_list=False):
-        query = {'id': self.message.chat.id}
-        if as_list:
-            return self.db.chats.find_one(query)['users'].items()
-        return self.db.chats.find_one(query)['users']
-
-    def db_set(self, key, value):
-        """Writes a key-value pair to the database."""
-        query = {'id': self.message.chat.id}
-        update = {'$set': {'commands.' + self.name + '.' + key: value}}
-        return self.db.chats.update(query, update, upsert=True)
-
-    def db_get(self, query=None):
-        """Gets a search result from the database."""
-        if not query:
-            query = {'id': self.message.chat.id}
-        return self.db.chats.find_one(query)['commands'][self.name]
-
     def is_active(self):
         """Returns whether the command is activated or not."""
-        result = self.db.chats.find_one({'id': self.message.chat.id,
-                                         'commands.' + self.name + '.active': {'$exists': True}
-                                         })
-        if result:
-            return result['commands'][self.name]['active']
-        return False
+        # TODO: database check
 
     def activate(self, boolean=True):
         """Activates or deactivates the command."""
-        query = {'id': self.message.chat.id}
-        update = {'$set': {'commands.' + self.name + '.active': boolean}}
-        self.db.chats.update(query, update, upsert=True)
+        # TODO: database set
 
     def chunk(self, text):
         """Chunks text if length exceeds Telegrams character limit. Returns list of chunks."""
+        # TODO: move to bot.py?
         max_length = 4096
         chunks_needed = len(text) / max_length + 1
 

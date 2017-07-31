@@ -28,7 +28,7 @@ class Send(object):
             dictionary['reply_markup'] = json.dumps(dictionary['reply_markup'])
 
         # Telegram now validates data, so empty dictionary items need to be removed.
-        unnecessary_keys = [key for key, value in dictionary.iteritems() if not value]
+        unnecessary_keys = [key for key, value in dictionary.items() if not value]
 
         for key in unnecessary_keys:
             del dictionary[key]
@@ -70,7 +70,7 @@ class Send(object):
         media_types = ['photo', 'sticker', 'document', 'audio']
         for key in self.__dict__:
 
-            if isinstance(self.__dict__[key], basestring) and key not in media_types:
+            if isinstance(self.__dict__[key], str) and key not in media_types:
                 self.__dict__[key] = self.__dict__[key].encode(encoding)
 
         if self.__dict__.get('reply_markup') and self.__dict__.get('reply_markup').keyboard:

@@ -16,19 +16,20 @@ class PyBot(object):
         self.name = name
         self.token = token
         self.base_url = 'https://api.telegram.org/bot' + self.token + '/'
-        self.core = Core()
+        self.helper = Core()
         self.dialogs = dialogs
         self.commands = commands
         self.command_names = [command.name for command in self.commands] + ['/cancel', '/done']
 
     def check_dirs(self):
         """Checks if the needed directories exist and creates them if they don't."""
-        if not os.path.exists(ROOT_DIR + 'logs'):
-            os.makedirs(ROOT_DIR + 'logs')
+        if not os.path.exists(ROOT_DIR + '/logs'):
+            os.makedirs(ROOT_DIR + '/logs')
             print("Logs folder created")
 
     def self_check(self):
         """Checks self."""
+        self.helper.check_db()
         pass  # TODO: check for server updates etc.
 
     def run(self):
@@ -36,44 +37,34 @@ class PyBot(object):
         self.check_dirs()
         self.self_check()
         print("Bot started...")
-
         while True:
-
             try:
                 self.check_for_updates()
-
             except KeyboardInterrupt:
                 print("Keyboard interrupt! Bot stopped.")
                 break
-
             except:
                 self.log(traceback.format_exc(), 'error')
 
     def check_for_updates(self):
         """Checks for updates via long polling."""
-        offset = self.core.get_offset()
+        offset = self.helper.get_offset()
         parameters = {'timeout': 30, 'limit': 100, 'offset': offset}
         update_url = self.base_url + 'getUpdates'
         request = urllib.request.urlopen(update_url + '?' + urllib.parse.urlencode(parameters))
         update = json.loads(request.read())
-
         if update['ok'] and update['result']:
-            self.core.set_offset(int(update['result'][-1]['update_id'] + 1))
-
+            self.helper.set_offset(int(update['result'][-1]['update_id'] + 1))
             for result in update['result']:
                 message = Message(result['message'])
-
                 try:
                     self.log(result, 'json')
                     self.log(self.name + " received a message from " + message.sender.first_name +
                              " in chat " + str(message.chat.id) + ".")
-                    # self.collect(message)
-
+                    self.track(message)
                 except:  # catch exceptions in logging/collecting, so it doesn't interfere with functionality
                     self.log(traceback.format_exc(), 'error')
-
                 self.handle(message)
-
         elif not update['ok']:
             self.log("Couldn't get correct response! Update not OK.", 'error')
 
@@ -81,90 +72,75 @@ class PyBot(object):
         """Handles incoming messages by looping through the commands."""
         for command in self.commands:
             response = Response(message.chat.id)
-
             if message.text:
                 first_word = message.text.split()[0].split('@')[0]
             else:
                 first_word = None
-
             if command.listen(message):
-
                 try:
-
                     if first_word == '/cancel':
                         response = command.cancel(response)
-
                     elif first_word == '/done':
                         response = command.done(response)
-
                     elif command.is_waiting_for_input and command.is_waiting_for.id == message.sender.id:
                         command.arguments = message.text
                         command.is_waiting_for_input = False
                         response = command.reply(response)
-
                     elif command.requires_arguments and not command.arguments and not command.is_active():
                         response = Response(message.chat.id)
                         command.is_waiting_for_input = True
                         command.is_waiting_for = message.sender
                         response.send_message.text = self.dialogs['input'] % command.name
-
                     elif command.arguments and command.arguments.lower() == 'help' and message.text.split()[0] == command.name:
                         response = command.get_help(response)
-
                     else:
                         response = command.reply(response)
-
                 except:
                     response.send_message.text = self.dialogs['command_failed'] % command.name
                     self.log(traceback.format_exc(), 'error')
-
                 if isinstance(response, list):
                     for rsp in response:
                         self.reply(rsp)
-
                 elif response:
                     self.reply(response)
-
         if message.contains_command() and message.command.lower() not in self.command_names:
             response = Response(message.chat.id)
             response.send_message.text = self.dialogs['no_such_command']
             self.reply(response)
 
-    def log(self, entry, log_type='readable', file_name=None, log_dir = ROOT_DIR + 'logs/'):
+    def log(self, entry, log_type='readable', file_name=None, log_dir=ROOT_DIR + '/logs/'):
         """Logs entries into their respective log files."""
         if file_name:
             entry = entry.replace('\n', ' ')
             with open(log_dir + file_name, 'a') as log:
                 log.write(entry + '\n')
-
         elif log_type in ['readable', 'error']:
             entry = entry.replace('\n', ' ')
             with open(log_dir + log_type + '.log', 'a') as log:
                 log.write(entry + '\n')
             print(entry)  # readable responses also get printed to the terminal
-
         elif log_type in ['json', 'response']:
             with open(log_dir + log_type + '.log', 'a') as log:
                 log.write(json.dumps(entry) + '\n')
-
         else:
             self.log("Error! Please specify correct log_type or file_name.", 'error')
+
+    def track(self, message):
+        """Keeps track of chats and users. Updates database."""
+        self.helper.save_user(user=message.sender, chat=message.chat)
 
     def reply(self, response):
         """Sends response to user, accepts a response object."""
         request_url = self.base_url
         files = None
-
         if response.send_message.text:
             request_url += 'sendMessage'
             parameters = response.send_message.to_dict()
             self.log(self.name + " sent a message to chat " + str(response.send_message.chat_id) + ".")
-
         elif response.forward_message.from_chat_id:
             request_url += 'forwardMessage'
             parameters = response.forward_message.to_dict()
             self.log(self.name + " forwarded a message to chat " + str(response.send_message.chat_id) + ".")
-
         elif response.send_photo.photo:
             request_url += 'sendPhoto'
             if not response.send_photo.name:
@@ -173,12 +149,10 @@ class PyBot(object):
             files = response.send_photo.get_files()
             data = response.send_photo.get_data()
             self.log(self.name + " sent a photo to chat " + str(response.send_message.chat_id) + ".")
-
         elif response.send_sticker.sticker:
             request_url += 'sendSticker'
             parameters = response.send_sticker.to_dict()
             self.log(self.name + " sent a sticker to chat " + str(response.send_message.chat_id) + ".")
-
         elif response.send_document.document:
             request_url += 'sendDocument'
             if not response.send_document.name:
@@ -186,81 +160,24 @@ class PyBot(object):
             files = response.send_document.get_files()
             data = response.send_document.get_data()
             self.log(self.name + " sent a document to chat " + str(response.send_message.chat_id) + ".")
-
         elif response.send_audio.audio:
             request_url += 'sendAudio'
             files = response.send_audio.get_files()
             data = response.send_audio.get_data()
             self.log(self.name + " sent an audio file to chat " + str(response.send_message.chat_id) + ".")
-
         else:
             self.log('No valid response!', 'error')
             return None
-
         if files:
             # Files should be sent via a multipart/form-data request.
             r = requests.post(request_url, files=files, data=data)
-
         else:
             r = requests.get(request_url, params=parameters)
-
         r = json.loads(r.text)
         self.log(r, 'response')
 
     def collect(self, message):
-        """Stores statistics and user information in database."""
-        user = message.sender.__dict__
-        words = 0
-        sticker = 0
-        photo = 0
-        document = 0
-        command = None
-
-        if message.text:
-            tokens = message.text.split()
-            words = len(tokens)
-            if tokens[0].startswith('/'):
-                command = tokens[0]
-            else:
-                command = None
-
-        elif message.sticker:
-            sticker = 1
-
-        elif message.photo:
-            photo = 1
-
-        elif message.document:
-            document = 1
-
-        query = {
-            'id': message.chat.id
-        }
-        update = {
-            '$inc': {
-                'statistics.total_messages': 1,
-                'statistics.total_words': words,
-                'statistics.total_stickers': sticker,
-                'statistics.total_photos': photo,
-                'statistics.total_documents': document,
-                'statistics.users.' + str(user['id']) + '.total_messages': 1,
-                'statistics.users.' + str(user['id']) + '.total_words': words,
-                'statistics.users.' + str(user['id']) + '.total_stickers': sticker,
-                'statistics.users.' + str(user['id']) + '.total_photos': photo,
-                'statistics.users.' + str(user['id']) + '.total_documents': document
-            },
-            '$set': {
-                'users.' + str(user['id']): user,
-                'title': message.chat.title,
-                'type': message.chat.type
-            }
-        }
-
-        if command:
-            update['$inc']['statistics.commands.' + command] = 1
-            update['$inc']['statistics.users.' + str(user['id']) + '.commands.' + command] = 1
-
-        self.db.chats.update(query, update, upsert=True)
+        pass
 
     # def send_action(self, chat_id, action):
     #     act = urllib.urlopen(self.base_url + 'sendChatAction',

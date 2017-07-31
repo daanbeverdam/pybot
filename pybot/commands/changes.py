@@ -7,7 +7,7 @@ class ChangesCommand(Command):
 
     def reply(self, response):
         feed = 'https://github.com/daanbeverdam/pybot/commits/master.atom'
-        xml = parse(urllib.urlopen(feed))
+        xml = parse(urllib.request.urlopen(feed))
         reply = self.dialogs['reply']
         for node in xml.getElementsByTagName('title')[1:6]:
             reply += u'\n- ' + node.firstChild.nodeValue.strip()

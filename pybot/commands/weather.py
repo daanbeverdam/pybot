@@ -11,7 +11,7 @@ class WeatherCommand(Command):
         url = ('http://api.openweathermap.org/data/2.5/weather?q=' + query +
                '&units=metric&lang=' + self.dialogs['lang'] + '&appid=' +
                self.api_key)
-        results = json.loads(urllib.urlopen(url).read())
+        results = json.loads(urllib.request.urlopen(url).read())
 
         try:
             place = str(results['name'])
