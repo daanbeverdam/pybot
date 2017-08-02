@@ -127,7 +127,8 @@ class PyBot(object):
 
     def track(self, message):
         """Keeps track of chats and users. Updates database."""
-        self.helper.save_user(user=message.sender, chat=message.chat)
+        if not self.helper.is_known(message.chat, message.sender):
+            self.helper.save_user_chat(user=message.sender, chat=message.chat)
 
     def reply(self, response):
         """Sends response to user, accepts a response object."""
