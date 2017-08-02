@@ -76,12 +76,12 @@ class Core(DataBase):
     def save_user_chat(self, user, chat):
         """Saves user, chat and their relation."""
         self.cursor.execute("""
-            INSERT INTO users (id, username, first_name, last_name)
+            INSERT OR IGNORE INTO users (id, username, first_name, last_name)
             VALUES (?,?,?,?)
             """, (user.id, user.username,
                   user.first_name, user.last_name, ))
         self.cursor.execute("""
-            INSERT INTO chats (id, title)
+            INSERT OR IGNORE INTO chats (id, title)
             VALUES (?,?)
             """, (chat.id, chat.title, ))
         self.cursor.execute("""
