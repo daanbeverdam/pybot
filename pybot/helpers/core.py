@@ -1,9 +1,36 @@
-from pybot.helpers.db import DataBase
+import sqlite3
+from pybot.env import ROOT_DIR
 from pybot.core.user import User
 
-
-class Core(DataBase):
+class CoreHelper():
     """Handles core operations that are needed for basic bot function."""
+
+    def __init__(self, database=None):
+        if not database:
+            database = self.get_default_path()
+        self.connection = self.connect(database)
+        self.cursor = self.get_cursor()
+        self.check_db()
+
+    def get_default_path(self):
+        return ROOT_DIR + '/etc/database.db'
+
+    def connect(self, database):
+        """Opens database connection and returns it."""
+        return sqlite3.connect(database)
+
+    def get_cursor(self):
+        """Creates new cursor object and returns it."""
+        return self.connection.cursor()
+
+    def save(self):
+        """Saves the database entries."""
+        self.connection.commit()
+
+    def close(self):
+        """Saves and closes the database connection."""
+        self.connection.commit()
+        self.connection.close()
 
     def check_db(self):
         """Will create and populate core tables if they don't exist."""
@@ -26,7 +53,8 @@ class Core(DataBase):
             );""")
         self.cursor.execute("""
             CREATE TABLE chats (
-                id INTEGER PRIMARY KEY, title TEXT, UNIQUE(id)
+                id INTEGER PRIMARY KEY,
+                title TEXT
             );
             """)
         self.cursor.execute("""

@@ -4,7 +4,7 @@ import io
 import urllib
 from pybot.core.response import Response
 from pybot.core.user import User
-from pybot.helpers.core import Core
+from pybot.helpers.core import CoreHelper
 
 
 class Command(object):
@@ -26,7 +26,7 @@ class Command(object):
         self.is_always_listening = is_always_listening
         self.is_waiting_for_input = False  # TODO: make this a function which consults the database
         self.default_language = language
-        self.helper = Core()
+        self.helper = CoreHelper()
 
     def reply(self, response):
         """Each command should have a reply function which accepts and returns

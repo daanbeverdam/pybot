@@ -1,6 +1,6 @@
 from pybot.core.message import Message
 from pybot.core.response import Response
-from pybot.helpers.core import Core
+from pybot.helpers.core import CoreHelper
 from pybot.env import ROOT_DIR
 import requests
 import json
@@ -16,7 +16,7 @@ class PyBot(object):
         self.name = name
         self.token = token
         self.base_url = 'https://api.telegram.org/bot' + self.token + '/'
-        self.helper = Core()
+        self.helper = CoreHelper()
         self.dialogs = dialogs
         self.commands = commands
         self.command_names = [command.name for command in self.commands] + ['/cancel', '/done']

@@ -1,14 +1,15 @@
 from pybot.core.command import Command
 import operator
+from pybot.helpers.kudos import KudosHelper
 
 
 class KudosCommand(Command):
 
     def reply(self, response):
+        k = KudosHelper()
         if self.message.text:
 
             if self.message.text.split()[0].split('@')[0] == self.name:
-
                 if not self.arguments:
                     return self.kudos_overview(response)
 
