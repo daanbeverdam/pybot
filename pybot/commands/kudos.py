@@ -1,82 +1,85 @@
 from pybot.core.command import Command
 import operator
 from pybot.helpers.kudos import KudosHelper
+from pybot.helpers.core import CoreHelper
 
 
 class KudosCommand(Command):
 
     def reply(self, response):
-        k = KudosHelper()
         if self.message.text:
-
-            if self.message.text.split()[0].split('@')[0] == self.name:
-                if not self.arguments:
-                    return self.kudos_overview(response)
-
-                elif self.arguments.title() in [i['first_name'] for i in self.get_chat_users().values()]:
-                    return self.give_kudos(response, self.arguments)
-
-                response.send_message.text = self.dialogs['not_in_chat'] % self.arguments
+            reply = self.parse(self.message.text)
+            if reply:
+                response.send_message.text = reply
                 return response
 
-            elif self.message.text[:2] == '+1' or self.message.text[-2:] == '+1':
-                return self.give_kudos(response)
+    def parse(self, text):
+        helper = KudosHelper()
+        reply = None
+        if text.split()[0].split('@')[0] == self.name:
+            if not self.arguments:
+                reply = self.get_total_overview()
+            else:
+                user = helper.get_member_by_name(self.arguments)
+                if user.id == self.message.sender.id:
+                    reply = self.dialogs['shame_on_you']
+                elif user:
+                    helper.mutate_kudos(user, +1)
+                    reply = self.get_user_overview(user)
+                else:
+                    reply = self.dialogs['not_in_chat'] % self.arguments
+        if self.message.reply_to_message:
+            result = self.parse_kudo_count(text)
+            if result:
+                no_of_kudos = result[0]
+                trigger = result[1]
+                prepend = self.get_special_message(trigger)
+                user = self.message.reply_to_message.sender
+                if user.id == self.message.sender.id:
+                    reply = self.dialogs['shame_on_you']
+                else:
+                    helper.mutate_kudos(user, no_of_kudos)
+                    reply = prepend + self.get_user_overview(user, no_of_kudos)
+        return reply
 
-            elif self.message.text[:2] == '-1' or self.message.text[-2:] == '-1':
-                return self.give_kudos(response, substract=True)
+    def parse_kudo_count(self, text):
+        sequences = {1: [u'\U0001F199', u'\U0001F51D', u'\U00002B06', '+1'],
+                     -1: [u'\U00002B07','-1'],
+                     2: [u'\U0001F525'],
+                     -2: [u'\U0001F4A9']}
+        for kudo_count, triggers in sequences.items():
+            for trigger in triggers:
+                if trigger in text:
+                    return (kudo_count, trigger)
+        return None
 
-    def kudos_overview(self, response):
-        result = self.db.chats.find_one({'id': self.message.chat.id, 'commands./kudos.overview': {'$exists': True}})
-
-        if result:
-            overview = self.db_get()['overview']
+    def get_total_overview(self):
+        helper = KudosHelper()
+        overview = helper.get_kudos_dict(self.message.chat)
+        if overview:
             reply = self.dialogs['kudo_overview']
             overview = sorted(overview.items(), key=operator.itemgetter(1), reverse=True)
-
+            counter = 1
             for entry in overview:
                 reply += "\n%s: %i" % (entry[0], entry[1])
-
-            response.send_message.text = reply
-
+                if counter == 1:
+                    reply += ' \U0001F451'
+                elif counter == len(overview) and len(overview) > 1:
+                    reply += ' \U0001F480'
+                counter += 1
         else:
-            response.send_message.text = self.dialogs['no_kudos']
+            reply = self.dialogs['no_kudos']
+        return reply
 
-        return response
+    def get_user_overview(self, user, kudos_given=1):
+        helper = KudosHelper()
+        kudo_count = helper.get_kudo_count(user)
+        return self.dialogs['kudos_given'] % (kudos_given, user.first_name, kudo_count)
 
-    def give_kudos(self, response, name=None, substract=False):
-        result = self.db.chats.find_one({'id': self.message.chat.id, 'commands./kudos.overview': {'$exists': True}})
-
-        if not result:
-            self.db_set('overview', {})
-
-        if substract:
-            number_of_kudos = -1
-
-        else:
-            number_of_kudos = 1
-
-        if not name:
-
-            try:
-                name = self.message.reply_to_message.sender.first_name
-
-            except:
-                return None
-
-        name = name.title()
-
-        if self.message.sender.first_name == name:
-            response.send_message.text = self.dialogs['shame_on_you']
-            return response
-
-        query = {
-            'id': self.message.chat.id
-        }
-        update = {
-            '$inc': {
-                'commands./kudos.overview.' + name: number_of_kudos
-            }
-        }
-        self.db.chats.update(query, update, upsert=True)
-        response.send_message.text = self.dialogs['kudos_given'] % (number_of_kudos, name, self.db_get()['overview'][name])
-        return response
+    def get_special_message(self, trigger):
+        messages = {u'\U0001F525': u'\U0001F525',
+                    u'\U0001F4A9': u'\U0001F4A9'}
+        message = messages.get(trigger)
+        if message:
+            return message + ' '
+        return ''

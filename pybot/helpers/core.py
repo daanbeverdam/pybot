@@ -2,6 +2,7 @@ import sqlite3
 from pybot.env import ROOT_DIR
 from pybot.core.user import User
 
+
 class CoreHelper():
     """Handles core operations that are needed for basic bot function."""
 
@@ -44,6 +45,13 @@ class CoreHelper():
     def create_tables(self):
         """Creates necessary tables."""
         self.cursor.execute("""CREATE TABLE core ( offset INTEGER );""")
+        self.cursor.execute("""
+            CREATE TABLE bot (
+                id INTEGER PRIMARY KEY,
+                first_name TEXT,
+                username TEXT
+            );
+            """)
         self.cursor.execute("""
             CREATE TABLE users (
                 id INTEGER PRIMARY KEY,
@@ -90,6 +98,22 @@ class CoreHelper():
                     first_name=result[2], last_name=result[3])
         return user
 
+    def get_user_by_name(self, name, chat):
+        """Finds a user by name in a certain chat.
+        May be inaccurate, get_user() by id is preferred."""
+        self.cursor.execute("""
+            SELECT users.* FROM users
+            JOIN chat_user ON users.id = chat_user.user_id
+            WHERE chat_user.chat_id=?
+            AND users.first_name LIKE ?
+            OR users.last_name LIKE ?
+            """, (chat.id, name, name, ))
+        result = self.cursor.fetchall()
+        if len(result) == 1:
+            return User(id=result[0], username=result[1],
+                        first_name=result[2], last_name=result[3])
+        return None
+
     def is_known(self, user, chat):
         """Checks if a user-chat combination is in the database."""
         self.cursor.execute("""
@@ -100,6 +124,22 @@ class CoreHelper():
         if self.cursor.fetchone():
             return True
         return False
+
+    def save_self(self, bot):
+        """Saves user."""
+        self.cursor.execute("""
+            INSERT OR IGNORE INTO bot (id, first_name, username)
+            VALUES (?,?,?)
+            """, (bot.id, bot.first_name,
+                  bot.username ))
+        self.save()
+
+    def get_self(self):
+        """Returns bot info in as User object."""
+        self.cursor.execute("""SELECT * FROM bot""")
+        result = self.cursor.fetchone()
+        bot = User(id=result[0], first_name=result[1], username=result[2])
+        return bot
 
     def save_user_chat(self, user, chat):
         """Saves user, chat and their relation."""
@@ -118,15 +158,17 @@ class CoreHelper():
             """, (chat.id, user.id, ))
         self.save()
 
-    def get_members(self, id):
-        """Get all members of a chat by chat ID."""
+    def get_members(self, chat, include_self=True):
+        """Get all members of a chat. Accepts Chat object."""
         self.cursor.execute("""
             SELECT users.* FROM users
             JOIN chat_user ON users.id = chat_user.user_id
             WHERE chat_user.chat_id=?
-            """, (id,))
+            """, (chat.id,))
         results = self.cursor.fetchall()
         users = [User(id=result[0], username=result[1],
                       first_name=result[2], last_name=result[3])
                  for result in results]
+        if include_self:
+            users.append(self.get_self())
         return users

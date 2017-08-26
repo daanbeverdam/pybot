@@ -1,6 +1,7 @@
 from pybot.core.message import Message
 from pybot.core.response import Response
 from pybot.helpers.core import CoreHelper
+from pybot.core.user import User
 from pybot.env import ROOT_DIR
 import requests
 import json
@@ -30,6 +31,7 @@ class PyBot(object):
     def self_check(self):
         """Checks self."""
         self.helper.check_db()
+        self.helper.save_self(self.get_me())
         pass  # TODO: check for server updates etc.
 
     def run(self):
@@ -176,6 +178,14 @@ class PyBot(object):
             r = requests.get(request_url, params=parameters)
         r = json.loads(r.text)
         self.log(r, 'response')
+
+    def get_me(self):
+        update_url = self.base_url + 'getMe'
+        request = urllib.request.urlopen(update_url)
+        update = json.loads(request.read())
+        if update['ok'] and update['result']:
+            result = update['result']
+            return User(id=result['id'], first_name=result['first_name'], username=result['username'])
 
     def collect(self, message):
         pass
