@@ -44,7 +44,7 @@ class KudosCommand(Command):
 
     def parse_kudo_count(self, text):
         sequences = {1: [u'\U0001F199', u'\U0001F51D', u'\U00002B06', '+1'],
-                     -1: [u'\U00002B07','-1'],
+                     -1: [u'\U00002B07', '-1'],
                      2: [u'\U0001F525'],
                      -2: [u'\U0001F4A9']}
         for kudo_count, triggers in sequences.items():
