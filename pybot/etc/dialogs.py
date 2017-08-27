@@ -4,14 +4,14 @@ bot = {'en': {
     'command_failed': "Sorry, something went wrong. "
     "Need help? Type: '%s help'.",
     'no_such_command': "Sorry, I'm not familiar with that command.",
-    'input': "Please type your input for the %s command:",
+    'input': "This command needs extra input! Please type '%s help' for more info.",
     'operation_canceled': "Canceled %s command."
 },
     'nl': {
     'command_failed': "Sorry, er ging iets mis. "
     "Hulp nodig? Type: '%s help'",
     'no_such_command': "Sorry, dat commando ken ik niet.",
-    'input': "Type alsjeblieft je invoer voor het commando %s:",
+    'input': "Dit commando heeft extra invoer nodig! Type '%s help' voor meer info.",
     'operation_canceled': "%s commando geannuleerd."
 }
 }

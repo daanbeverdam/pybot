@@ -21,10 +21,8 @@ class Command(object):
         self.requires_arguments = requires_arguments
         self.admin = int(admin_id)
         self.api_key = api_key  # optional; only if the command needs it
-        self.is_waiting_for = User()
         self.has_scheduled_event = False
         self.is_always_listening = is_always_listening
-        self.is_waiting_for_input = False  # TODO: make this a function which consults the database
         self.default_language = language
         self.helper = CoreHelper()
 
@@ -39,7 +37,7 @@ class Command(object):
            Accepts a message object and returns a truth value."""
         self.message = message
         self.arguments = self.get_arguments()
-        if self.is_active() or self.is_always_listening or self.is_waiting_for_input:
+        if self.is_active() or self.is_always_listening:
             return True
         elif message.text and message.text.split()[0].lower().split('@')[0] == self.name:
             return True
@@ -47,9 +45,8 @@ class Command(object):
 
     def cancel(self, response):
         """Cancels the command."""
-        if self.is_waiting_for_input or self.is_active():
-            self.is_waiting_for_input = False
-            self.activate(False)
+        if self.is_active():
+            self.activate(self.message.chat, self.name, False)
             response.send_message.text = "OK, no worries."
             return response
         return None
@@ -65,11 +62,18 @@ class Command(object):
 
     def is_active(self):
         """Returns whether the command is activated or not."""
-        # TODO: database check
+        if self.message:
+            status = self.helper.command_is_active(self.message.chat, self.name[1:])
+            return status
+        return False
 
-    def activate(self, boolean=True):
+    def activate(self, boolean=True, chat=None, name=None):
         """Activates or deactivates the command."""
-        # TODO: database set
+        if not chat:
+            chat = self.message.chat
+        if not name:
+            name = self.name[1:]
+        self.helper.activate_command(chat, name, boolean)
 
     def chunk(self, text):
         """Chunks text if length exceeds Telegrams character limit. Returns list of chunks."""

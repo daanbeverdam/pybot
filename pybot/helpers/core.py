@@ -73,6 +73,15 @@ class CoreHelper():
                 FOREIGN KEY(user_id) REFERENCES users(id)
             );
             """)
+        self.cursor.execute("""
+            CREATE TABLE commands (
+            chat_id INTEGER,
+            name TEXT,
+            active INTEGER,
+            waiting INTEGER,
+            FOREIGN KEY(chat_id) REFERENCES chats(id)
+            );
+            """)
         self.save()
 
     def populate_tables(self):
@@ -172,3 +181,32 @@ class CoreHelper():
         if include_self:
             users.append(self.get_self())
         return users
+
+    def command_is_active(self, chat, name):
+        self.cursor.execute("""
+            SELECT active FROM commands
+            WHERE chat_id=?
+            AND name=?
+            """, (chat.id, name,))
+        status = self.cursor.fetchone()
+        if status:
+            return status[0]
+        else:
+            self.create_command_row(chat, name)
+            return self.command_is_active(chat, name)
+
+    def activate_command(self, chat, name, status):
+        self.cursor.execute("""
+            UPDATE commands
+            SET active=?
+            WHERE chat_id=?
+            AND name=?;
+            """, (status, chat.id, name,))
+        self.save()
+
+    def create_command_row(self, chat, name):
+        self.cursor.execute("""
+            INSERT INTO commands(chat_id, name, active, waiting)
+            VALUES (?, ?,?,?)
+            """, (chat.id, name, 0, 0,))
+        self.save()

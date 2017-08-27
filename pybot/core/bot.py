@@ -84,14 +84,8 @@ class PyBot(object):
                         response = command.cancel(response)
                     elif first_word == '/done':
                         response = command.done(response)
-                    elif command.is_waiting_for_input and command.is_waiting_for.id == message.sender.id:
-                        command.arguments = message.text
-                        command.is_waiting_for_input = False
-                        response = command.reply(response)
                     elif command.requires_arguments and not command.arguments and not command.is_active():
                         response = Response(message.chat.id)
-                        command.is_waiting_for_input = True
-                        command.is_waiting_for = message.sender
                         response.send_message.text = self.dialogs['input'] % command.name
                     elif command.arguments and command.arguments.lower() == 'help' and message.text.split()[0] == command.name:
                         response = command.get_help(response)
