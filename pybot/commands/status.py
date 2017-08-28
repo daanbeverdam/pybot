@@ -5,5 +5,5 @@ class StatusCommand(Command):
 
     def reply(self, response):
         bot = self.helper.get_self()
-        response.send_message.text = self.dialogs['reply'] % (bot.first_name, bot.id, self.message.chat.id)
+        response.send_message.text = self.dialogs['reply'] % (bot.first_name, bot.id, self.message.chat.id, self.message.sender.id)
         return response

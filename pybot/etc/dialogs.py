@@ -331,12 +331,12 @@ stats = {'en': {
 status = {'en': {
     'usage': "The /status commands lets you know the current status "
     "of the bot.",
-    'reply': "\U0001F916 %s (%i) is up and running. \n\U0001F4AC Your chat id is %i."
+    'reply': "\U0001F916 %s (%i) is up and running.\n\U0001F4AC Current chat id is %i.\n\U0001F464 Your user id is %i."
 },
     'nl': {
     'usage': "Het /status commando geeft de huidige status weer van "
     "de bot.",
-    'reply': "\U0001F916 %s (%i) is operationeel. \n\U0001F4AC Je chat id is %i."
+    'reply': "\U0001F916 %s (%i) is operationeel.\n\U0001F4AC Huidige chat id is %i.\n\U0001F464 Je user id is %i."
 }
 }
 
