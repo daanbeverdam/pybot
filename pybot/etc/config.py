@@ -42,7 +42,7 @@ COMMAND_LIST = [
     QuoteCommand('/quote', dialogs.quote[LANG]),
     ResultsCommand('/results', dialogs.results[LANG]),
     StartCommand('/start', dialogs.start[LANG]),
-    StatsCommand('/stats', dialogs.stats[LANG]),
+    StatsCommand('/stats', dialogs.stats[LANG], is_always_listening=True),
     StatusCommand('/status', dialogs.status[LANG]),
     WikiCommand('/wiki', dialogs.wiki[LANG], requires_arguments=True),
     WeatherCommand('/weather', dialogs.weather[LANG], requires_arguments=True, api_key=WEATHER_API),

@@ -1,4 +1,5 @@
 from pybot.core.command import Command
+from pybot.helpers.stats import StatsHelper
 
 
 class StatsCommand(Command):
@@ -6,6 +7,10 @@ class StatsCommand(Command):
 
     def reply(self, response):
         self.collect(self.message)
+        if self.message.text and self.message.text.split()[0] == self.name:
+            return self.get_stats_overview()
+
+    def get_stats_overview(self):
         query = {
             'id': self.message.chat.id
         }
@@ -43,56 +48,45 @@ class StatsCommand(Command):
         response.send_message.text = reply
         return response
 
-    def collect():
+    def collect(self, message):
         """Stores statistics and user information in database."""
-        user = message.sender.__dict__
+        helper = StatsHelper()
         words = 0
         sticker = 0
         photo = 0
-        document = 0
-        command = None
-
         if message.text:
             tokens = message.text.split()
             words = len(tokens)
-            if tokens[0].startswith('/'):
-                command = tokens[0]
-            else:
-                command = None
-
         elif message.sticker:
             sticker = 1
-
         elif message.photo:
             photo = 1
+        helper.collect(self.message.chat, self.message.sender, words, sticker, photo)
 
-        elif message.document:
-            document = 1
+        # query = {
+        #     'id': message.chat.id
+        # }
+        # update = {
+        #     '$inc': {
+        #         'statistics.total_messages': 1,
+        #         'statistics.total_words': words,
+        #         'statistics.total_stickers': sticker,
+        #         'statistics.total_photos': photo,
+        #         'statistics.total_documents': document,
+        #         'statistics.users.' + str(user['id']) + '.total_messages': 1,
+        #         'statistics.users.' + str(user['id']) + '.total_words': words,
+        #         'statistics.users.' + str(user['id']) + '.total_stickers': sticker,
+        #         'statistics.users.' + str(user['id']) + '.total_photos': photo,
+        #         'statistics.users.' + str(user['id']) + '.total_documents': document
+        #     },
+        #     '$set': {
+        #         'users.' + str(user['id']): user,
+        #         'title': message.chat.title,
+        #         'type': message.chat.type
+        #     }
+        # }
 
-        query = {
-            'id': message.chat.id
-        }
-        update = {
-            '$inc': {
-                'statistics.total_messages': 1,
-                'statistics.total_words': words,
-                'statistics.total_stickers': sticker,
-                'statistics.total_photos': photo,
-                'statistics.total_documents': document,
-                'statistics.users.' + str(user['id']) + '.total_messages': 1,
-                'statistics.users.' + str(user['id']) + '.total_words': words,
-                'statistics.users.' + str(user['id']) + '.total_stickers': sticker,
-                'statistics.users.' + str(user['id']) + '.total_photos': photo,
-                'statistics.users.' + str(user['id']) + '.total_documents': document
-            },
-            '$set': {
-                'users.' + str(user['id']): user,
-                'title': message.chat.title,
-                'type': message.chat.type
-            }
-        }
-
-        if command:
-            update['$inc']['statistics.commands.' + command] = 1
-            update['$inc']['statistics.users.' + str(user['id']) + '.commands.' + command] = 1
-        self.db.chats.update(query, update, upsert=True)
+        # if command:
+        #     update['$inc']['statistics.commands.' + command] = 1
+        #     update['$inc']['statistics.users.' + str(user['id']) + '.commands.' + command] = 1
+        # self.db.chats.update(query, update, upsert=True)
