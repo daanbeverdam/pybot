@@ -209,9 +209,7 @@ marnie = {'en': {
 poll = {
     'en': {
         'usage': "Start a poll! Use the following format: '/poll "
-        "[question] *[option 1] *[option 2] *[etc]'. Add '~m' to allow voting "
-        "on multiple options. Add '~a' to allow adding poll options with "
-        "/poll add [option]'. You can "
+        "question *option 1 *option 2 *etc'. You can "
         "always /cancel a poll or ask for the /results.",
         'store_answer': "Thanks, your answer has been recorded.",
         'results': "The results for '%s':",
@@ -227,9 +225,7 @@ poll = {
         'all_reserved': "Sorry, it's not possible to use the name 'All'."},
     'nl': {
         'usage': "Start een poll! Gebruik het volgende formaat: "
-        "'/poll [vraag] *[optie 1] *[optie 2] *[etc]'. Voeg '~m' toe wanneer "
-        "er meerdere antwoorden mogelijk zijn. Voeg '~a' toe om anderen "
-        "opties te laten toevoegen met '/poll add [optie]'. De resultaten "
+        "'/poll vraag *optie 1 *optie 2 *etc'. De resultaten "
         "kunnen opgevraagd worden met /results en de poll kan "
         "geannuleerd worden met /cancel.",
         'store_answer': "Dankjewel, je antwoord is opgeslagen.",
@@ -276,13 +272,13 @@ results = {'en': {
     'reply': "The results for '%s':",
     'vote': 'vote',
     'votes': 'votes',
-    'not_active': 'Poll is not active anymore.'
+    'not_active': "There isn't an active poll at the moment."
 },
     'nl': {
     'reply': "De resultaten voor de vraag '%s':",
     'vote': 'stem',
     'votes': 'stemmen',
-    'not_active': 'Poll is niet meer actief.'
+    'not_active': "Er is geen actieve poll op het moment."
 }
 }
 

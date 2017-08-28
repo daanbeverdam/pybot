@@ -49,6 +49,13 @@ class PollHelper(CoreHelper):
         """, (chat.id, user.id, question,))
         self.save()
 
+    def get_question(self, chat):
+        self.cursor.execute("""
+            SELECT question FROM poll
+            WHERE chat_id=?
+        """, (chat.id,))
+        return self.cursor.fetchone()[0]
+
     def store_options(self, options, chat):
         """Stores poll options, accepts a list of strings and chat object."""
         poll_id = self.get_poll_id(chat)
@@ -82,7 +89,10 @@ class PollHelper(CoreHelper):
             SELECT id FROM poll
             WHERE chat_id=?
         """, (chat.id,))
-        return self.cursor.fetchone()[0]
+        result = self.cursor.fetchone()
+        if result:
+            return result[0]
+        return None
 
     def get_option_id(self, option, poll_id):
         self.cursor.execute("""
@@ -124,6 +134,24 @@ class PollHelper(CoreHelper):
             if result:
                 return True
         return False
+
+    def get_results(self, chat):
+        poll_id = self.get_poll_id(chat)
+        if poll_id:
+            options = self.get_options(chat)
+            poll_dict = {}
+            for option in options:
+                poll_dict[option] = []
+            self.cursor.execute("""
+                SELECT poll_options.option, poll_option_user.user_id FROM poll_options
+                JOIN poll_option_user ON poll_options.id = poll_option_user.option_id
+                WHERE poll_options.poll_id = ?;
+            """, (poll_id,))
+            results = self.cursor.fetchall()
+            for option, user_id in results:
+                poll_dict[option].append(self.get_user(user_id).first_name)
+            return poll_dict
+        return None
 
     def delete_poll(self, chat):
         """Deletes poll and all references for a given chat."""
