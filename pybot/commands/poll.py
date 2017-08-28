@@ -61,21 +61,20 @@ class PollCommand(Command):
 
     def store_answer(self, response):
         helper = PollHelper()
-        helper.register_option(self.message.text, self.message.sender, self.message.chat)
-        response.send_message.text = self.dialogs['store_answer']
-        response.send_message.reply_markup.hide_keyboard = True
-        response.send_message.reply_markup.selective = True
-        response.send_message.reply_to_message_id = self.message.id
-        return response
-
-    def add_poll_option(self, response):
-        self.arguments = self.db_get()['original_arguments'] + '*' + self.arguments[3:]
-        return self.new_poll(response, keep_old_results=True)
+        if not helper.has_voted(self.message.sender, self.message.chat):
+            helper.register_option(self.message.text, self.message.sender, self.message.chat)
+            response.send_message.text = self.dialogs['store_answer']
+            response.send_message.reply_markup.hide_keyboard = True
+            response.send_message.reply_markup.selective = True
+            response.send_message.reply_to_message_id = self.message.id
+            return response
+        return None
 
     def cancel(self, response):
         helper = PollHelper()
         initiator = helper.get_initiator(self.message.chat)
         if self.message.sender.id == initiator.id or self.message.sender.id == self.admin:
+            helper.delete_poll(self.message.chat)
             self.activate(False)
             response.send_message.text = self.dialogs['end_poll']
             response.send_message.reply_markup.hide_keyboard = True
@@ -91,9 +90,10 @@ class PollCommand(Command):
         return response
 
     def poll_results(self):
-        reply = self.dialogs['results'] % self.db_get()['question']
-        for option, voters in self.db_get()['options_dict'].iteritems():
-            reply += ('\n- ' + option + ': ' + ', '.join(voters) +
-                      ' (%d %s)' % (len(voters), self.dialogs[(
-                                    'vote' if len(voters) == 1 else 'votes')]))
-        return reply
+        pass
+        # reply = self.dialogs['results'] % self.db_get()['question']
+        # for option, voters in self.db_get()['options_dict'].iteritems():
+        #     reply += ('\n- ' + option + ': ' + ', '.join(voters) +
+        #               ' (%d %s)' % (len(voters), self.dialogs[(
+        #                             'vote' if len(voters) == 1 else 'votes')]))
+        # return reply

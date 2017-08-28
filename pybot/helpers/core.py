@@ -11,6 +11,8 @@ class CoreHelper():
             database = self.get_default_path()
         self.connection = self.connect(database)
         self.cursor = self.get_cursor()
+        self.cursor.execute("""PRAGMA foreign_keys = ON""")
+        self.save()
         self.check_db()
 
     def get_default_path(self):

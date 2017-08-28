@@ -28,14 +28,14 @@ class PollHelper(CoreHelper):
             poll_id INTEGER,
             option TEXT,
             PRIMARY KEY(id),
-            FOREIGN KEY(poll_id) REFERENCES poll(id)
+            FOREIGN KEY(poll_id) REFERENCES poll(id) ON DELETE CASCADE
             );
         """)
         self.cursor.execute("""
             CREATE TABLE poll_option_user (
             option_id INTEGER,
             user_id TEXT,
-            FOREIGN KEY(option_id) REFERENCES poll_options(id),
+            FOREIGN KEY(option_id) REFERENCES poll_options(id) ON DELETE CASCADE,
             FOREIGN KEY(user_id) REFERENCES users(id)
             );
         """)
@@ -99,4 +99,48 @@ class PollHelper(CoreHelper):
             INSERT OR IGNORE INTO poll_option_user (option_id, user_id)
             VALUES (?,?)
         """, (option_id, user.id,))
+        self.save()
+
+    def get_option_ids(self, poll_id):
+        """Returns IDs of the active poll."""
+        self.cursor.execute("""
+            SELECT id FROM poll_options
+            WHERE poll_id=?
+        """, (poll_id,))
+        results = self.cursor.fetchall()
+        return [result[0] for result in results]
+
+    def has_voted(self, user, chat):
+        """Returns whether an user has voted in chat."""
+        poll_id = self.get_poll_id(chat)
+        option_ids = self.get_option_ids(poll_id)
+        for option_id in option_ids:
+            self.cursor.execute("""
+                SELECT * FROM poll_option_user
+                WHERE user_id=?
+                AND option_id=?
+            """, (user.id, option_id,))
+            result = self.cursor.fetchone()
+            if result:
+                return True
+        return False
+
+    def delete_poll(self, chat):
+        """Deletes poll and all references for a given chat."""
+        # TODO: figure out why on delete cascade is not working
+        poll_id = self.get_poll_id(chat)
+        self.cursor.execute("""
+            DELETE FROM poll
+            WHERE id=?
+        """, (poll_id,))
+        self.cursor.execute("""
+            DELETE FROM poll_options
+            WHERE poll_id=?
+        """, (poll_id,))
+        option_ids = self.get_option_ids(poll_id)
+        for option_id in option_ids:
+            self.cursor.execute("""
+                DELETE FROM poll_option_user
+                WHERE option_id=?
+            """, (option_id,))
         self.save()
