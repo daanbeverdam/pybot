@@ -12,7 +12,7 @@ class ResultsCommand(Command):
             question = helper.get_question(self.message.chat)
             reply = self.dialogs['reply'] % question
             for option, voters in results.items():
-                reply += ('\n- ' + option + ': ' + ', '.join(voters) +
+                reply += ('\n\u2022 ' + option + ': ' + ', '.join(voters) +
                           ' (%d %s)' % (len(voters), self.dialogs[(
                                         'vote' if len(voters) == 1 else 'votes')]))
         else:

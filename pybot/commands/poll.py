@@ -26,12 +26,15 @@ class PollCommand(Command):
         tokens = self.arguments.split('*')
         question = tokens[0].strip()
         options = [token.strip() for token in tokens[1:]]
+        if len(options) != len(set(options)):
+            response.send_message.text = self.dialogs['duplicate_options']
+            return response
 
         if question != '' and len(options) > 0:
             helper.store_question(question, self.message.sender, self.message.chat)
             helper.store_options(options, self.message.chat)
             self.activate(True)
-            response.send_message.text = question + '\n- ' + '\n- '.join(options)
+            response.send_message.text = question + ' \U0001F4CA\n\u2022 ' + '\n\u2022 '.join(options)
             response.send_message.reply_markup.keyboard = self.format(question, options)
             response.send_message.force_reply = True
             response.send_message.reply_markup.one_time_keyboard = True
@@ -40,7 +43,7 @@ class PollCommand(Command):
         return response
 
     def format(self, question, options):
-        formatted_options = [['"%s"' % question]]
+        formatted_options = [['%s \U0001F4CA' % question]]
         temp_options = []
         counter = 1
 

@@ -222,7 +222,8 @@ poll = {
         'vote': "vote",
         'everybody_voted': "Everybody has voted! %s",
         'done_voting': "Thanks, I'll hide your keyboard now.",
-        'all_reserved': "Sorry, it's not possible to use the name 'All'."},
+        'all_reserved': "Sorry, it's not possible to use the name 'All'.",
+        'duplicate_options': "Duplicate options detected! Poll canceled."},
     'nl': {
         'usage': "Start een poll! Gebruik het volgende formaat: "
         "'/poll vraag *optie 1 *optie 2 *etc'. De resultaten "
@@ -239,7 +240,8 @@ poll = {
         'vote': "stem",
         'everybody_voted': "Iedereen heeft gestemd! %s",
         'done_voting': "Bedankt, de antwoordopties worden nu verborgen.",
-        'all_reserved': "Sorry, je kan de naam 'All' niet gebruiken."}}
+        'all_reserved': "Sorry, je kan de naam 'All' niet gebruiken.",
+        'duplicate_options': "Je kan niet twee dezelfde antwoordopties aanmaken. Poll geannuleerd."}}
 
 putin = {'en': {
     'usage': "The command /putin returns a random photo of "
@@ -269,13 +271,13 @@ quote = {'en': {
 }
 
 results = {'en': {
-    'reply': "The results for '%s':",
+    'reply': "Poll results for '%s' \U0001F4CA",
     'vote': 'vote',
     'votes': 'votes',
     'not_active': "There isn't an active poll at the moment."
 },
     'nl': {
-    'reply': "De resultaten voor de vraag '%s':",
+    'reply': "Poll resultaten voor '%s' \U0001F4CA",
     'vote': 'stem',
     'votes': 'stemmen',
     'not_active': "Er is geen actieve poll op het moment."
