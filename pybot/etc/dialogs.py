@@ -307,22 +307,20 @@ start = {'en': {
 stats = {'en': {
     'usage': "The /stats command returns statistics of the "
     "chat.",
-    'reply': "Total messages sent: %i\n"
-    "Total words sent: %i\n"
-    "Total photos sent: %i\n"
-    "Total stickers sent: %i\n"
-    "Most used commands:\n%s"
+    'reply': "\U0001F4E8 Total messages sent: %i\n"
+    "\U0001F5E3 Total words sent: %i\n"
+    "\U0001F320 Total stickers sent: %i\n"
+    "\U0001F4F7 Total photos sent: %i\n"
     "Most active users (messages/words/average):\n%s",
     'error': "Sorry, not enough data yet. Chat some more!"
 },
     'nl': {
     'usage': "Het /stats commando geeft de huidige "
     "gespreksstatistieken.",
-    'reply': "Totaal verzonden berichten: %i\n"
-    "Totaal verzonden woorden: %i\n"
-    "Totaal verzonden foto's: %i\n"
-    "Totaal verzonden stickers: %i\n\n"
-    "Meest gebruikte commando's:\n%s"
+    'reply': "\U0001F4E8 Totaal verzonden berichten: %i\n"
+    "\U0001F5E3 Totaal verzonden woorden: %i\n"
+    "\U0001F320 Totaal verzonden stickers: %i\n\n"
+    "\U0001F4F7 Totaal verzonden foto's: %i\n"
     "Meest actieve gebruikers (berichten/woorden/gemiddelde):\n%s",
     'error': "Sorry, nog niet genoeg data. Chat nog wat meer!"
 }
