@@ -79,7 +79,7 @@ class Command(object):
         """Chunks text if length exceeds Telegrams character limit. Returns list of chunks."""
         # TODO: move to bot.py?
         max_length = 4096
-        chunks_needed = len(text) / max_length + 1
+        chunks_needed = int(len(text) / max_length + 1)
 
         if chunks_needed > 0:
             chunks = []
