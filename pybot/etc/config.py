@@ -1,7 +1,6 @@
 from pybot.commands.dice import DiceCommand
 from pybot.commands.echo import EchoCommand
 from pybot.commands.results import ResultsCommand
-from pybot.commands.wiki import WikiCommand
 from pybot.commands.poll import PollCommand
 from pybot.commands.help import HelpCommand
 from pybot.commands.status import StatusCommand
@@ -44,6 +43,5 @@ COMMAND_LIST = [
     StartCommand('/start', dialogs.start[LANG]),
     StatsCommand('/stats', dialogs.stats[LANG], is_always_listening=True),
     StatusCommand('/status', dialogs.status[LANG]),
-    WikiCommand('/wiki', dialogs.wiki[LANG], requires_arguments=True),
-    WeatherCommand('/weather', dialogs.weather[LANG], requires_arguments=True, api_key=WEATHER_API),
+    WeatherCommand('/weather', dialogs.weather[LANG], requires_arguments=True, api_key=WEATHER_API)
 ]
