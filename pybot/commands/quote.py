@@ -13,57 +13,51 @@ class QuoteCommand(Command):
             reply = self.random_quote()
             if not reply:
                 reply = self.dialogs['no_quotes']
-
         else:
             tokens = self.arguments.split()
-
             if len(tokens) > 1:
-
                 if ':' in self.arguments:
                     reply = self.save_quote()
-
                 elif tokens[1] == 'all':
                     reply = self.all_quotes_by_name(tokens)
-
             elif len(tokens) == 1:
-
                 if tokens[0] == 'all':
                     reply = self.all_quotes(tokens)
-
                 else:
                     reply = self.random_quote_by_name(tokens)
-
         chunks = self.chunk(reply)
         responses = []
-
         for reply in chunks:
             response = Response(self.message.chat.id)
             response.send_message.text = reply
             responses.append(response)
-
         return responses
 
     def random_quote(self):
         helper = QuoteHelper()
         quote = helper.get_random_quote(self.message.chat)
-        return quote
+        return quote[1] + ' -' + quote[0]
 
     def random_quote_by_name(self, tokens):
-        quote_list = self.quotes[tokens[0].title()]
-        return random.choice(quote_list) + ' -' + tokens[0].title()
+        helper = QuoteHelper()
+        quote = helper.get_random_quote_by_name(self.message.chat, tokens[0].title())
+        return quote[1] + ' -' + quote[0].title()
 
     def save_quote(self):
         name = self.arguments.split(':')[0].title()
-        if name == 'all':
+        if name == 'All':
             return self.dialogs['all_reserved']
         quote = '"' + self.arguments.split(':')[1].strip() + '"'
         helper = QuoteHelper()
-        helper.save_quote(chat, name, quote)
+        helper.save_quote(self.message.chat, name, quote)
         return self.dialogs['quote_saved']
 
     def all_quotes_by_name(self, tokens):
+        name = tokens[0].title()
+        helper = QuoteHelper()
+        quotes = helper.get_all_quotes_by_name(self.message.chat, name)
         quote_list = []
-        for quote in self.quotes[tokens[0].title()]:
+        for name, quote in quotes:
             quote_list.append(quote)
         return ('\n'.join(quote_list) + '\n -' +
                 tokens[0].title())

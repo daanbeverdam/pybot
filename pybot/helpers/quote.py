@@ -40,6 +40,17 @@ class QuoteHelper(CoreHelper):
         result = self.cursor.fetchone()
         return result
 
+    def get_random_quote_by_name(self, chat, name):
+        self.cursor.execute("""
+            SELECT name, text FROM quote
+            WHERE _ROWID_ >= (abs(random()) % (SELECT max(_ROWID_) FROM quote))
+            AND chat_id=?
+            AND name=?
+            LIMIT 1
+        """, (chat.id, name,))
+        result = self.cursor.fetchone()
+        return result
+
     def save_quote(self, chat, name, quote):
         self.cursor.execute("""
             INSERT INTO quote (chat_id, name, text)
@@ -52,4 +63,12 @@ class QuoteHelper(CoreHelper):
             SELECT name, text FROM quote
             WHERE chat_id=?
         """, (chat.id,))
-        return self.cursor.fetchone()
+        return self.cursor.fetchall()
+
+    def get_all_quotes_by_name(self, chat, name):
+        self.cursor.execute("""
+            SELECT name, text FROM quote
+            WHERE chat_id=?
+            AND name=?
+        """, (chat.id, name,))
+        return self.cursor.fetchall()
