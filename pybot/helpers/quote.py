@@ -1,4 +1,5 @@
 from pybot.helpers.core import CoreHelper
+import random
 
 
 class QuoteHelper(CoreHelper):
@@ -33,23 +34,23 @@ class QuoteHelper(CoreHelper):
     def get_random_quote(self, chat):
         self.cursor.execute("""
             SELECT name, text FROM quote
-            WHERE _ROWID_ >= (abs(random()) % (SELECT max(_ROWID_) FROM quote))
-            AND chat_id=?
-            LIMIT 1
+            WHERE chat_id=?
         """, (chat.id,))
-        result = self.cursor.fetchone()
-        return result
+        results = self.cursor.fetchall()
+        if results:
+            return random.choice(results)
+        return None
 
     def get_random_quote_by_name(self, chat, name):
         self.cursor.execute("""
             SELECT name, text FROM quote
-            WHERE _ROWID_ >= (abs(random()) % (SELECT max(_ROWID_) FROM quote))
-            AND chat_id=?
+            WHERE chat_id=?
             AND name=?
-            LIMIT 1
         """, (chat.id, name,))
-        result = self.cursor.fetchone()
-        return result
+        results = self.cursor.fetchall()
+        if results:
+            return random.choice(results)
+        return None
 
     def save_quote(self, chat, name, quote):
         self.cursor.execute("""

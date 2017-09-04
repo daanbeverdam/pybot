@@ -9,15 +9,17 @@ class QuoteCommand(Command):
 
     def reply(self, response):
 
-        if not self.arguments:
+        if not self.arguments and self.message.reply_to_message:
+            name = self.message.reply_to_message.sender.first_name
+            quote = '"' + self.message.reply_to_message.text + '"'
+            reply = self.save_quote(name, quote)
+        elif not self.arguments:
             reply = self.random_quote()
-            if not reply:
-                reply = self.dialogs['no_quotes']
         else:
             tokens = self.arguments.split()
             if len(tokens) > 1:
                 if ':' in self.arguments:
-                    reply = self.save_quote()
+                    reply = self.parse_quote(self.arguments)
                 elif tokens[1] == 'all':
                     reply = self.all_quotes_by_name(tokens)
             elif len(tokens) == 1:
@@ -36,31 +38,43 @@ class QuoteCommand(Command):
     def random_quote(self):
         helper = QuoteHelper()
         quote = helper.get_random_quote(self.message.chat)
-        return quote[1] + ' -' + quote[0]
+        if quote:
+            return quote[1] + ' -' + quote[0]
+        else:
+            return self.dialogs['no_quotes']
 
     def random_quote_by_name(self, tokens):
         helper = QuoteHelper()
         quote = helper.get_random_quote_by_name(self.message.chat, tokens[0].title())
-        return quote[1] + ' -' + quote[0].title()
+        if quote:
+            return quote[1] + ' -' + quote[0].title()
+        else:
+            return self.dialogs['no_quotes_for_user'] % tokens[0]
 
-    def save_quote(self):
-        name = self.arguments.split(':')[0].title()
+    def parse_quote(self, text):
+        name = text.split(':')[0].title()
         if name == 'All':
             return self.dialogs['all_reserved']
-        quote = '"' + self.arguments.split(':')[1].strip() + '"'
+        quote = '"' + text.split(':')[1].strip() + '"'
+        return self.save_quote(name, quote)
+
+    def save_quote(self, name, quote):
         helper = QuoteHelper()
-        helper.save_quote(self.message.chat, name, quote)
+        helper.save_quote(self.message.chat, name.strip(), quote.strip())
         return self.dialogs['quote_saved']
 
     def all_quotes_by_name(self, tokens):
         name = tokens[0].title()
         helper = QuoteHelper()
         quotes = helper.get_all_quotes_by_name(self.message.chat, name)
-        quote_list = []
-        for name, quote in quotes:
-            quote_list.append(quote)
-        return ('\n'.join(quote_list) + '\n -' +
-                tokens[0].title())
+        if quotes:
+            quote_list = []
+            for name, quote in quotes:
+                quote_list.append(quote)
+            return ('\n'.join(quote_list) + '\n -' +
+                    tokens[0].title())
+        else:
+            return self.dialogs['no_quotes_for_user'] % tokens[0]
 
     def all_quotes(self, tokens):
         helper = QuoteHelper()
@@ -68,4 +82,6 @@ class QuoteCommand(Command):
         reply = ''
         for name, quote in quotes:
             reply += quote + ' -' + name + '\n'
+        if not reply:
+            return self.dialogs['no_quotes']
         return reply

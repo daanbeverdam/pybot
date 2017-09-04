@@ -258,7 +258,8 @@ quote = {'en': {
     "You can also ask for a random quote using '/quote [optional "
     "name]'. Request all quotes by adding 'all'.",
     'quote_saved': "Quote saved.",
-    'no_quotes': "No quotes saved yet!"
+    'no_quotes': "No quotes saved yet.",
+    'no_quotes_for_user': "No quotes found for user '%s'."
 },
     'nl': {
     'usage': "Sla je quotes op met behulp van '/quote [naam]: "
@@ -266,7 +267,8 @@ quote = {'en': {
     "[optionele naam]'. Vraag alle quotes op door 'all' toe te "
     "voegen.",
     'quote_saved': "Quote opgeslagen.",
-    'no_quotes': "Nog geen quotes opgeslagen!"
+    'no_quotes': "Nog geen quotes opgeslagen.",
+    'no_quotes_for_user': "Geen quotes gevonden voor gebruiker '%s'."
 }
 }
 
