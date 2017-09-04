@@ -7,7 +7,7 @@ class StatsCommand(Command):
 
     def reply(self, response):
         self.collect(self.message)
-        if self.message.text and self.message.text.split()[0] == self.name:
+        if self.message.text and self.message.text.split()[0].split('@')[0] == self.name:
             reply = self.get_stats_overview()
             response.send_message.text = reply
             return response
