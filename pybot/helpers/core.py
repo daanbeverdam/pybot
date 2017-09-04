@@ -121,8 +121,12 @@ class CoreHelper():
             """, (chat.id, name, name, ))
         result = self.cursor.fetchall()
         if len(result) == 1:
+            result = result[0]
             return User(id=result[0], username=result[1],
                         first_name=result[2], last_name=result[3])
+        bot = self.get_self()
+        if bot.first_name.lower() == name.lower():
+            return bot
         return None
 
     def is_known(self, user, chat):
@@ -131,7 +135,7 @@ class CoreHelper():
             SELECT * FROM chat_user
             WHERE chat_id=?
             AND user_id=?
-            """, (chat.id, user.id))
+            """, (chat.id, user.id, ))
         if self.cursor.fetchone():
             return True
         return False

@@ -20,11 +20,11 @@ class KudosCommand(Command):
             if not self.arguments:
                 reply = self.get_total_overview()
             else:
-                user = helper.get_member_by_name(self.arguments)
-                if user.id == self.message.sender.id:
+                user = helper.get_user_by_name(self.arguments, self.message.chat)
+                if user and user.id == self.message.sender.id:
                     reply = self.dialogs['shame_on_you']
                 elif user:
-                    helper.mutate_kudos(user, +1)
+                    helper.mutate_kudos(user, self.message.chat, +1)
                     reply = self.get_user_overview(user)
                 else:
                     reply = self.dialogs['not_in_chat'] % self.arguments
@@ -38,7 +38,7 @@ class KudosCommand(Command):
                 if user.id == self.message.sender.id:
                     reply = self.dialogs['shame_on_you']
                 else:
-                    helper.mutate_kudos(user, no_of_kudos)
+                    helper.mutate_kudos(user, self.message.chat, no_of_kudos)
                     reply = prepend + self.get_user_overview(user, no_of_kudos)
         return reply
 
@@ -73,7 +73,7 @@ class KudosCommand(Command):
 
     def get_user_overview(self, user, kudos_given=1):
         helper = KudosHelper()
-        kudo_count = helper.get_kudo_count(user)
+        kudo_count = helper.get_kudo_count(user, self.message.chat,)
         return self.dialogs['kudos_given'] % (kudos_given, user.first_name, kudo_count)
 
     def get_special_message(self, trigger):
