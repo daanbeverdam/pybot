@@ -198,9 +198,14 @@ class CoreHelper():
         self.cursor.execute("""
             UPDATE users
             SET first_name=?, last_name=?, username=?
-            WHERE user_id=?
+            WHERE id=?
             """, (user.first_name, user.last_name,
                   user.username, user.id, ))
+        self.cursor.execute("""
+            UPDATE chats
+            SET id=?, title=?
+            WHERE id=?
+        """, (chat.id, chat.title, chat.id))
         self.save()
 
     def get_members(self, chat, include_self=True):
