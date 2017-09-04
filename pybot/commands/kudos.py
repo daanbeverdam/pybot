@@ -33,13 +33,13 @@ class KudosCommand(Command):
             if result:
                 no_of_kudos = result[0]
                 trigger = result[1]
-                prepend = self.get_special_message(trigger)
+                appendix = self.get_special_message(trigger)
                 user = self.message.reply_to_message.sender
                 if user.id == self.message.sender.id:
                     reply = self.dialogs['shame_on_you']
                 else:
                     helper.mutate_kudos(user, self.message.chat, no_of_kudos)
-                    reply = prepend + self.get_user_overview(user, no_of_kudos)
+                    reply = self.get_user_overview(user, no_of_kudos) + appendix
         return reply
 
     def parse_kudo_count(self, text):
@@ -81,5 +81,5 @@ class KudosCommand(Command):
                     u'\U0001F4A9': u'\U0001F4A9'}
         message = messages.get(trigger)
         if message:
-            return message + ' '
+            return ' ' + message
         return ''
