@@ -137,20 +137,40 @@ class CoreHelper():
         return False
 
     def save_self(self, bot):
-        """Saves user."""
-        self.cursor.execute("""
-            INSERT OR IGNORE INTO bot (id, first_name, username)
-            VALUES (?,?,?)
-            """, (bot.id, bot.first_name,
+        """Saves bot."""
+        if not self.get_self():
+            self.cursor.execute("""
+                INSERT OR IGNORE INTO bot (id, first_name, username)
+                VALUES (?,?,?)
+                """, (bot.id, bot.first_name,
+                      bot.username ))
+            self.cursor.execute("""
+                INSERT OR IGNORE INTO users (id, first_name, username)
+                VALUES (?,?,?)
+                """, (bot.id, bot.first_name,
+                      bot.username ))
+        else:
+            self.cursor.execute("""
+            UPDATE bot
+            SET first_name=?, username=?
+            """, (bot.first_name,
                   bot.username ))
+            self.cursor.execute("""
+            UPDATE users
+            SET first_name=?, last_name=?, username=?
+            WHERE id=?
+            """, (bot.first_name, bot.last_name,
+                  bot.username, bot.id, ))
         self.save()
 
     def get_self(self):
         """Returns bot info in as User object."""
         self.cursor.execute("""SELECT * FROM bot""")
         result = self.cursor.fetchone()
-        bot = User(id=result[0], first_name=result[1], username=result[2])
-        return bot
+        if result:
+            bot = User(id=result[0], first_name=result[1], username=result[2])
+            return bot
+        return None
 
     def save_user_chat(self, user, chat):
         """Saves user, chat and their relation."""
@@ -167,6 +187,16 @@ class CoreHelper():
             INSERT INTO chat_user (chat_id, user_id)
             VALUES (?,?)
             """, (chat.id, user.id, ))
+        self.save()
+
+    def update_user_chat(self, user, chat):
+        """Updates user and chat values."""
+        self.cursor.execute("""
+            UPDATE users
+            SET first_name=?, last_name=?, username=?
+            WHERE user_id=?
+            """, (user.first_name, user.last_name,
+                  user.username, user.id, ))
         self.save()
 
     def get_members(self, chat, include_self=True):
