@@ -54,7 +54,7 @@ class PyBot(object):
         parameters = {'timeout': 30, 'limit': 100, 'offset': offset}
         update_url = self.base_url + 'getUpdates'
         request = urllib.request.urlopen(update_url + '?' + urllib.parse.urlencode(parameters))
-        update = json.loads(request.read())
+        update = json.loads(request.read().decode('utf-8'))
         if update['ok'] and update['result']:
             self.helper.set_offset(int(update['result'][-1]['update_id'] + 1))
             for result in update['result']:
@@ -178,7 +178,7 @@ class PyBot(object):
     def get_me(self):
         update_url = self.base_url + 'getMe'
         request = urllib.request.urlopen(update_url)
-        update = json.loads(request.read())
+        update = json.loads(request.read().decode('utf-8'))
         if update['ok'] and update['result']:
             result = update['result']
             return User(id=result['id'], first_name=result['first_name'], username=result['username'])
