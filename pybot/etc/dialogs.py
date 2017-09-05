@@ -321,7 +321,7 @@ stats = {'en': {
     "gespreksstatistieken.",
     'reply': "\U0001F4E8 Totaal verzonden berichten: %i\n"
     "\U0001F5E3 Totaal verzonden woorden: %i\n"
-    "\U0001F320 Totaal verzonden stickers: %i\n\n"
+    "\U0001F320 Totaal verzonden stickers: %i\n"
     "\U0001F4F7 Totaal verzonden foto's: %i\n"
     "Meest actieve gebruikers (berichten/woorden/gemiddelde):\n%s",
     'error': "Sorry, nog niet genoeg data. Chat nog wat meer!"
