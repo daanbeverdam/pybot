@@ -8,6 +8,7 @@ import json
 import urllib
 import traceback
 import os
+import pkg_resources
 
 
 class PyBot(object):
@@ -29,14 +30,18 @@ class PyBot(object):
             print("Logs folder created")
 
     def self_check(self):
-        """Checks self."""
+        """Checks all requirements before starting."""
+        self.check_dirs()
         self.helper.check_db()
         self.helper.save_self(self.get_me())
-        pass  # TODO: check for server updates etc.
+        self.check_version()
+
+    def check_version(self):
+        version_number = pkg_resources.get_distribution("pybot").version
+        print("Version number: %s" % version_number)
 
     def run(self):
         """Main loop of the bot."""
-        self.check_dirs()
         self.self_check()
         print("Bot started...")
         while True:

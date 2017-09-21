@@ -46,7 +46,11 @@ class CoreHelper():
 
     def create_tables(self):
         """Creates necessary tables."""
-        self.cursor.execute("""CREATE TABLE core ( offset INTEGER );""")
+        self.cursor.execute("""
+            CREATE TABLE core (
+                setting TEXT,
+                value TEXT
+            );""")
         self.cursor.execute("""
             CREATE TABLE bot (
                 id INTEGER PRIMARY KEY,
@@ -87,18 +91,33 @@ class CoreHelper():
         self.save()
 
     def populate_tables(self):
-        self.cursor.execute("""INSERT INTO core(offset) VALUES(0);""")
+        self.cursor.execute("""
+            INSERT INTO core(setting, value)
+            VALUES ("offset", 0)
+        """)
         self.save()
+
+    def set_version(self, version_number):
+        pass
+
+    def get_version(self):
+        pass
 
     def get_offset(self):
         """Gets offset for long polling."""
-        self.cursor.execute("""SELECT offset FROM core""")
+        self.cursor.execute("""
+            SELECT value FROM core
+            WHERE setting="offset"
+        """)
         result = self.cursor.fetchone()
         return result[0]
 
     def set_offset(self, offset):
         """Sets offset for long polling."""
-        self.cursor.execute("""UPDATE `core` SET `offset`=?;""", (offset,))
+        self.cursor.execute("""
+            UPDATE core SET value=?
+            WHERE setting="offset"
+        """, (offset,))
         self.save()
 
     def get_user(self, id):

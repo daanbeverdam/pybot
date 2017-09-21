@@ -24,7 +24,6 @@ class Command(object):
         self.has_scheduled_event = False
         self.is_always_listening = is_always_listening
         self.default_language = language
-        self.helper = CoreHelper()
 
     def reply(self, response):
         """Each command should have a reply function which accepts and returns
@@ -62,8 +61,9 @@ class Command(object):
 
     def is_active(self):
         """Returns whether the command is activated or not."""
+        helper = CoreHelper()
         if self.message:
-            status = self.helper.command_is_active(self.message.chat, self.name[1:])
+            status = helper.command_is_active(self.message.chat, self.name[1:])
             return status
         return False
 
@@ -73,7 +73,8 @@ class Command(object):
             chat = self.message.chat
         if not name:
             name = self.name[1:]
-        self.helper.activate_command(chat, name, boolean)
+        helper = CoreHelper()
+        helper.activate_command(chat, name, boolean)
 
     def chunk(self, text):
         """Chunks text if length exceeds Telegrams character limit. Returns list of chunks."""
