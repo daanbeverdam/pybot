@@ -37,8 +37,16 @@ class PyBot(object):
         self.check_version()
 
     def check_version(self):
-        version_number = pkg_resources.get_distribution("pybot").version
-        print("Version number: %s" % version_number)
+        actual_version = open(ROOT_DIR + '/etc/VERSION').read().strip()
+        current_version = self.helper.get_version()
+        if not current_version:
+            self.helper.set_version(actual_version)
+            current_version = self.helper.get_version()
+        if actual_version != current_version:
+            print("PyBot will be upgraded to version %s" % actual_version)
+            self.helper.upgrade_db(current_version, actual_version)
+            self.helper.set_version(actual_version)
+        print("PyBot version %s" % actual_version)
 
     def run(self):
         """Main loop of the bot."""

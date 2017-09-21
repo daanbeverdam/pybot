@@ -1,4 +1,6 @@
 import sqlite3
+import os.path
+import importlib
 from pybot.env import ROOT_DIR
 from pybot.core.user import User
 
@@ -48,7 +50,7 @@ class CoreHelper():
         """Creates necessary tables."""
         self.cursor.execute("""
             CREATE TABLE core (
-                setting TEXT,
+                variable TEXT,
                 value TEXT
             );""")
         self.cursor.execute("""
@@ -92,22 +94,52 @@ class CoreHelper():
 
     def populate_tables(self):
         self.cursor.execute("""
-            INSERT INTO core(setting, value)
+            INSERT INTO core(variable, value)
             VALUES ("offset", 0)
         """)
         self.save()
 
     def set_version(self, version_number):
-        pass
+        if not self.get_version():
+            self.cursor.execute("""
+                INSERT INTO core(variable, value)
+                VALUES ("version", ?)
+            """, (version_number, ))
+        else:
+            self.cursor.execute("""
+                UPDATE core
+                SET value=?
+                WHERE variable="version"
+            """, (version_number, ))
+        self.save()
 
     def get_version(self):
-        pass
+        try:
+            self.cursor.execute("""
+                SELECT value FROM core
+                WHERE variable="version"
+                """)
+            result = self.cursor.fetchone()
+            if result:
+                return result[0]
+            return None
+        except:
+            # if column doesn't exist, it's version 1.0.0
+            return '1.0.0'
+
+    def upgrade_db(self, old_version, new_version):
+        path = ROOT_DIR + '/upgrades/'
+        file = old_version.replace('.', '_') + '-' + new_version.replace('.', '_') + '.py'
+        if os.path.isfile(path + file):
+            print("Applying upgrade script " + file)
+            script = importlib.import_module('pybot.upgrades.' + file[:-3])
+            script.upgrade()
 
     def get_offset(self):
         """Gets offset for long polling."""
         self.cursor.execute("""
             SELECT value FROM core
-            WHERE setting="offset"
+            WHERE variable="offset"
         """)
         result = self.cursor.fetchone()
         return result[0]
@@ -116,7 +148,7 @@ class CoreHelper():
         """Sets offset for long polling."""
         self.cursor.execute("""
             UPDATE core SET value=?
-            WHERE setting="offset"
+            WHERE variable="offset"
         """, (offset,))
         self.save()
 
