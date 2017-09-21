@@ -207,8 +207,8 @@ class CoreHelper():
         else:
             self.cursor.execute("""
             UPDATE bot
-            SET first_name=?, username=?
-            """, (bot.first_name,
+            SET id=?, first_name=?, username=?
+            """, (bot.id, bot.first_name,
                   bot.username ))
             self.cursor.execute("""
             UPDATE users
