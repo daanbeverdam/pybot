@@ -195,15 +195,3 @@ class PyBot(object):
         if update['ok'] and update['result']:
             result = update['result']
             return User(id=result['id'], first_name=result['first_name'], username=result['username'])
-
-    def collect(self, message):
-        pass
-
-    # def send_action(self, chat_id, action):
-    #     act = urllib.urlopen(self.base_url + 'sendChatAction',
-    #                           urllib.urlencode({
-    #                            'chat_id': str(chat_id),
-    #                            'action': str(action)
-    #                            })).read()
-    #     self.log('Bot sent action "' + action + '" to ' + str(chat_id) + '.')
-    # )
