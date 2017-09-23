@@ -168,8 +168,9 @@ class CoreHelper():
             JOIN chat_user ON users.id = chat_user.user_id
             WHERE chat_user.chat_id=?
             AND users.first_name LIKE ?
-            OR users.last_name LIKE ?
-            """, (chat.id, name, name, ))
+            OR chat_user.chat_id=?
+            AND users.last_name LIKE ?
+            """, (chat.id, name, chat.id, name, ))
         result = self.cursor.fetchall()
         if len(result) == 1:
             result = result[0]
