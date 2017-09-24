@@ -45,7 +45,7 @@ class Command(object):
     def cancel(self, response):
         """Cancels the command."""
         if self.is_active():
-            self.activate(self.message.chat, self.name, False)
+            self.activate(False)
             response.send_message.text = "OK, no worries."
             return response
         return None

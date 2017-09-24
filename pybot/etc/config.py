@@ -37,7 +37,7 @@ COMMAND_LIST = [
     DiceCommand('/dice', dialogs.dice[LANG]),
     EchoCommand('/echo', dialogs.echo[LANG], requires_arguments=True),
     HelpCommand('/help', dialogs.help[LANG]),
-    KickCommand('/kick', {}, requires_arguments=True),
+    KickCommand('/kick', dialogs.kick[LANG], requires_arguments=True),
     KudosCommand('/kudos', dialogs.kudos[LANG], is_always_listening=True),
     PollCommand('/poll', dialogs.poll[LANG], True, ADMIN_CHAT_ID),
     QuoteCommand('/quote', dialogs.quote[LANG]),

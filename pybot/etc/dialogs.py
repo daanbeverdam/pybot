@@ -176,6 +176,25 @@ gif = {'en': {
 }
 }
 
+kick = {'en': {
+    'vote_recorded': "Vote recorded. Yes: %i. No: %i. Votes needed: %i.",
+    'start_vote': "Kick %s from this chat? A majority vote of %i members is required.",
+    'not_found': "Couldn't find that user, please use first or last name.",
+    'user_kicked': "Majority reached! Kicked %s for 60 seconds.",
+    'kick_not_possible': "Majority reached! I'm sorry, I can't kick %s. This is what I got back: '%s'",
+    'user_kept': "Majority reached. %s survived voting and lives to see another day.",
+    'cancel': "Kick votes cannot be canceled."
+},
+    'nl': {
+    'vote_recorded': "Stem opgeslagen. Yes: %i. No: %i. Benodigd: %i.",
+    'start_vote': "Kick %s? Minstens %i stemmen zijn benodigd.",
+    'not_found': "Gebruiker niet gevonden. Gebruik voor- of achternaam.",
+    'user_kicked': "De meerderheid heeft bepaald. %s is gekicked voor 60 seconden.",
+    'kick_not_possible': "De meerderheid heeft bepaald, maar ik kan %s helaas niet kicken: '%s'",
+    'user_kept': "De meerderheid heeft bepaald. %s heeft de stemming overleefd en mag blijven.",
+    'cancel': "Kick stemmingen kunnen niet gecanceld worden."
+}
+}
 kudos = {'en': {
     'usage': "Give kudos to your friends by replying to their messages with "
     "'+1' or '/kudos [first name]'. Ask for the overview with /kudos.",
