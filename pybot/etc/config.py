@@ -10,6 +10,7 @@ from pybot.commands.stats import StatsCommand
 from pybot.commands.start import StartCommand
 from pybot.commands.kudos import KudosCommand
 from pybot.commands.changes import ChangesCommand
+from pybot.commands.kick import KickCommand
 from pybot.etc import dialogs
 from pybot.env import ROOT_DIR
 import json
@@ -36,6 +37,7 @@ COMMAND_LIST = [
     DiceCommand('/dice', dialogs.dice[LANG]),
     EchoCommand('/echo', dialogs.echo[LANG], requires_arguments=True),
     HelpCommand('/help', dialogs.help[LANG]),
+    KickCommand('/kick', {}, requires_arguments=True),
     KudosCommand('/kudos', dialogs.kudos[LANG], is_always_listening=True),
     PollCommand('/poll', dialogs.poll[LANG], True, ADMIN_CHAT_ID),
     QuoteCommand('/quote', dialogs.quote[LANG]),
