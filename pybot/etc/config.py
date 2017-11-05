@@ -11,6 +11,7 @@ from pybot.commands.start import StartCommand
 from pybot.commands.kudos import KudosCommand
 from pybot.commands.changes import ChangesCommand
 from pybot.commands.kick import KickCommand
+from pybot.commands.birthday import BirthdayCommand
 from pybot.etc import dialogs
 from pybot.env import ROOT_DIR
 import json
@@ -33,6 +34,7 @@ WEATHER_API = config.get('weather_api')
 SAY_API = config.get('say_api')
 # list of commands:
 COMMAND_LIST = [
+    BirthdayCommand('/birthday', dialogs.birthday[LANG]),
     ChangesCommand('/changes', dialogs.changes[LANG]),
     DiceCommand('/dice', dialogs.dice[LANG]),
     EchoCommand('/echo', dialogs.echo[LANG], requires_arguments=True),

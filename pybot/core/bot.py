@@ -112,6 +112,10 @@ class PyBot(object):
                         self.reply(rsp)
                 elif response:
                     self.reply(response)
+            scheduled_responses = command.get_scheduled()
+            if scheduled_responses:
+                for response in scheduled_responses:
+                    self.reply(response)
         if message.contains_command() and message.command.lower() not in self.command_names:
             response = Response(message.chat.id)
             response.send_message.text = self.dialogs['no_such_command']

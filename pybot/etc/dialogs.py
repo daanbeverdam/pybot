@@ -21,19 +21,22 @@ cancel = {'en': {
 },
     'nl': {
     'reply': '%s geannuleerd.'
-    }
+}
 }
 
-bbq = {'en': {
-    'usage': "The command /bbq determines if the weather "
-    "circumstances in the Netherlands are suitable for barbecuing.",
-    'reply': "On a scale of 1-10, the barbecue weather in the "
-    "Netherlands gets an %s."
+birthday = {'en': {
+    'birthday': "I will notify this chat on your birthday: %s. \U0001F382",
+    'saved': "\u2713 Birthday saved!",
+    'not_valid': "Date format not valid. Please use the %s format.",
+    'happy_birthday': "Happy birthday %s %s! I hope you have a splendid day. \U0001F382",
+    'usage': "Let me notify this chat on your birthday. Save your birthday with /birthday DD-MM-YYYY."
 },
     'nl': {
-    'usage': "Het commando /bbq geeft het huidige "
-    "barbecueweercijfer voor Nederland.",
-    'reply': "Het barbecueweer krijgt vandaag een %s. Oant moarn!"
+    'birthday': "Ik stuur een notificatie in deze chat op je verjaardag: %s. \U0001F382",
+    'saved': "\u2713 Verjaardag opgeslagen!",
+    'not_valid': "Datum niet geldig. Gebruik alsjeblieft het %s formaat.",
+    'happy_birthday': "Happy birthday %s %s! Fijne dag. \U0001F382",
+    'usage': "Krijg een notificatie op je verjaardag! Sla hem op met /birthday DD-MM-YYYY."
 }
 }
 
@@ -261,16 +264,6 @@ poll = {
         'done_voting': "Bedankt, de antwoordopties worden nu verborgen.",
         'all_reserved': "Sorry, je kan de naam 'All' niet gebruiken.",
         'duplicate_options': "Je kan niet twee dezelfde antwoordopties aanmaken. Poll geannuleerd."}}
-
-putin = {'en': {
-    'usage': "The command /putin returns a random photo of "
-    "Vladimir Putin."
-},
-    'nl': {
-    'usage': "Het /putin commando retourneert een willekeurige "
-    "foto van Vladimir Putin."
-}
-}
 
 quote = {'en': {
     'usage': "Save quotes by using '/quote [name]: [quote]'. "

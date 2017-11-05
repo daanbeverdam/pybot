@@ -54,6 +54,10 @@ class Command(object):
         """Tells the command the user is done."""
         return None
 
+    def get_scheduled(self):
+        """"Get scheduled responses (if any)."""
+        return None
+
     def get_help(self, response):
         """Returns information on how to use the command."""
         response.send_message.text = self.usage
