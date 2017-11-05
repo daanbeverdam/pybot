@@ -46,8 +46,6 @@ class BirthdayHelper(CoreHelper):
 
     def get_birthdays(self, date):
         """Returns all birthday entries for a specific date."""
-        print("~~~~DATE~~~~")
-        print(date)
         self.cursor.execute("""
             SELECT * from birthday
             WHERE date=?
