@@ -45,10 +45,11 @@ class BirthdayHelper(CoreHelper):
         return None
 
     def get_birthdays(self, date):
-        """Returns all birthday entries for a specific date."""
+        """Returns all birthday entries for a specific date. Accepts date as 'DD-MM'."""
+        # kind of hacky and not really universal at the moment
         self.cursor.execute("""
             SELECT * from birthday
-            WHERE date=?
+            WHERE substr(date,1,5)=?
         """, (date,))
         return self.cursor.fetchall()
 

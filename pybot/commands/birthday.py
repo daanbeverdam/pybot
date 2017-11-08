@@ -25,8 +25,9 @@ class BirthdayCommand(Command):
         return response
 
     def get_scheduled(self):
+        """Returns birthday notifications when appropriate."""
         responses = []
-        today = datetime.date.today().strftime('%d-%m-%Y')
+        today = datetime.date.today().strftime('%d-%m')
         helper = BirthdayHelper()
         birthdays = helper.get_birthdays(today)
         if birthdays:
@@ -37,16 +38,18 @@ class BirthdayCommand(Command):
         return responses
 
     def get_notification(self, chat_id, user_id):
+        """Generates birthday notification response."""
         response = Response(chat_id)
         helper = BirthdayHelper()
         user = helper.get_user(user_id)
-        response.send_message.text = self.dialogs['happy_birthday'] % (str(user.first_name), str(user.last_name))
+        response.send_message.text = self.dialogs['happy_birthday'] % (user.first_name, user.last_name if
+                                                                       user.last_name else '')
         return response
 
     def is_today(self, date):
-        """Checks if a date string is today, returns truth value."""
-        date = parse(date, dayfirst=True).strftime('%d-%m-%Y')
-        today = datetime.date.today().strftime('%d-%m-%Y')
+        """Checks if a date string is today, ignoring the year. Returns truth value."""
+        date = parse(date, dayfirst=True).strftime('%d-%m')
+        today = datetime.date.today().strftime('%d-%m')
         if date == today:
             return True
         return False
