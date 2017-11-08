@@ -32,8 +32,9 @@ class BirthdayCommand(Command):
         birthdays = helper.get_birthdays(today)
         if birthdays:
             for birthday in birthdays:
-                if self.is_today(birthday[2]) and not self.is_today(birthday[3]):
-                    helper.set_notified_at(birthday[0], birthday[1], today)
+                if self.birthday_is_today(birthday[2]) and not self.is_today(birthday[3]):
+                    full_date = datetime.date.today().strftime('%d-%m-%Y')
+                    helper.set_notified_at(birthday[0], birthday[1], full_date)
                     responses.append(self.get_notification(birthday[0], birthday[1]))
         return responses
 
@@ -47,6 +48,14 @@ class BirthdayCommand(Command):
         return response
 
     def is_today(self, date):
+        """Checks if a date string is today."""
+        date = parse(date, dayfirst=True).strftime('%d-%m-%Y')
+        today = datetime.date.today().strftime('%d-%m-%Y')
+        if date == today:
+            return True
+        return False
+
+    def birthday_is_today(self, date):
         """Checks if a date string is today, ignoring the year. Returns truth value."""
         date = parse(date, dayfirst=True).strftime('%d-%m')
         today = datetime.date.today().strftime('%d-%m')
