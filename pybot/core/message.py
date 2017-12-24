@@ -17,6 +17,8 @@ class Message(object):
         self.sender = User(message.get('from'))
         self.forward_from = message.get('forward_from')
         self.reply_to_message = message.get('reply_to_message')
+        self.left_chat_member = (User(message.get('left_chat_member'))
+                                 if message.get('left_chat_member') else None)
         self.sticker = message.get('sticker')
         self.photo = message.get('photo')
         self.caption = message.get('caption')
