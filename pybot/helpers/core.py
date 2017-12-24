@@ -260,6 +260,15 @@ class CoreHelper():
         """, (chat.id, chat.title, chat.id))
         self.save()
 
+    def remove_user(self, user, chat):
+        """Removes user-chat association. Accepts User and Chat object."""
+        self.cursor.execute("""
+            DELETE FROM chat_user
+            WHERE user_id = ?
+            AND chat_id = ?
+         """, (user.id, chat.id, ))
+        self.save()
+
     def get_members(self, chat, include_self=True):
         """Get all members of a chat. Accepts Chat object."""
         self.cursor.execute("""

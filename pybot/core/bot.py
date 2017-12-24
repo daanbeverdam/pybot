@@ -144,6 +144,8 @@ class PyBot(object):
             self.helper.update_user_chat(message.sender, message.chat)
         else:
             self.helper.save_user_chat(user=message.sender, chat=message.chat)
+        if message.left_chat_member:
+            self.helper.remove_user(message.left_chat_member, message.chat)
 
     def reply(self, response):
         """Sends response to user, accepts a response object."""
