@@ -11,9 +11,7 @@ class BirthdayCommand(Command):
     def reply(self, response):
         helper = BirthdayHelper()
         birthday = helper.get_birthday(self.message.chat, self.message.sender)
-        if birthday:
-            response.send_message.text = self.dialogs['birthday'] % birthday
-        elif self.get_arguments() and not birthday:
+        if self.get_arguments() and not birthday:
             birthday = self.get_arguments()
             if self.is_valid_date(birthday):
                 birthday = parse(birthday, dayfirst=True).strftime('%d-%m-%Y')  # Sorry EN users!
@@ -22,6 +20,11 @@ class BirthdayCommand(Command):
                 response.send_message.text = reply
             else:
                 response.send_message.text = self.dialogs['not_valid'] % "DD-MM-YYYY"
+        elif not self.get_arguments() or self.get_arguments():
+            birthdays = helper.get_birthdays(chat=self.message.chat)
+            birthday_strings = ["\n%s %s" % (helper.get_user(id=d[1]).first_name, d[2]) for d in birthdays]
+            formatted_birthdays = "".join(birthday_strings)
+            response.send_message.text = self.dialogs['all_birthdays'] + formatted_birthdays
         return response
 
     def get_scheduled(self):

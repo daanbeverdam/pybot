@@ -29,14 +29,16 @@ birthday = {'en': {
     'saved': "\u2713 Birthday saved!",
     'not_valid': "Date format not valid. Please use the %s format.",
     'happy_birthday': "Happy birthday %s %s! I hope you have a splendid day. \U0001F382",
-    'usage': "Let me notify this chat on your birthday. Save your birthday with /birthday DD-MM-YYYY."
+    'usage': "Let me notify this chat on your birthday. Save your birthday with /birthday DD-MM-YYYY.",
+    'all_birthdays': "I saved the following birthdays \U0001F382:"
 },
     'nl': {
     'birthday': "Ik stuur een notificatie in deze chat op je verjaardag: %s. \U0001F382",
     'saved': "\u2713 Verjaardag opgeslagen!",
     'not_valid': "Datum niet geldig. Gebruik alsjeblieft het %s formaat.",
     'happy_birthday': "Happy birthday %s %s! Fijne dag. \U0001F382",
-    'usage': "Krijg een notificatie op je verjaardag! Sla hem op met /birthday DD-MM-YYYY."
+    'usage': "Krijg een notificatie op je verjaardag! Sla hem op met /birthday DD-MM-YYYY.",
+    'all_birthdays': "Ik heb de volgende verjaardagen opgeslagen \U0001F382:"
 }
 }
 

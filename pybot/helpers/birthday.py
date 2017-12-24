@@ -44,13 +44,20 @@ class BirthdayHelper(CoreHelper):
             return result[0]
         return None
 
-    def get_birthdays(self, date):
-        """Returns all birthday entries for a specific date. Accepts date as 'DD-MM'."""
+    def get_birthdays(self, date=None, chat=None):
+        """Returns all birthday entries for a specific date or chat.
+        Accepts date string as 'DD-MM' or chat object."""
         # kind of hacky and not really universal at the moment
-        self.cursor.execute("""
-            SELECT * from birthday
-            WHERE substr(date,1,5)=?
-        """, (date,))
+        if date:
+            self.cursor.execute("""
+                SELECT * from birthday
+                WHERE substr(date,1,5)=?
+            """, (date,))
+        elif chat:
+            self.cursor.execute("""
+                SELECT * from birthday
+                WHERE chat_id=?
+            """, (chat.id,))
         return self.cursor.fetchall()
 
     def set_notified_at(self, chat_id, user_id, date):
