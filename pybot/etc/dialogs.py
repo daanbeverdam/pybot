@@ -55,19 +55,19 @@ calculator = {'en': {
 }
 
 changes = {'en': {
-    'usage': "The command /changes shows the most recent code changes of the "
+    'usage': "The command /changes shows the latest release info of the "
     "PyBot project. Visit github.com/daanbeverdam/pybot to contribute.",
-    'reply': "Most recent code changes to PyBot:",
-    'more': "Visit https://github.com/daanbeverdam/pybot/commits/master for "
-    "more."
+    'reply': "Most recent release:",
+    'more': "\U0001F5D2 Be aware that you may not be running the latest release."
+    " Check your version with /status."
 },
     'nl': {
-    'usage': "Het commando /changes laat de meest recente wijzigingen zien "
+    'usage': "Het commando /changes laat de laatste releaseinfo zien "
     "van het PyBot project. Ga naar github.com/daanbeverdam/pybot om bij te "
     "dragen.",
-    'reply': "Meest recente wijzigingen:",
-    'more': "Ga naar https://github.com/daanbeverdam/pybot/commits/master "
-    "voor meer."
+    'reply': "Meest recente release:",
+    'more': "\U0001F5D2 Dit is de laatste release. Het is mogelijk dat de bot niet op de "
+    "laatste versie draait, controleer dit met /status."
 }
 }
 
