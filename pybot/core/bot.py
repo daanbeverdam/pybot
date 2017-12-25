@@ -1,14 +1,13 @@
+import json
+import urllib
+import traceback
+import os
+import requests
 from pybot.core.message import Message
 from pybot.core.response import Response
 from pybot.helpers.core import CoreHelper
 from pybot.core.user import User
 from pybot.env import ROOT_DIR
-import requests
-import json
-import urllib
-import traceback
-import os
-import pkg_resources
 
 
 class PyBot(object):
