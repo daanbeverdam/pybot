@@ -33,15 +33,17 @@ class KudosHelper(CoreHelper):
             """, (user.id, chat.id, 0, 0, 0, ))
         self.save()
 
-    def get_kudos_dict(self, chat):
+    def get_kudos_overview(self, chat):
         """Returns kudo dictionary."""
-        kudo_dictionary = {}
+        overview = []
         members = self.get_members(chat)
         for member in members:
             kudo_count = self.get_kudo_count(member, chat)
             if kudo_count:
-                kudo_dictionary[member.first_name] = self.get_kudo_count(member, chat)
-        return kudo_dictionary
+                result = (member.get_full_name(),
+                          self.get_kudo_count(member, chat))
+                overview.append(result)
+        return overview
 
     def get_kudo_count(self, user, chat):
         """Returns kudo count for a user."""

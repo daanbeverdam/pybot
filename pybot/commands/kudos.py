@@ -55,10 +55,10 @@ class KudosCommand(Command):
 
     def get_total_overview(self):
         helper = KudosHelper()
-        overview = helper.get_kudos_dict(self.message.chat)
+        overview = helper.get_kudos_overview(self.message.chat)
         if overview:
             reply = self.dialogs['kudo_overview']
-            overview = sorted(overview.items(), key=operator.itemgetter(1), reverse=True)
+            overview.sort(key=lambda x: x[1], reverse=True)
             counter = 1
             for entry in overview:
                 reply += "\n%s: %i" % (entry[0], entry[1])
