@@ -1,7 +1,6 @@
+import time
 from pybot.core.command import Command
-import shelve
 from pybot.helpers.poll import PollHelper
-
 
 class PollCommand(Command):
 
@@ -17,7 +16,14 @@ class PollCommand(Command):
             return self.store_answer(response)
 
         elif self.message.text.split(' ', 1)[0] == self.name:
-            response.send_message.text = self.dialogs['poll_already_active']
+
+            if self.is_stale():
+                PollHelper().delete_poll(self.message.chat)
+                return self.new_poll(response)
+
+            else:
+                response.send_message.text = self.dialogs['poll_already_active']
+
             return response
 
     def new_poll(self, response):
@@ -26,20 +32,24 @@ class PollCommand(Command):
         tokens = self.arguments.split('*')
         question = tokens[0].strip()
         options = [token.strip() for token in tokens[1:]]
+
         if len(options) != len(set(options)):
             response.send_message.text = self.dialogs['duplicate_options']
             return response
 
         if question != '' and len(options) > 0:
-            helper.store_question(question, self.message.sender, self.message.chat)
+            timestamp = int(time.time())
+            helper.store_question(question, self.message.sender, self.message.chat, timestamp)
             helper.store_options(options, self.message.chat)
             self.activate(True)
             response.send_message.text = question + ' \U0001F4CA\n\u2022 ' + '\n\u2022 '.join(options)
             response.send_message.reply_markup.keyboard = self.format(question, options)
             response.send_message.force_reply = True
             response.send_message.reply_markup.one_time_keyboard = True
+
         else:
             raise ValueError('No question or options specified!')
+
         return response
 
     def format(self, question, options):
@@ -76,7 +86,7 @@ class PollCommand(Command):
     def cancel(self, response):
         helper = PollHelper()
         initiator = helper.get_initiator(self.message.chat)
-        if self.message.sender.id == initiator.id or self.message.sender.id == self.admin:
+        if self.message.sender.id in [initiator.id, self.admin]:
             helper.delete_poll(self.message.chat)
             self.activate(False)
             response.send_message.text = self.dialogs['end_poll']
@@ -92,11 +102,15 @@ class PollCommand(Command):
         response.send_message.reply_to_message_id = self.message.id
         return response
 
-    def poll_results(self):
-        pass
-        # reply = self.dialogs['results'] % self.db_get()['question']
-        # for option, voters in self.db_get()['options_dict'].iteritems():
-        #     reply += ('\n- ' + option + ': ' + ', '.join(voters) +
-        #               ' (%d %s)' % (len(voters), self.dialogs[(
-        #                             'vote' if len(voters) == 1 else 'votes')]))
-        # return reply
+    def is_stale(self):
+        current_timestamp = int(time.time())
+        stale_period = 24 * 60 * 60  # one day
+        helper = PollHelper()
+        initiation_timestamp = helper.get_initiated_at(self.message.chat)
+
+        print (initiation_timestamp)
+
+        if current_timestamp - initiation_timestamp > stale_period:
+            return True
+
+        return False

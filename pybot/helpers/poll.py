@@ -18,6 +18,7 @@ class PollHelper(CoreHelper):
             question TEXT,
             initiator_id INTEGER,
             flags TEXT,
+            initiated_at INTEGER,
             PRIMARY KEY(id),
             FOREIGN KEY(chat_id) REFERENCES chats(id)
             );
@@ -41,12 +42,12 @@ class PollHelper(CoreHelper):
         """)
         self.save()
 
-    def store_question(self, question, user, chat):
-        """Stores poll question, accepts a string and chat object."""
+    def store_question(self, question, user, chat, timestamp):
+        """Stores question alongside initiator and time of initiation."""
         self.cursor.execute("""
-            INSERT INTO poll (chat_id, initiator_id, question)
-            VALUES (?,?,?)
-        """, (chat.id, user.id, question,))
+            INSERT INTO poll (chat_id, initiator_id, question, initiated_at)
+            VALUES (?,?,?,?)
+        """, (chat.id, user.id, question, timestamp))
         self.save()
 
     def get_question(self, chat):
@@ -83,6 +84,14 @@ class PollHelper(CoreHelper):
         """, (chat.id,))
         initiator_id = self.cursor.fetchone()[0]
         return self.get_user(initiator_id)
+
+    def get_initiated_at(self, chat):
+        self.cursor.execute("""
+            SELECT initiated_at FROM poll
+            WHERE chat_id=?
+        """, (chat.id,))
+        timestamp = self.cursor.fetchone()[0]
+        return timestamp
 
     def get_poll_id(self, chat):
         self.cursor.execute("""
