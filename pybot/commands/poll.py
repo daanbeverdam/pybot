@@ -108,7 +108,8 @@ class PollCommand(Command):
         helper = PollHelper()
         initiation_timestamp = helper.get_initiated_at(self.message.chat)
 
-        print (initiation_timestamp)
+        if not initiation_timestamp:  # for backwards compatibility
+            return True
 
         if current_timestamp - initiation_timestamp > stale_period:
             return True
