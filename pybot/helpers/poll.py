@@ -90,8 +90,10 @@ class PollHelper(CoreHelper):
             SELECT initiated_at FROM poll
             WHERE chat_id=?
         """, (chat.id,))
-        timestamp = self.cursor.fetchone()[0]
-        return timestamp
+        result = self.cursor.fetchone()
+        if result:
+            return result[0]
+        return None
 
     def get_poll_id(self, chat):
         self.cursor.execute("""
