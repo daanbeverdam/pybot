@@ -203,7 +203,8 @@ kick = {'en': {
 kudos = {'en': {
     'usage': "Give kudos to your friends by replying to their messages with "
     "'+1' or '/kudos [first name]'. Ask for the overview with /kudos.",
-    'kudos_given': "%i kudo(s) given to %s. Total kudos: %i.",
+    'kudo_given': "1 kudo given to %s. Total kudos: %i.",
+    'kudos_given': "%i kudos given to %s. Total kudos: %i.",
     'kudo_overview': "Kudo overview:",
     'no_kudos': "Sorry, no kudos have been given yet.",
     'not_in_chat': "Sorry, couldn't find a user with the name '%s' in this chat. Give me a full first or last name.",
@@ -213,7 +214,8 @@ kudos = {'en': {
     'nl': {
     'usage': "Geef kudo's aan je vrienden door hun berichten te beantwoorden "
     "met '+1' of '/kudos [voornaam]'. Vraag de resultaten op met /kudos.",
-    'kudos_given': "%i kudo('s) gegeven aan %s. Totaal aantal kudo\'s: %i.",
+    'kudo_given': "1 kudo gegeven aan %s. Totaal aantal kudo's: %i.",
+    'kudos_given': "%i kudo's gegeven aan %s. Totaal aantal kudo's: %i.",
     'kudo_overview': "Kudo overzicht:",
     'not_in_chat': "Sorry, ik kon '%s' niet vinden in deze chat. Gebruik volledige voor- of achternamen.",
     'no_kudos': "Sorry, er zijn nog geen kudo's gegeven.",

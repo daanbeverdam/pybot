@@ -74,6 +74,8 @@ class KudosCommand(Command):
     def get_user_overview(self, user, kudos_given=1):
         helper = KudosHelper()
         kudo_count = helper.get_kudo_count(user, self.message.chat,)
+        if abs(kudo_count) == 1:
+            return self.dialogs['kudo_given'] % (user.first_name, kudo_count)
         return self.dialogs['kudos_given'] % (kudos_given, user.first_name, kudo_count)
 
     def get_special_message(self, trigger):
