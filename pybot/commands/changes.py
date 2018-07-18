@@ -10,7 +10,7 @@ class ChangesCommand(Command):
         url = "https://api.github.com/repos/daanbeverdam/pybot/releases/latest"
         release = json.load(urllib.request.urlopen(url))
         reply = "\n<strong>%s</strong>\n\n%s" % (release['name'], release['body'])
-        reply += '\n' + self.dialogs['more']
+        reply += '\n\n' + self.dialogs['more']
         response.send_message.text = reply
         response.send_message.disable_web_page_preview = True
         response.send_message.parse_mode = "HTML"
